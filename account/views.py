@@ -1,5 +1,4 @@
-# Create your views here.
-
+from account.models import *
 from django.http import HttpResponse
 
 def index(request):
