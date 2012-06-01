@@ -1,4 +1,8 @@
 # Django settings for SocialExpressApp project.
+import djcelery
+djcelery.setup_loader()
+
+BROKER_URL = "amqp://guest:guest@localhost:5672/"
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -121,7 +125,8 @@ INSTALLED_APPS = (
      'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
      'django.contrib.admindocs',
-     'account'
+     'account',
+     'djcelery'
 )
 
 # A sample logging configuration. The only tangible logging
