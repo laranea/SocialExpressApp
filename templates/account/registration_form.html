@@ -1,0 +1,55 @@
+{% extends 'base_login.html' %}
+{% block content %}
+    <div class="container">
+      <div class="content">
+            <div class="">
+                <div class="contentwraper contentbg">
+                     <div class="contenthead">
+                        <h2>Create Sniffer Docs account</h2>
+                        <span class="imp">All fields are required (*).</span>
+                     </div>
+
+                     <div class="contentbody">
+                     <form id="newAcc" class="newAcc" method="post" action="" accept-charset="UTF-8">
+                            <ol class="">
+                                <li class="group">
+                                    <label class="labeltag" for="id_username">Username*:</label>
+                                    <input id="id_username" class="userip" type="text" size="20" name="username" maxlength="30">
+                                    <span class="imp">(6 or more characters)</span>
+                                </li>
+                                <li class="group">
+                                    <label class="labeltag" for="id_email">Email*:</label>
+                                    <input id="id_email" class="userip" type="text" size="20" name="email" maxlength="30" />
+                                  <span class="imp"></span>
+                            </li>
+                              <li class="group">
+                                    <label class="labeltag" for="id_pwd1">Password*:</label>
+                                    <input id="id_pwd1" class="userip" type="password" size="20" name="password1" maxlength="30" />
+                                  <span class="imp"></span>
+                            </li>
+                            <li class="group">
+                                    <label class="labeltag" for="id_pwd2">Confirm Password*:</label>
+                                    <input id="id_pwd2" class="userip" type="password" size="20" name="login[password]" maxlength="30" />
+                                  <span class="imp"></span>
+                            </li>
+                            <li class="group">
+                                    <label class="" for="id_submit"></label>
+                                                 <input type="submit" class="fancy_button" name="" id="id_submit" value="Sign up" style="background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(13, 109, 198); margin-left:215px;padding-top: 6px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; background-position: initial initial; background-repeat: initial initial;"/>
+
+                                 <!--   <a href="#" class="fancy_button" style="background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(13, 109, 198); margin-left:215px;padding-top: 6px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; background-position: initial initial; background-repeat: initial initial; ">Sign up</a>-->
+                                  <span class="policy">By signing up, you agree to the <a href="#" class=""> Terms of service</a> and<a href="#" class=""> Privacy policy</a>.</span>						</li>
+
+                            </ol>
+                          </form>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+

@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 from django.contrib.auth.models import User, UserManager
 
@@ -62,7 +63,7 @@ class SERule(models.Model):
     
     def __unicode__(self):
         return "if " + self.if_clause + " then " + self.then_clause + " do " + self.action_clause 
-    
+
 class SEInbox(SEFeed):
     pass
 
