@@ -13,7 +13,11 @@ CONSUMER_SECRET = 'u3fAm8u99ZGB10wjzWp77d1llp5ExCksbUhNjb0b8'
 ACCESS_TOKEN = '56356461-zNcAX7r9hAWDIyFsM4c7RPGiWXWGy6scZHyMV2iFq'
 ACCESS_SECRET = 'IBjA1GduRzPvcdgHuYJRGeZ9TzYATnWhvk0vhIUZ5k'
 
-KLOUT_KEY = 'wj2nxrpamjkxht5uaqy5ugv6'
+KLOUT_KEY = 'fab599edabec2x9npkecm6wa'
+'''
+'wj2nxrpamjkxht5uaqy5ugv6'
+Shared Secret: Yh62Ydggxj
+'''
 
 OUTPUT_FILE = 'tweets'
 BATCH_SIZE = 1000
