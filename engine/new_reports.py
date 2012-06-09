@@ -14,6 +14,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.linecharts import HorizontalLineChart
+import string
 
 
 def drawStringOrangeHelvetica(canvas, string, size, x, y, isBold=False):
@@ -61,6 +62,32 @@ def drawSentimentGraph(data):
     drawing.add(lc)
     return drawing
 
+def twitterMentionsGraph(data):
+    drawing = Drawing(200, 300)
+    lc = HorizontalLineChart()
+    #lc.strokeColor = colors.darkorange
+    lc.x = 0
+    lc.y = 0
+    lc.width = 1795 # Length of X-axis
+    lc.height = 780 # Length of Y-axis
+#    lc.joinedLines = 1
+    lc.data = data
+    catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
+#    lc.valueAxis.visible = 0 # Make Y-Axis Invisible
+    lc.lines[0].strokeColor = colors.magenta
+#    lc.inFill = 1
+    lc.lines[1].strokeColor = colors.lightblue
+    lc.categoryAxis.categoryNames = catNames
+    lc.categoryAxis.labels.boxAnchor = 'n'
+    lc.categoryAxis.joinAxisMode = 'bottom'
+    lc.valueAxis.valueMin = 0
+    lc.valueAxis.valueMax = 11000
+    lc.valueAxis.valueStep = 1000
+    lc.lines[0].strokeWidth = 2.5
+    lc.lines[1].strokeWidth = 2.5
+    drawing.add(lc)
+    return drawing
+
 
 def page1(canvas):
     mentions, cityname = 35, "Amsterdam"
@@ -90,6 +117,13 @@ def page1(canvas):
     drawSentimentGraph([(math.sin(0), math.sin(30), math.sin(45), math.sin(90),\
         math.sin(120), math.sin(150), math.sin(180))]).drawOn(canvas, 450, 2300)
 
+#    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
+#        , 6900, 7900, 8000, 10200, 9500, 11000)
+    graph_tuple = ( 2000, 3200, 4600, 4800, 5100, 6100, 5700, 7000 , 6900, 7900, 8000, 10200, 10000, 10500, 10650, 11000)
+    graph_tuple2 = (700, 1000, 2500, 3000, 3400, 3700, 4600, 5100, 5700 , 5800, 5900, 6000, 6400, 6800, 7700, 8100)
+    twitterMentionsGraph([graph_tuple, graph_tuple2]).drawOn(canvas, 365, 1880)
+#    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
+
 #   Most Positive Conversations
     drawStringGrayHelvetica(canvas, "'Philips is doing great, wow! Very nice customer service ", 26.07, 452, 687, False, '#636363')
     drawStringGrayHelvetica(canvas, "concerning coffee machines'", 26.07, 452, 650, False, '#636363')
@@ -110,6 +144,13 @@ def page1(canvas):
     drawStringGrayHelvetica(canvas, "'Nice Timigs man'", 26.07, 452, 196, False, '#636363')
     drawStringGrayHelvetica(canvas, "Thomas Dewinter", 26.07, 662, 196, False)
 
+    #avatar
+    canvas.drawImage("reports/TabulaMagica-1.png", 300, 635, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 300, 511, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 300, 385, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 300, 268, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 300, 144, 80, 80)
+
 #   Most Negative Coversations
     drawStringGrayHelvetica(canvas, "'Philips is doing great, wow! Very nice customer service ", 26.07, 1512, 687, False, '#636363')
     drawStringGrayHelvetica(canvas, "concerning coffee machines'", 26.07, 1512, 650, False, '#636363')
@@ -129,6 +170,13 @@ def page1(canvas):
 
     drawStringGrayHelvetica(canvas, "'Nice Timigs man'", 26.07, 1512, 196, False, '#636363')
     drawStringGrayHelvetica(canvas, "Thomas Dewinter", 26.07, 1722, 196, False, '#a1a1a1')
+
+    #avatar
+    canvas.drawImage("reports/TabulaMagica-1.png", 1360, 635, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1360, 511, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1360, 385, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1360, 268, 80, 80)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1360, 144, 80, 80)
 
 #   Timeline Conversations
     drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
@@ -171,10 +219,6 @@ def page1(canvas):
     drawStringGrayHelvetica(canvas, "17:00", 29.17, 1518, 1391, False, '#FFFFFF')
     drawStringGrayHelvetica(canvas, "17:30", 29.17, 1518, 1195, False, '#FFFFFF')
 
-def page2(canvas):
-    #bg
-    canvas.drawImage("reports/EMPTYPhilipsRealTimeReport2.png", 0, 0, 2479,\
-        3507)
 
 
 canvas = canvas.Canvas('report-page-latest.pdf', pagesize=(2480, 3508),\
@@ -186,6 +230,7 @@ canvas.save()
 
 
 print "page 1 created."
-#os.system("open -a Preview report-page-latest.pdf")
 #open pdf file created
-os.system('/usr/bin/gnome-open report-page-latest.pdf')
+os.system("open -a Preview report-page-latest.pdf")
+#open pdf file created Ubuntu
+#os.system('/usr/bin/gnome-open report-page-latest.pdf')

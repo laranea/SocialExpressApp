@@ -35,6 +35,26 @@ def drawStringGrayHelvetica(canvas, string, size, x, y, isBold=False, color=''):
     canvas.drawString(x, y, string)
 
 
+def drawSentimentGraph(data):
+    drawing = Drawing(300, 220)
+    lc = HorizontalLineChart()
+#    lc.strokeColor = colors.darkorange
+#    lc.x = -1
+#    lc.y = 8
+    lc.width = 200
+    lc.data = data
+    lc.categoryAxis.visible = 0  # Make X-Axis Invisible
+    lc.valueAxis.visible = 0 # Make Y-Axis Invisible
+    lc.valueAxis.valueMin = 0  # Y axis Min value
+    lc.valueAxis.valueMax = 2  # Y Axis Max Value
+    lc.valueAxis.valueStep = 1  # Y Axis num of steps
+    lc.lines[0].strokeWidth = 1.5 # Width of line graph
+    lc.lines[0].strokeColor = colors.black  # Color of the Graph Line
+    lc.lines[1].strokeWidth = 1.5 #Width of 2nd line graph
+    drawing.add(lc)
+    return drawing
+
+
 def page2(canvas):
     mentions, cityname = 35, "Amsterdam"
     percentage_increase = 35
@@ -63,6 +83,11 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, sentiments, 90.65, 499, 2452, False, '#e68383')
     drawStringGrayHelvetica(canvas, followers, 90.65, 499, 2220, False, '#e68383')
 
+    #Arrows
+    canvas.drawImage("reports/green-up.png", 320, 2652, 100, 120)
+    canvas.drawImage("reports/red-down.png", 320, 2402, 100, 120)
+    canvas.drawImage("reports/red-down.png", 320, 2170, 100, 120)
+
     #Hottest Topics
     drawStringGrayHelvetica(canvas, 'Topics mention together with the word ' + keyword, 23.26, 379, 1780, False, '#000000')
     #Green
@@ -89,6 +114,22 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'bruin', 23.26, 1739, 864, False, '#000000')
     drawStringGrayHelvetica(canvas, 'sens', 23.26, 2055, 864, False, '#000000')
 
+    # Sentiment Graphs
+    graph_tuple = (1.5, 1.35, 1.37, 1.42, 1.22, 1.31, 1.1, .9, .80, .85, .75, .82, .69, .72, .55)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 398, 740)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 712, 740)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1021, 740)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1338, 740)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1661, 740)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1973, 740)
+
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 398, 332)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 712, 332)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1021, 332)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1338, 332)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1661, 332)
+    drawSentimentGraph([graph_tuple]).drawOn(canvas, 1973, 332)
+
     #Key influencers by Topic Second Row
     drawStringGrayHelvetica(canvas, 'reclame', 23.26, 476, 458, False, '#000000')
     drawStringGrayHelvetica(canvas, 'saeco', 23.26, 785, 458, False, '#000000')
@@ -104,6 +145,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 730, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1727, 730, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 2043, 730, False, '#000000')
+
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 710, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 710, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 710, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 710, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 710, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 710, 30, 30)
 
     #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '44', 13.96, 490, 710, False, '#000000')
@@ -127,6 +176,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1727, 666, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 2043, 666, False, '#000000')
 
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 646, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 646, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 646, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 646, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 646, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 646, 30, 30)
+
     #Expertise Middle Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '21', 13.96, 490, 646, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Social media', 13.96, 515, 646, False)
@@ -149,6 +206,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 604, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 604, False, '#000000')
 
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 584, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 584, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 584, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 584, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 584, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 584, 30, 30)
+
     #Expertise Bottom Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '49', 13.96, 490, 584, False, '#000000')
     drawStringGrayHelvetica(canvas, 'ICT', 13.96, 515, 584, False)
@@ -170,6 +235,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 324, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1727, 324, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 2043, 324, False, '#000000')
+
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 304, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 304, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 304, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 304, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 304, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 304, 30, 30)
 
     #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '44', 13.96, 490, 304, False, '#000000')
@@ -195,6 +268,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1727, 261, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 2043, 261, False, '#000000')
 
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 241, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 241, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 241, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 241, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 241, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 241, 30, 30)
+
     #Expertise Middle Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '21', 13.96, 490, 241, False, '#000000')
     drawStringGrayHelvetica(canvas, '21', 13.96, 797, 241, False, '#000000')
@@ -219,6 +300,14 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 197, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 197, False, '#000000')
 
+    #avatars
+    canvas.drawImage("reports/TabulaMagica-1.png", 420, 177, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 727, 177, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1041, 177, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1359, 177, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1679, 177, 30, 30)
+    canvas.drawImage("reports/TabulaMagica-1.png", 1995, 177, 30, 30)
+
     #Expertise Bottom Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
     drawStringGrayHelvetica(canvas, '49', 13.96, 490, 177, False, '#000000')
     drawStringGrayHelvetica(canvas, '49', 13.96, 797, 177, False, '#000000')
@@ -236,6 +325,7 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 177, False)
 
 
+
 canvas = canvas.Canvas('report-page-latest2.pdf', pagesize=(2480, 3508),\
     bottomup=1)
 page2(canvas)
@@ -244,4 +334,6 @@ canvas.save()
 
 print "page 2 created."
 #open pdf file created
-os.system('/usr/bin/gnome-open report-page-latest2.pdf')
+os.system("open -a Preview report-page-latest2.pdf")
+#open pdf file created Ubuntu
+#os.system('/usr/bin/gnome-open report-page-latest2.pdf')
