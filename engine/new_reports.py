@@ -73,7 +73,7 @@ def twitterMentionsGraph(data):
 #    lc.joinedLines = 1
     lc.data = data
     catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
-#    lc.valueAxis.visible = 0 # Make Y-Axis Invisible
+    lc.valueAxis.visible = 0 # Make Y-Axis Invisible
     lc.lines[0].strokeColor = colors.magenta
 #    lc.inFill = 1
     lc.lines[1].strokeColor = colors.lightblue
