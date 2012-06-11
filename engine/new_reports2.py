@@ -244,4 +244,5 @@ canvas.save()
 
 print "page 2 created."
 #open pdf file created
-os.system('/usr/bin/gnome-open report-page-latest2.pdf')
+#os.system('/usr/bin/gnome-open report-page-latest2.pdf')
+os.system("open -a Preview report-page-latest2.pdf")
