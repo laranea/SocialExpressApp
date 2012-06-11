@@ -225,7 +225,7 @@ canvas = canvas.Canvas('report-page-latest.pdf', pagesize=(2480, 3508),\
     bottomup=1)
 page1(canvas)
 canvas.showPage()
-canvas.save()
+canvas.save() sta
 
 
 
