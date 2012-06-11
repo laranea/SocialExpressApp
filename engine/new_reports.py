@@ -63,7 +63,7 @@ def drawSentimentGraph(data):
     return drawing
 
 def twitterMentionsGraph(data, yaxis_names = []):
-    drawing = Drawing(200, 300)
+    drawing = Drawing(100, 300)
     lc = HorizontalLineChart()
     #lc.strokeColor = colors.darkorange
     lc.x = 0
@@ -77,13 +77,15 @@ def twitterMentionsGraph(data, yaxis_names = []):
     lc.valueAxis.visible = 0 # Make Y-Axis Invisible
     lc.lines[0].strokeColor = colors.magenta
 #    lc.inFill = 1
+    print dir(lc.categoryAxis)
+#    lc.categoryAxis.scale = 1
     lc.lines[1].strokeColor = colors.lightblue
     lc.categoryAxis.categoryNames = catNames
     lc.categoryAxis.labels.boxAnchor = 'n'
     lc.categoryAxis.joinAxisMode = 'bottom'
     lc.valueAxis.valueMin = 0
     lc.valueAxis.valueMax = 11000
-    lc.valueAxis.valueStep = 1000
+    lc.valueAxis.valueStep = 500
     lc.lines[0].strokeWidth = 2.5
     lc.lines[1].strokeWidth = 2.5
     drawing.add(lc)
