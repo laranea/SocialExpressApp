@@ -62,7 +62,7 @@ def drawSentimentGraph(data):
     drawing.add(lc)
     return drawing
 
-def twitterMentionsGraph(data):
+def twitterMentionsGraph(data, yaxis_names = []):
     drawing = Drawing(200, 300)
     lc = HorizontalLineChart()
     #lc.strokeColor = colors.darkorange
@@ -72,7 +72,8 @@ def twitterMentionsGraph(data):
     lc.height = 780 # Length of Y-axis
 #    lc.joinedLines = 1
     lc.data = data
-    catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
+#    catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
+    catNames = yaxis_names
     lc.valueAxis.visible = 0 # Make Y-Axis Invisible
     lc.lines[0].strokeColor = colors.magenta
 #    lc.inFill = 1
@@ -93,6 +94,24 @@ def page1(canvas):
     mentions, cityname = 35, "Amsterdam"
     percentage_increase = 35
     keyword, hour, date, twitter_mins = "coffee", 1, "22/04/2012", 15
+    start, end = "8:00", "15:30"
+    start_date = time = map(int, start.split(':'))
+    end_date = map(int, end.split(':'))
+    if end_date[0] < start_date[0]:
+        end_date[0] += 12
+    time_list = [start]
+    if end_date[1] and not start_date[1]:
+        loop_count = range((end_date[0] - start_date[0]) * 2 + 1)
+    else:
+        loop_count = range((end_date[0] - start_date[0]) * 2)
+    for i in loop_count:
+        if time[1]:
+            time_list.append(str(time[0] + 1) + ":00")
+            time[0] += 1
+            time[1] = 0
+        else:
+            time_list.append(str(time[0]) + ":30")
+            time[1] = 30
     #bg
     canvas.drawImage("reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
         2479, 3507)
@@ -129,7 +148,7 @@ def page1(canvas):
 #        , 6900, 7900, 8000, 10200, 9500, 11000)
     graph_tuple = ( 2000, 3200, 4600, 4800, 5100, 6100, 5700, 7000 , 6900, 7900, 8000, 10200, 10000, 10500, 10650, 11000)
     graph_tuple2 = (700, 1000, 2500, 3000, 3400, 3700, 4600, 5100, 5700 , 5800, 5900, 6000, 6400, 6800, 7700, 8100)
-    twitterMentionsGraph([graph_tuple, graph_tuple2]).drawOn(canvas, 365, 1880)
+    twitterMentionsGraph([graph_tuple, graph_tuple2], time_list).drawOn(canvas, 365, 1880)
 #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
 
 #   Most Positive Conversations
@@ -233,7 +252,7 @@ canvas = canvas.Canvas('report-page-latest.pdf', pagesize=(2480, 3508),\
     bottomup=1)
 page1(canvas)
 canvas.showPage()
-canvas.save() sta
+canvas.save()
 
 
 
