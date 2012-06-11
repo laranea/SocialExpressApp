@@ -168,7 +168,7 @@ def page2(canvas):
     drawStringGrayHelvetica(canvas, '44', 13.96, 2065, 710, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Programming', 13.96, 2090, 710, False)
 
-   #Influencer Info above Middle Row
+    #Influencer Info above Middle Row
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 468, 666, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 775, 666, False, '#000000')
     drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1087, 666, False, '#000000')
@@ -335,5 +335,4 @@ canvas.save()
 print "page 2 created."
 #open pdf file created
 os.system("open -a Preview report-page-latest2.pdf")
-#open pdf file created Ubuntu
 #os.system('/usr/bin/gnome-open report-page-latest2.pdf')
