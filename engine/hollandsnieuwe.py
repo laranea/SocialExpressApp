@@ -13,6 +13,7 @@ import tweeql.extras.sentiment.analysis
 from ordereddict import OrderedDict
 from pkg_resources import resource_filename
 from dateutil import parser
+import itertools
 
 import gzip
 import math
@@ -39,6 +40,12 @@ fname = resource_filename(tweeql.extras.sentiment.__name__, 'sentiment.pkl.gz')
 fp = gzip.open(fname)
 classifier_dict = pickle.load(fp)
 fp.close()
+
+
+print classifier_dict
+
+exit
+
 classifier = classifier_dict['classifier']
 classinfo = { classifier_dict['pos_label'] :
                           { 'cutoff': classifier_dict['pos_cutoff'],
@@ -66,7 +73,7 @@ twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_sett
 for i in (map(lambda x : x+1, range(3))):
         try:
             print "Searching tweets page %i" % i
-            search_results = twitter.search(q="hollandsnieuwe", page=i, rpp=100)
+            search_results = twitter.search(q="hollandsnieuwe", page=i, rpp=10)
         except:
             pass
                  
@@ -92,6 +99,60 @@ for i in (map(lambda x : x+1, range(3))):
             tweet_data['ws'] = 0
             
             data.append(tweet_data)
+        
+            
+print "Creating word cloud..."
+
+            
+print "Creating volume plot..."
+x= []
+y = []
+volume = -1    
+for tweet_data in data:
+    d = parser.parse(tweet_data['created_at']).date()
+    if not d in x:
+        if volume != -1: 
+            y.append(volume)
+        volume = 0
+        x.append(d)
+    volume += 1
+    
+y.append(volume)
+
+print x
+print y
+
+print "Calculating the freq time..."
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return itertools.izip(a, b)
+
+times = [item['created_at'] for item in data]
+
+sum_deltas = 0
+count_deltas = 0
+for t0, t1 in pairwise(times):
+    sum_deltas += ((parser.parse(t1) - parser.parse(t0)).seconds / 60)
+    count_deltas += 1
+
+delta_time = sum_deltas / count_deltas
+
+print(delta_time) #minutes or seconds ?
+    
+print "Calculating the delta's of Volume..."
+comb_list = itertools.combinations(y, 2)
+
+max_volume_delta = 0
+# %
+
+for comb in comb_list:
+    delta = abs(comb[1] - comb[0])
+    if delta > max_volume_delta:
+        max_volume_delta = delta
+
+print max_volume_delta
 
 print "Creating sentiment plot..."
 x= []
@@ -99,20 +160,32 @@ y = []
 sentiment = -100
 counter = 0         
 for tweet_data in data:
-    d = parser.parse(tweet_data['created_at']).date()
-    if not d in x:
-        if sentiment > -100: 
-            y.append((sentiment/counter))
-        sentiment = 0
-        counter = 0
-        x.append(d)
-    sentiment += tweet_data['sentiment']
-    counter += 1
-    
+       d = parser.parse(tweet_data['created_at']).date()
+       if not d in x:
+           if sentiment > -100: 
+               y.append((sentiment/counter))
+           sentiment = 0
+           counter = 0
+           x.append(d)
+       sentiment += tweet_data['sentiment']
+       counter += 1
+   
 y.append(sentiment/counter)
     
 print x 
 print y
+
+print "Calculating the delta's of sentiment..."
+comb_list = itertools.combinations(y, 2)
+
+max_sentiment_delta = 0
+
+for comb in comb_list:
+    delta = abs(comb[1] - comb[0])
+    if delta > max_sentiment_delta:
+        max_sentiment_delta = delta
+        
+print max_sentiment_delta
 
 years    = mdates.YearLocator()   # every year
 months   = mdates.MonthLocator()  # every month
@@ -131,7 +204,7 @@ ax.xaxis.set_minor_locator(hours)
 datemin = min(x)
 datemax = max(x)
 ax.set_xlim(datemin, datemax)
-ax.set_ylim(-1.5, 0.5)
+ax.set_ylim(0, max(y))
 
 ax.format_xdata = mdates.DateFormatter('%a, %d %b %Y %H:%M:%S %z')
 ax.format_ydata = '$%1.2f'

@@ -30,7 +30,8 @@ class KloutInfluence(object):
         return api.topics(user_id)
  
 if __name__ == '__main__':
-    klout = KloutInfluence('laranea')
+    klout = KloutInfluence('larane')
+    klout.screen_name = 'laranea'
     print(klout.score())
     print(klout.influences())
     print(klout.topics())
