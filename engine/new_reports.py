@@ -69,8 +69,8 @@ class Report1(object):
         drawing.add(lc)
         return drawing
     
-    def twitterMentionsGraph(self, data):
-        drawing = Drawing(200, 300)
+    def twitterMentionsGraph(self, data, yaxis_names = []):
+        drawing = Drawing(100, 300)
         lc = HorizontalLineChart()
         #lc.strokeColor = colors.darkorange
         lc.x = 0
@@ -79,7 +79,8 @@ class Report1(object):
         lc.height = 780 # Length of Y-axis
         #lc.joinedLines = 1
         lc.data = data
-        catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
+        #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
+        catNames = yaxis_names
         lc.valueAxis.visible = 0 # Make Y-Axis Invisible
         lc.lines[0].strokeColor = colors.magenta
     #    lc.inFill = 1
@@ -89,7 +90,7 @@ class Report1(object):
         lc.categoryAxis.joinAxisMode = 'bottom'
         lc.valueAxis.valueMin = 0
         lc.valueAxis.valueMax = 11000
-        lc.valueAxis.valueStep = 1000
+        lc.valueAxis.valueStep = 500
         lc.lines[0].strokeWidth = 2.5
         lc.lines[1].strokeWidth = 2.5
         drawing.add(lc)
@@ -100,6 +101,26 @@ class Report1(object):
         mentions, cityname = 35, "Amsterdam"
         percentage_increase = 35
         keyword, hour, date, twitter_mins = "coffee", 1, "22/04/2012", 15
+        
+        start, end = "8:00", "15:30"
+        start_date = time = map(int, start.split(':'))
+        end_date = map(int, end.split(':'))
+        if end_date[0] < start_date[0]:
+            end_date[0] += 12
+        time_list = [start]
+        if end_date[1] and not start_date[1]:
+            loop_count = range((end_date[0] - start_date[0]) * 2 + 1)
+        else:
+            loop_count = range((end_date[0] - start_date[0]) * 2)
+        for i in loop_count:
+            if time[1]:
+                time_list.append(str(time[0] + 1) + ":00")
+                time[0] += 1
+                time[1] = 0
+            else:
+                time_list.append(str(time[0]) + ":30")
+                time[1] = 30 
+                
         #bg
         canvas.drawImage("reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
             2479, 3507)
@@ -120,6 +141,11 @@ class Report1(object):
     
         self.drawStringOrangeHelvetica(canvas, "Every " + str(twitter_mins) +\
             " minutes someone is twittering..", 25, 484, 2627)
+        
+        #keyword related to legends
+        self.drawStringGrayHelvetica(canvas, "JURA", 26.07, 970, 2435, False)
+        self.drawStringGrayHelvetica(canvas, "NESPRESSO", 26.07, 970, 2477, False)
+        self.drawStringGrayHelvetica(canvas, "SENSEO", 26.07, 970, 2523, False)
     
         self.drawSentimentGraph([(math.sin(0), math.sin(30), math.sin(45), math.sin(90),\
             math.sin(120), math.sin(150), math.sin(180))]).drawOn(canvas, 450, 2300)
@@ -128,7 +154,7 @@ class Report1(object):
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
         graph_tuple = ( 2000, 3200, 4600, 4800, 5100, 6100, 5700, 7000 , 6900, 7900, 8000, 10200, 10000, 10500, 10650, 11000)
         graph_tuple2 = (700, 1000, 2500, 3000, 3400, 3700, 4600, 5100, 5700 , 5800, 5900, 6000, 6400, 6800, 7700, 8100)
-        self.twitterMentionsGraph([graph_tuple, graph_tuple2]).drawOn(canvas, 365, 1880)
+        self.twitterMentionsGraph([graph_tuple, graph_tuple2], time_list).drawOn(canvas, 365, 1880)
     #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
     
     #   Most Positive Conversations
@@ -226,16 +252,14 @@ class Report1(object):
         self.drawStringGrayHelvetica(canvas, "17:00", 29.17, 1518, 1391, False, '#FFFFFF')
         self.drawStringGrayHelvetica(canvas, "17:30", 29.17, 1518, 1195, False, '#FFFFFF')
 
-        def create(self, name):
-            canvas = canvas.Canvas('report-page-1-%s.pdf' % name, pagesize=(2480, 3508),\
-    bottomup=1)
-            self.page1(canvas)
-            canvas.showPage()
-            canvas.save()
-            os.system("open -a Preview report-page-latest.pdf")
-
+    def create(self, name):
+        c = canvas.Canvas('report-page-1-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1)
+        self.page1(c)
+        c.showPage()
+        c.save()
+        os.system("open -a Preview report-page-latest.pdf")
 
 if __name__ == '__main__':
     report1 = Report1()
-    report1.create("Philips")i
+    report1.create("Philips")
     
