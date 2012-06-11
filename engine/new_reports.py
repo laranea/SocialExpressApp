@@ -114,6 +114,14 @@ def page1(canvas):
     drawStringOrangeHelvetica(canvas, "Every " + str(twitter_mins) +\
         " minutes someone is twittering..", 25, 484, 2627)
 
+    # Circles -  Legends - number of graph lines
+#    canvas.circle(947, 2445, 11, 1)
+
+    #keyword related to legends
+    drawStringGrayHelvetica(canvas, "JURA", 26.07, 970, 2435, False)
+    drawStringGrayHelvetica(canvas, "NESPRESSO", 26.07, 970, 2477, False)
+    drawStringGrayHelvetica(canvas, "SENSEO", 26.07, 970, 2523, False)
+
     drawSentimentGraph([(math.sin(0), math.sin(30), math.sin(45), math.sin(90),\
         math.sin(120), math.sin(150), math.sin(180))]).drawOn(canvas, 450, 2300)
 
