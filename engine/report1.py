@@ -96,6 +96,9 @@ class Report1(object):
         lc.lines[1].strokeWidth = 2.5
         drawing.add(lc)
         return drawing
+
+#    def createCircle(self, x, y, color):
+
     
     
     def page1(self, canvas):
