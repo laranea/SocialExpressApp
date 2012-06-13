@@ -66,6 +66,7 @@ class Report1(object):
         lc.valueAxis.valueStep = 1
         lc.lines[0].strokeWidth = 1.5
         lc.lines[1].strokeWidth = 1.5
+        print dir(lc.lines[0])
         drawing.add(lc)
         return drawing
     
@@ -257,7 +258,8 @@ class Report1(object):
         self.page1(c)
         c.showPage()
         c.save()
-        os.system("open -a Preview report-page-latest.pdf")
+#        os.system("open -a Preview report-page-latest.pdf")
+        os.system('/usr/bin/gnome-open report-page-latest.pdf') 
 
 if __name__ == '__main__':
     report1 = Report1()
