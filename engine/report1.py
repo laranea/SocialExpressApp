@@ -13,11 +13,13 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Drawing, Circle
 from reportlab.graphics.charts.linecharts import HorizontalLineChart
 
+
 class Report1(object):
-    def __init__(self, realtime = True):
+
+    def __init__(self, realtime=True):
         self.spike_kind = 'volume'
         self.spike_percentage = 35
         self.spike_moreorless = 'more'
@@ -34,19 +36,17 @@ class Report1(object):
         self.conversationlist = []
         self.top5positive = []
         self.top5negative = []
+        self.graphcircleradius = 11
 
-        
     def drawStringOrangeHelvetica(self, canvas, string, size, x, y, isBold=False):
         canvas.setFillColor(colors.darkorange)
-    
+
         if not isBold:
             canvas.setFont('Helvetica', size)
         else:
             canvas.setFont('Helvetica-Bold', size)
-    
         canvas.drawString(x, y, string)
-    
-    
+
     def drawStringGrayHelvetica(self, canvas, string, size, x, y, isBold=False, color=''):
         if color:
             canvas.setFillColor(colors.HexColor(color))
@@ -56,10 +56,8 @@ class Report1(object):
             canvas.setFont('Helvetica', size)
         else:
             canvas.setFont('Helvetica-Bold', size)
-    
         canvas.drawString(x, y, string)
-    
-    
+
     def drawSentimentGraph(self, data):
         drawing = Drawing(300, 200)
         lc = HorizontalLineChart()
@@ -78,27 +76,26 @@ class Report1(object):
         lc.valueAxis.valueStep = 1
         lc.lines[0].strokeWidth = 1.5
         lc.lines[1].strokeWidth = 1.5
-        print dir(lc.lines[0])
         drawing.add(lc)
         return drawing
-    
-    def twitterMentionsGraph(self, data, yaxis_names = []):
+
+    def twitterMentionsGraph(self, data, yaxis_names=[]):
         drawing = Drawing(100, 300)
         lc = HorizontalLineChart()
         #lc.strokeColor = colors.darkorange
         lc.x = 0
         lc.y = 0
-        lc.width = 1795 # Length of X-axis
-        lc.height = 780 # Length of Y-axis
+        lc.width = 1795  # Length of X-axis
+        lc.height = 780  # Length of Y-axis
         #lc.joinedLines = 1
         lc.data = data
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
-        lc.valueAxis.visible = 0 # Make Y-Axis Invisible
+        lc.valueAxis.visible = 0  # Make Y-Axis Invisible
         lc.lines[0].strokeColor = colors.magenta
     #    lc.inFill = 1
         lc.lines[1].strokeColor = colors.lightblue
-        #lc.lines[2].strokeColor = 
+        #lc.lines[2].strokeColor =
         lc.categoryAxis.categoryNames = catNames
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
@@ -110,15 +107,40 @@ class Report1(object):
         drawing.add(lc)
         return drawing
 
-#    def createCircle(self, x, y, color):
+    def createCircle(self, canvas, x, y, radius, color):
+        canvas.setFillColor(colors.HexColor(color))
+        canvas.setStrokeColor(colors.HexColor(color))
+        canvas.circle(x, y, radius, 1, 1)
 
-    
-    
+    def splitSentence(self, sentence, isConversation=1):
+        list = sentence.split()
+        sentence_list = []
+        first, second, third = '', '', ''
+        # isConversation = 1 for TimeLine Conversation
+        # isConversation = 0 for Positive & Negative Comments
+        if isConversation:
+            for i in range(9):
+                first += list[i] + " "
+            sentence_list.append(first)
+            for i in range(9, 18):
+                second += list[i] + " "
+            sentence_list.append(second)
+            for i in range(18, len(list)):
+                third += list[i] + " "
+            sentence_list.append(third)
+        else:
+            for i in range(9):
+                first += list[i] + " "
+            sentence_list.append(first)
+            for i in range(9, len(list)):
+                second += list[i] + " "
+            sentence_list.append(second)
+        return sentence_list
+
     def page1(self, canvas):
         mentions, cityname = self.spike_percentage, self.spike_location
         percentage_increase = self.spike_percentage
         keyword, hour, date, twitter_mins = self.spike_keyword, 1, datetime.now().date(), self.freq_time
-        
         start, end = self.volumebegintime, self.volumeendtime
         start_date = time = map(int, start.split(':'))
         end_date = map(int, end.split(':'))
@@ -136,8 +158,8 @@ class Report1(object):
                 time[1] = 0
             else:
                 time_list.append(str(time[0]) + ":30")
-                time[1] = 30 
-                
+                time[1] = 30
+
         #bg
         canvas.drawImage("reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
             2479, 3507)
@@ -148,7 +170,7 @@ class Report1(object):
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% more mentions", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% less mentions", 54.17, 653, 3350, True)
-        else: 
+        else:
             self.drawStringOrangeHelvetica(canvas, "SENTIMENT SPIKE : ", 54.17, 170, 3350, True)
             if self.spike_moreorless == 'more':
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment increase", 54.17, 653, 3350, True)
@@ -157,61 +179,70 @@ class Report1(object):
                #TODO: dynamic change!
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 1220, 3350, False)
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1290, 3350, True)
-    
+
         self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + \
             "% increase", 64.22, 1920, 3280, True)
-    
+
         self.drawStringGrayHelvetica(canvas, "concerning", 54.17, 170, 3250, False)
         self.drawStringOrangeHelvetica(canvas, self.spike_keyword, 54.17, 450, 3250, False)
         #self.drawStringGrayHelvetica(canvas, "than usual in " + str(hour) +\
         #    " hour " + date, 54.17, 610, 3250)
-    
+
         self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time) + " seconds someone is twittering..", 25, 484, 2627)
-        
+
         #keyword related to legends
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[0], 26.07, 970, 2435, False)
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[1], 26.07, 970, 2477, False)
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[2], 26.07, 970, 2523, False)
-    
-        
+
         self.drawSentimentGraph(self.sentimentgraph).drawOn(canvas, 450, 2300)
-    
+
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
-        graph_tuple = ( 2000, 3200, 4600, 4800, 5100, 6100, 5700, 7000 , 6900, 7900, 8000, 10200, 10000, 10500, 10650, 11000)
-        graph_tuple2 = (700, 1000, 2500, 3000, 3400, 3700, 4600, 5100, 5700 , 5800, 5900, 6000, 6400, 6800, 7700, 8100)
+        graph_tuple = (2000, 3200, 4600, 4800, 5100, 6100, 5700, 7000, 6900, 7900, 8000, 10200, 10000, 10500, 10650, 11000)
+        graph_tuple2 = (700, 1000, 2500, 3000, 3400, 3700, 4600, 5100, 5700, 5800, 5900, 6000, 6400, 6800, 7700, 8100)
         self.twitterMentionsGraph([self.volumegraph1], time_list).drawOn(canvas, 365, 1880)
+
+        #Create Circle on Twitter Mention Graph
+        self.createCircle(canvas, 400, 2000, self.graphcircleradius, "#00611C")
+
     #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
-    
+
     #   Most Positive Conversations
         #TODO: calculate length for sentence
         i = 0
-        
+
         for pos in self.top5positive:
             deltax_text = i * 0
             deltay_text = i * 124
             deltay_space = i * (37 + 5)
-            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
+            sentence_list = self.splitSentence(pos['text'], 0)
+            self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 452, 687 - deltay_text, False, '#636363')
+            self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 452, 650 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
-    
+#            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
+#            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
+#            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
+
             #avatar
             canvas.drawImage(pos['avatar'], 300, 635 - deltay_text, 80, 80)
 
             i += 1
 
-    
         #   Most Negative Coversations
         i = 0
-        
+
         for neg in self.top5negative:
             deltax_text = i * 0
             deltay_text = i * 124
             deltay_space = i * (37 + 5)
-            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
+            self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 1512, 687 - deltay_text, False, '#636363')
+            self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 1512, 650 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
-    
+#            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
+#            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
+#            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
+
             #avatar
             canvas.drawImage(neg['avatar'], 1360, 635 - deltay_text, 80, 80)
 
@@ -219,7 +250,7 @@ class Report1(object):
 
         #   Timeline Conversations
         for conv in self.conversationlist:
-            
+
                #   Time line Hours
             #First Column
             self.drawStringGrayHelvetica(canvas, conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#FFFFFF')
@@ -233,7 +264,7 @@ class Report1(object):
             self.drawStringGrayHelvetica(canvas, conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#FFFFFF')
             self.drawStringGrayHelvetica(canvas, conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#FFFFFF')
             self.drawStringGrayHelvetica(canvas, conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, '#FFFFFF')
-    
+
             self.drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
             self.drawStringGrayHelvetica(canvas, "''Coffee Machine exploded,", 29.17, 570, 1463, False)
             self.drawStringGrayHelvetica(canvas, "what is this? Can not", 29.17, 570, 1433, False)
@@ -258,7 +289,7 @@ class Report1(object):
             self.drawStringGrayHelvetica(canvas, "explode? Unbelievable", 29.17, 1672, 1331, False)
             self.drawStringGrayHelvetica(canvas, "Philips is not", 29.17, 1672, 1195, False)
             self.drawStringGrayHelvetica(canvas, "answering my questions", 29.17, 1672, 1165, False)
-            self.drawStringGrayHelvetica(canvas, "bad customer service", 29.17, 1672, 1135, False)    
+            self.drawStringGrayHelvetica(canvas, "bad customer service", 29.17, 1672, 1135, False)
 
     def create(self, name):
         c = canvas.Canvas('report-page-1-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1)
@@ -266,7 +297,7 @@ class Report1(object):
         c.showPage()
         c.save()
 #        os.system("open -a Preview report-page-latest.pdf")
-        os.system('/usr/bin/gnome-open report-page-latest.pdf') 
+        os.system('/usr/bin/gnome-open report-page-1-%s.pdf' % name)
 
 if __name__ == '__main__':
     report1 = Report1()
