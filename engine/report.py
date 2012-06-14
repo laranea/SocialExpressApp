@@ -13,6 +13,12 @@ from reportlab.graphics.charts.linecharts import HorizontalLineChart
 
 class ConversationalReport(object):
 
+    def __init__(self, realtime = True):
+        self.keyword = "coffee"
+        self.cityname = "Amsterdam"
+        self.start_date = "22/04/2012"
+        self.end_date = "29/04/2012"
+
     def drawStringOrangeHelvetica(self, canvas, string, size, x, y, isBold=False):
         canvas.setFillColor(colors.darkorange)
         if not isBold:
@@ -36,8 +42,7 @@ class ConversationalReport(object):
         canvas.drawString(x, y, string)
 
     def generate_pdf(self, canvas):
-        keyword, cityname = "coffee", "Amsterdam"
-        start_date, end_date = "22/04/2012", "29/04/2012"
+
         #bg
         canvas.drawImage("reports/EMPTYPhilipsWeeklyConversationProblemsReport.png", 0, 0, 2479, 3507)
 
@@ -55,10 +60,10 @@ class ConversationalReport(object):
         #Conversational Problems Report
         self.drawStringGrayHelvetica(canvas, "Weekly generated social media report", 54.17, 176, 3083, False)
         self.drawStringGrayHelvetica(canvas, "on", 54.17, 176, 3023, False)
-        self.drawStringOrangeHelvetica(canvas, keyword, 54.17, 250, 3023, False)
+        self.drawStringOrangeHelvetica(canvas, self.keyword, 54.17, 250, 3023, False)
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 415, 3023, False)
-        self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 470, 3023, False)
-        self.drawStringGrayHelvetica(canvas, "(between " + start_date + " and " + end_date + ")", 54.17, 760, 3023, False)
+        self.drawStringOrangeHelvetica(canvas, self.cityname, 54.17, 470, 3023, False)
+        self.drawStringGrayHelvetica(canvas, "(between " + self.start_date + " and " + self.end_date + ")", 54.17, 760, 3023, False)
 
         #Problem Subjects
         self.drawStringGrayHelvetica(canvas, "Motor Break Down", 58.33, 371, 2435, True)
@@ -108,8 +113,8 @@ class ConversationalReport(object):
         self.generate_pdf(c)
         c.showPage()
         c.save()
-        #os.system("open -a Preview coversation-report.pdf")
-        os.system('/usr/bin/gnome-open coversation-report.pdf')
+        os.system("open -a Preview coversation-report.pdf")
+        #os.system('/usr/bin/gnome-open coversation-report.pdf')
 
 if __name__ == '__main__':
     report = ConversationalReport()
