@@ -120,6 +120,10 @@ class Report(object):
         canvas.setStrokeColor(colors.HexColor(color))
         canvas.circle(x, y, radius, 1, 1)
 
+    def setFillStrokeColor(self, canvas, color):
+        canvas.setFillColor(colors.HexColor(color))
+        canvas.setStrokeColor(colors.HexColor(color))
+
     def splitSentence(self, sentence, isConversation=1):
         list = sentence.split()
         sentence_list = []
@@ -283,8 +287,21 @@ class Report(object):
 
             i += 1
 
-        #   Timeline Conversations
+        # Timeline Time - Rect Box
+        self.setFillStrokeColor(canvas, '#808080')  # Set Color to Rectangular Box
+        canvas.roundRect(393, 1600, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(393, 1453, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(393, 1243, 105, 50, 2, stroke=1, fill=1)
 
+        canvas.roundRect(992, 1565, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(992, 1376, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(992, 1177, 105, 50, 2, stroke=1, fill=1)
+
+        canvas.roundRect(1503, 1565, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(1503, 1378, 105, 50, 2, stroke=1, fill=1)
+        canvas.roundRect(1503, 1177, 105, 50, 2, stroke=1, fill=1)
+
+        #   Timeline Conversations
         self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#FFFFFF')
         self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#FFFFFF')
         self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#FFFFFF')
@@ -684,7 +701,7 @@ class Report(object):
         self.page3()
         c.showPage()
         c.save()
-        #os.system('/usr/bin/gnome-open coversation-report.pdf')
+        #os.system('/usr/bin/gnome-open report-%s.pdf' % name)
         os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
