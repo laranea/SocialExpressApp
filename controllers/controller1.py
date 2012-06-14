@@ -7,4 +7,4 @@ class Controller1(Controller):
     def post(self, request):
 		return Response("<h1>hello first response!</h1>")
     def get(self, request):
-        return TemplateResponse("index.html", {})
+        return TemplateResponse("index.html", {"error":0})
