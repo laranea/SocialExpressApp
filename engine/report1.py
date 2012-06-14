@@ -296,7 +296,6 @@ class Report1(object):
         self.page1(c)
         c.showPage()
         c.save()
-#        os.system("open -a Preview report-page-latest.pdf")
         os.system('/usr/bin/gnome-open report-page-1-%s.pdf' % name)
 
 if __name__ == '__main__':
