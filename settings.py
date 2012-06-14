@@ -1,6 +1,7 @@
 from controllers.controller1 import Controller1
 from controllers.controller2 import Controller2
-from kiss.core.application import Event
+from controllers.users import UserRegister
+from kiss.core import events as Event
 from kiss.models import SqliteDatabase, MySQLDatabase
 from kiss.core.exceptions import InternalServerError
 
@@ -18,7 +19,8 @@ options = {
 		"2": {
 			"3": Controller1,
 			"4": Controller2
-		}
+		},
+        "register": UserRegister,
 	},
 	"views": {
 		"templates_path": "views.templates",
@@ -33,7 +35,7 @@ options = {
 		"host": "localhost",
 		"database": 'socialexpress',
 		"user": 'root',
-		"password": "elleke"
+		"passwd": 'elleke'
 	}
 }
 

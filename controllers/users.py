@@ -3,8 +3,9 @@ from kiss.controllers.core import Controller
 from kiss.views.templates import TemplateResponse
 
 
-class Controller1(Controller):
+class UserRegister(Controller):
+
     def post(self, request):
-		return Response("<h1>hello first response!</h1>")
-    def get(self, request):
-        return TemplateResponse("index.html", {})
+        print "------user reg---"
+        print request.params['email']
+        return Response("<h1>Registration</h1>")
