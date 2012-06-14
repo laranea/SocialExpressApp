@@ -10,7 +10,6 @@ from twython import Twython
 from klout import KloutInfluence
 import tweeql.extras.sentiment
 import tweeql.extras.sentiment.analysis
-from ordereddict import OrderedDict
 from pkg_resources import resource_filename
 from dateutil import parser
 import itertools
@@ -18,6 +17,7 @@ from pygeocoder import Geocoder
 import language
 import urllib
 from collections import defaultdict
+import ordereddict
 
 import gzip
 import math
@@ -37,11 +37,10 @@ from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 from nltk import word_tokenize, sent_tokenize, corpus
 
-
 MAIN_KEYWORD = 'koffie'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
-MAIN_ENTERPRISE =  'Philips'
+MAIN_ENTERPRISE =  'PhilipsNL'
 MAIN_LOCATION = 'Amsterdam'
 
 MAIN_LANGUAGE = 'nl'
@@ -97,6 +96,7 @@ def sentiment(text):
         
     return retval
 
+
 # search keywords
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
@@ -113,7 +113,7 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             tweet_data = {}
             print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
             #print tweet['text'].encode('utf-8'),"\n"
-            tweet_data['text'] = tweet['text'].encode('utf-8')
+            tweet_data['text'] = tweet['text']#.encode('utf-8')
             tweet_data['username'] = tweet['from_user']
             tweet_data['created_at'] = tweet['created_at']
             #===================================================================
@@ -431,7 +431,7 @@ y.append(sentiment/counter)
 print x 
 print y
 
-report.sentimentgraph = [tuple(y)]
+report.sentimentgraph = tuple(y)
 
 print "Calculating the delta's of sentiment..."
 comb_list = itertools.combinations(y, 2)
@@ -613,6 +613,7 @@ c = 0
 for tweet in main_data:
         #for word in word_tokenize(tweet['text']):
         for word in tweet['text'].split():
+            word = word.lower()
             if len(word) > 5 and word not in corpus.stopwords.words('dutch'):
                 print word
                 if word_cloud.has_key(word):
@@ -639,9 +640,9 @@ for tweet in main_data:
                 if c > 100:
                     break
                 
-report.word_cloud = dict(sorted(word_cloud, key=lambda k: k[1], reverse = True))
+report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)    
 report.key_infl = key_infl
 report.word_sent = word_sent
-report.word_klout = dict(sorted(word_klout, key=lambda k: k[0], reverse = True))
+report.word_klout = sorted(word_klout.items(), key=lambda k:k[1], reverse = True)
 
 report.create(MAIN_ENTERPRISE)
