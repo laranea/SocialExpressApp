@@ -48,14 +48,13 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
-SEARCH_PAGES = 100
-SEARCH_RPP = 1000
+SEARCH_PAGES = 10
+SEARCH_RPP = 10
 
 #REPORT1
-import report1
-import report2
+import report
 
-report = report1.Report1()
+report = report.Report()
 main_data = []
 competitor1_data = []
 competitor2_data = []
