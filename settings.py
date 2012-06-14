@@ -1,7 +1,7 @@
 from controllers.controller1 import Controller1
 from controllers.controller2 import Controller2
 from kiss.core.application import Event
-from kiss.models import SqliteDatabase
+from kiss.models import SqliteDatabase, MySQLDatabase
 from kiss.core.exceptions import InternalServerError
 
 
@@ -29,11 +29,11 @@ options = {
 		InternalServerError.code: Controller2.internal_server_error
 	},
 	"models": {
-		"engine": SqliteDatabase,
-		#"host": "localhost",
-		"database": 'test.sqldb'#,
-		#"user": 'postgres',
-		#"password": "postgres"
+		"engine": MySQLDatabase,
+		"host": "localhost",
+		"database": 'socialexpress',
+		"user": 'root',
+		"password": "elleke"
 	}
 }
 

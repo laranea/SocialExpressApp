@@ -286,6 +286,7 @@ class Report(object):
             canvas.drawImage("reports/TabulaMagica-1.png", 1360, 635 - deltay_text, 80, 80)
 
             i += 1
+        #circles ?
 
         # Timeline Time - Rect Box
         self.setFillStrokeColor(canvas, '#808080')  # Set Color to Rectangular Box
