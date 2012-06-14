@@ -20,16 +20,16 @@ class User(Model):
     date_joined = DateTimeField()
     
     departement = CharField(max_length=255)
-    account = ForeignKeyField('Account')
+    account = ForeignKeyField(Account)
     #
     
     def __unicode__(self):
-        return self.__unicode__()
+        return self.user_id
     
 class ClientProfile(Model):
     twitter_username = CharField(max_length=255)
     twitter_password = CharField(max_length=255)
-    user = ForeignKeyField('User')
+    user = ForeignKeyField(User)
     
     def __unicode__(self):
         return self.twitter_username
@@ -45,7 +45,7 @@ class Feed(Model):
     problem = BooleanField()
     praise = BooleanField()
     language = CharField(max_length=255)
-    client_profile = ForeignKeyField('ClientProfile')
+    client_profile = ForeignKeyField(ClientProfile)
     TYPES = (
         (0, 'Twitter'),
         (1, 'Facebook'),
@@ -62,7 +62,7 @@ class Rule(Model):
     if_clause = CharField(max_length=255)
     then_clause = CharField(max_length=255)
     action_clause = CharField(max_length=255)
-    client_profile = ForeignKeyField('ClientProfile')
+    client_profile = ForeignKeyField(ClientProfile)
     TYPES = (
         (0, 'sentiment'),
         (1, 'mentions'),
