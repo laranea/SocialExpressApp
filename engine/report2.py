@@ -5,6 +5,7 @@ Created on May 21, 2012
 '''
 import os
 import math
+import datetime
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_JUSTIFY
@@ -63,16 +64,16 @@ class Report2(object):
         return drawing
        
     def page2(self, canvas):
-        mentions, cityname = 35, "Amsterdam"
-        percentage_increase = 35
-        keyword, hour, date = "coffee", 1, "22/04/2012"
-        twit_mentions, sentiments, followers = "+40%", "-20%", "-20%"
+        mentions, cityname = self.percentage, self.location
+        percentage_increase = self.percentage
+        keyword, hour, date = self.keyword, 1, datetime.datetime.now().date()
+        twit_mentions, sentiments, followers = self.mentions_percentage, self.sentiment_percentage, self.followers_percentage
         #bg
         canvas.drawImage("reports/EMPTYPhilipsRealTimeReport2.png", 0, 0, 2479,\
             3507)
         #volume spike
         self.drawStringOrangeHelvetica(canvas, "VOLUME SPIKE : ", 54.17, 170, 3350, True)
-        self.drawStringOrangeHelvetica(canvas, str(mentions) + "% more mentions",\
+        self.drawStringOrangeHelvetica(canvas, str(self.percentage) + "% more mentions",\
             54.17, 653, 3350, True)
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 1180, 3350, False)
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1250, 3350, True)
@@ -93,7 +94,7 @@ class Report2(object):
         #Arrows
         canvas.drawImage("reports/green-up.png", 320, 2652, 100, 120)
         canvas.drawImage("reports/red-down.png", 320, 2402, 100, 120)
-        canvas.drawImage("reports/red-down.png", 320, 2170, 100, 120)
+        #canvas.drawImage("reports/red-down.png", 320, 2170, 100, 120)
     
         #Hottest Topics
         self.drawStringGrayHelvetica(canvas, 'Topics mention together with the word ' + keyword, 23.26, 379, 1780, False, '#000000')
@@ -184,12 +185,12 @@ class Report2(object):
         self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 2043, 666, False, '#000000')
     
         #avatars
-        canvas.drawImage("reports/TabulaMagica-1.png", 420, 646, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 727, 646, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1041, 646, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1359, 646, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1679, 646, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1995, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 420, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 727, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 1041, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 1359, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 1679, 646, 30, 30)
+        self.canvas.drawImage("reports/TabulaMagica-1.png", 1995, 646, 30, 30)
     
         #Expertise Middle Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
         self.drawStringGrayHelvetica(canvas, '21', 13.96, 490, 646, False, '#000000')
@@ -199,19 +200,19 @@ class Report2(object):
         self.drawStringGrayHelvetica(canvas, '21', 13.96, 1109, 646, False, '#000000')
         self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1134, 646, False)
         self.drawStringGrayHelvetica(canvas, '21', 13.96, 1429, 646, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1454, 646, False)
-        drawStringGrayHelvetica(canvas, '21', 13.96, 1749, 646, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1774, 646, False)
-        drawStringGrayHelvetica(canvas, '21', 13.96, 2065, 646, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 2090, 646, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1454, 646, False)
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 1749, 646, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1774, 646, False)
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 2065, 646, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 2090, 646, False)
     
         #Influencer Info above Bottom Row
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 468, 604, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 775, 604, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1087, 604, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1407, 604, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 604, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 468, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 775, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1087, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1407, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 604, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 604, False, '#000000')
     
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 584, 30, 30)
@@ -222,26 +223,26 @@ class Report2(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 584, 30, 30)
     
         #Expertise Bottom Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 490, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 515, 584, False)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 797, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 822, 584, False)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1109, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1134, 584, False)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1429, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1454, 584, False)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1749, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1774, 584, False)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 2065, 584, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 490, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 515, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 797, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 822, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1109, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1134, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1429, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1454, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1749, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1774, 584, False)
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 2065, 584, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 584, False)
     
         #Influencer Info above Top Row
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 468, 324, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 775, 324, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1087, 324, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 324, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1727, 324, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 2043, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 468, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 775, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1087, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1727, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 2043, 324, False, '#000000')
     
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 304, 30, 30)
@@ -252,28 +253,28 @@ class Report2(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 304, 30, 30)
     
         #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        drawStringGrayHelvetica(canvas, '44', 13.96, 490, 304, False, '#000000')
-        drawStringGrayHelvetica(canvas, '44', 13.96, 797, 304, False, '#000000')
-        drawStringGrayHelvetica(canvas, '44', 13.96, 1109, 304, False, '#000000')
-        drawStringGrayHelvetica(canvas, '44', 13.96, 1429, 304, False, '#000000')
-        drawStringGrayHelvetica(canvas, '44', 13.96, 1749, 304, False, '#000000')
-        drawStringGrayHelvetica(canvas, '44', 13.96, 2065, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 490, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 797, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1109, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1429, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1749, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '44', 13.96, 2065, 304, False, '#000000')
     
         #Expertise Field Top Row
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 515, 304, False)
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 822, 304, False)
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1134, 304, False)
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1454, 304, False)
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1774, 304, False)
-        drawStringGrayHelvetica(canvas, 'Programming', 13.96, 2090, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 515, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 822, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1134, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1454, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 1774, 304, False)
+        self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 2090, 304, False)
     
         #Influencer Info above Middle Row
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 468, 261, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 775, 261, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1087, 261, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1407, 261, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1727, 261, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 2043, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 468, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 775, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1087, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1407, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 1727, 261, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Stefan Lammert', 18.61, 2043, 261, False, '#000000')
     
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 241, 30, 30)
@@ -284,28 +285,28 @@ class Report2(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 241, 30, 30)
     
         #Expertise Middle Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        drawStringGrayHelvetica(canvas, '21', 13.96, 490, 241, False, '#000000')
-        drawStringGrayHelvetica(canvas, '21', 13.96, 797, 241, False, '#000000')
-        drawStringGrayHelvetica(canvas, '21', 13.96, 1109, 241, False, '#000000')
-        drawStringGrayHelvetica(canvas, '21', 13.96, 1429, 241, False, '#000000')
-        drawStringGrayHelvetica(canvas, '21', 13.96, 1749, 241, False, '#000000')
-        drawStringGrayHelvetica(canvas, '21', 13.96, 2065, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 490, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 797, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 1109, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 1429, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 1749, 241, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '21', 13.96, 2065, 241, False, '#000000')
     
         #Expertise Field Middle Row
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 515, 241, False)
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 822, 241, False)
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1134, 241, False)
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1454, 241, False)
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1774, 241, False)
-        drawStringGrayHelvetica(canvas, 'Social media', 13.96, 2090, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 515, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 822, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1134, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1454, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 1774, 241, False)
+        self.drawStringGrayHelvetica(canvas, 'Social media', 13.96, 2090, 241, False)
     
         #Influencer Info above Bottom Row
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 468, 197, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 775, 197, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1087, 197, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1407, 197, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 197, False, '#000000')
-        drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 468, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 775, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1087, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1407, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 1727, 197, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, 'Joost Deland', 18.61, 2043, 197, False, '#000000')
     
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 177, 30, 30)
@@ -316,20 +317,20 @@ class Report2(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 177, 30, 30)
     
         #Expertise Bottom Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        drawStringGrayHelvetica(canvas, '49', 13.96, 490, 177, False, '#000000')
-        drawStringGrayHelvetica(canvas, '49', 13.96, 797, 177, False, '#000000')
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1109, 177, False, '#000000')
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1429, 177, False, '#000000')
-        drawStringGrayHelvetica(canvas, '49', 13.96, 1749, 177, False, '#000000')
-        drawStringGrayHelvetica(canvas, '49', 13.96, 2065, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 490, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 797, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1109, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1429, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 1749, 177, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, '49', 13.96, 2065, 177, False, '#000000')
     
         #Expertise Field Bottom Row
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 515, 177, False)
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 822, 177, False)
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1134, 177, False)
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1454, 177, False)
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1774, 177, False)
-        drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 515, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 822, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1134, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1454, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 1774, 177, False)
+        self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 177, False)
 
     def create(self, name):
         c = canvas.Canvas('report-page-2-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1)
@@ -340,4 +341,4 @@ class Report2(object):
 
 if __name__ == '__main__':
     report2 = Report2()
-    report1.create("Philips")
+    report2.create("Philips")
