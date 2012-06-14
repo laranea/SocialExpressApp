@@ -35,6 +35,8 @@ import matplotlib.cbook as cbook
 import matplotlib.ticker as ticker
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText    
 
+from nltk import word_tokenize, sent_tokenize, corpus
+
 
 MAIN_KEYWORD = 'koffie'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
@@ -463,6 +465,8 @@ if max_volume_percentage > max_sentiment_percentage:
 else:
     report.spike_percentage = max_sentiment_sign * max_sentiment_percentage    
 
+report.mentions_percentage = max_volume_percentage
+report.sentiment_percentage = max_sentiment_percentage
 
 '''years    = mdates.YearLocator()   # every year
 months   = mdates.MonthLocator()  # every month
@@ -501,6 +505,9 @@ print xmins
 print ymins
 print xmaxs
 print ymaxs
+
+report.optima = zip(xmins, ymins)
+report.optima.extend(zip(xmaxs, xmins))
 
 '''
 if b.any():
@@ -593,18 +600,48 @@ print "Top 5 Negative:"
 for conv in sorted_negative:
     print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
     
+word_cloud = {}
+key_infl = {}
+word_sent = {}
+word_klout = {}
+
+c = 0
+
 #word cloud
-#Collect word statistics
-counts = defaultdict(int) 
-stemmed_sentences = []
-for sent in stemmed_sentences:
-    for stem in sent:
-        counts[stem] += 1
+#TODO stop words and stem
+#TODO calculate KLOUT, partnership with KLOUT ???
+for tweet in main_data:
+        #for word in word_tokenize(tweet['text']):
+        for word in tweet['text'].split():
+            if len(word) > 5 and word not in corpus.stopwords.words('dutch'):
+                print word
+                if word_cloud.has_key(word):
+                    word_cloud[word] += tweet['sentiment']
+                else:
+                    word_cloud[word] = tweet['sentiment']
+                    
+                key_infl[word] = tweet['username']
+                
+                if word_sent.has_key(word):
+                    word_sent[word].append(tweet['sentiment'])
+                else:
+                    word_sent[word] = list()
+                    word_sent[word].append(tweet['sentiment'])
+                
+                if not word_klout.has_key(word):
+                    try:
+                        klout = KloutInfluence(tweet['username'].encode('utf-8'))
+                        word_klout[word] = klout.score()
+                    except:
+                        word_klout[word] = -1 
+                c += 1
+                
+                if c > 100:
+                    break
+                
+report.word_cloud = dict(sorted(word_cloud, key=lambda k: k[1], reverse = True))
+report.key_infl = key_infl
+report.word_sent = word_sent
+report.word_klout = dict(sorted(word_klout, key=lambda k: k[0], reverse = True))
 
-#This block deletes all words with count <3
-#They are not relevant and sorting will be way faster
-pairs = [(x,y) for x,y in counts.items() if y >= 3]
-
-#Sort (stem,count) pairs based on count 
-sorted_stems = sorted(pairs, key = lambda x: x[1])
 report.create(MAIN_ENTERPRISE)
