@@ -15,6 +15,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.graphics.shapes import Drawing, Circle
 from reportlab.graphics.charts.linecharts import HorizontalLineChart
+from reportlab.lib.utils import ImageReader
 
 
 class Report1(object):
@@ -176,7 +177,7 @@ class Report1(object):
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment increase", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment decrease", 54.17, 653, 3350, True)
-               #TODO: dynamic change!
+        #TODO: dynamic change!
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 1220, 3350, False)
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1290, 3350, True)
 
@@ -225,7 +226,7 @@ class Report1(object):
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
 
             #avatar
-            canvas.drawImage(pos['avatar'], 300, 635 - deltay_text, 80, 80)
+            canvas.drawImage("reports/TabulaMagica-1.png", 300, 635 - deltay_text, 80, 80)
 
             i += 1
 
@@ -244,52 +245,57 @@ class Report1(object):
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
 
             #avatar
-            canvas.drawImage(neg['avatar'], 1360, 635 - deltay_text, 80, 80)
+            canvas.drawImage("reports/TabulaMagica-1.png", 1360, 635 - deltay_text, 80, 80)
 
             i += 1
 
         #   Timeline Conversations
-        for conv in self.conversationlist:
+        #First Column
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#FFFFFF')
+        #Second Column
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, '#FFFFFF')
+        #Third Column
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#FFFFFF')
+        self.drawStringGrayHelvetica(canvas, self.conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, '#FFFFFF')
 
-               #   Time line Hours
-            #First Column
-            self.drawStringGrayHelvetica(canvas, conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#FFFFFF')
-            #Second Column
-            self.drawStringGrayHelvetica(canvas, conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, '#FFFFFF')
-            #Third Column
-            self.drawStringGrayHelvetica(canvas, conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, '#FFFFFF')
-
-            self.drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
-            self.drawStringGrayHelvetica(canvas, "''Coffee Machine exploded,", 29.17, 570, 1463, False)
-            self.drawStringGrayHelvetica(canvas, "what is this? Can not", 29.17, 570, 1433, False)
-            self.drawStringGrayHelvetica(canvas, "believe what is happenin!!''", 29.17, 570, 1404, False)
-            self.drawStringGrayHelvetica(canvas, "My Senseo coffee doesn't", 29.17, 570, 1251, False)
-            self.drawStringGrayHelvetica(canvas, "work anymore :(( there goes", 29.17, 570, 1221, False)
-            self.drawStringGrayHelvetica(canvas, "my happy day", 29.17, 570, 1191, False)
-            self.drawStringGrayHelvetica(canvas, "Hey @Philips Why does", 29.17, 1158, 1577, False)
-            self.drawStringGrayHelvetica(canvas, "my brand new Senseo", 29.17, 1158, 1547, False)
-            self.drawStringGrayHelvetica(canvas, "explode?", 29.17, 1158, 1517, False)
-            self.drawStringGrayHelvetica(canvas, "OMG senseo sucks!", 29.17, 1158, 1391, False)
-            self.drawStringGrayHelvetica(canvas, "Keeps giving me warm", 29.17, 1158, 1361, False)
-            self.drawStringGrayHelvetica(canvas, "water instead of coffee", 29.17, 1158, 1331, False)
-            self.drawStringGrayHelvetica(canvas, "Philips is not answering", 29.17, 1158, 1195, False)
-            self.drawStringGrayHelvetica(canvas, "my questions concerning", 29.17, 1158, 1165, False)
-            self.drawStringGrayHelvetica(canvas, "my broken coffee mach..", 29.17, 1158, 1135, False)
-            self.drawStringGrayHelvetica(canvas, "I have no faith in Philips", 29.17, 1672, 1577, False)
-            self.drawStringGrayHelvetica(canvas, "any more, my Senseo", 29.17, 1672, 1547, False)
-            self.drawStringGrayHelvetica(canvas, "is fucked up!", 29.17, 1672, 1517, False)
-            self.drawStringGrayHelvetica(canvas, "@PhilipsNL Why does", 29.17, 1672, 1391, False)
-            self.drawStringGrayHelvetica(canvas, "my brand new Senseo", 29.17, 1672, 1361, False)
-            self.drawStringGrayHelvetica(canvas, "explode? Unbelievable", 29.17, 1672, 1331, False)
-            self.drawStringGrayHelvetica(canvas, "Philips is not", 29.17, 1672, 1195, False)
-            self.drawStringGrayHelvetica(canvas, "answering my questions", 29.17, 1672, 1165, False)
-            self.drawStringGrayHelvetica(canvas, "bad customer service", 29.17, 1672, 1135, False)
+        self.drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
+        
+        self.drawStringGrayHelvetica(canvas, "''Coffee Machine exploded,", 29.17, 570, 1463, False)
+        self.drawStringGrayHelvetica(canvas, "what is this? Can not", 29.17, 570, 1433, False)
+        self.drawStringGrayHelvetica(canvas, "believe what is happenin!!''", 29.17, 570, 1404, False)
+        
+        self.drawStringGrayHelvetica(canvas, "My Senseo coffee doesn't", 29.17, 570, 1251, False)
+        self.drawStringGrayHelvetica(canvas, "work anymore :(( there goes", 29.17, 570, 1221, False)
+        self.drawStringGrayHelvetica(canvas, "my happy day", 29.17, 570, 1191, False)
+        
+        self.drawStringGrayHelvetica(canvas, "Hey @Philips Why does", 29.17, 1158, 1577, False)
+        self.drawStringGrayHelvetica(canvas, "my brand new Senseo", 29.17, 1158, 1547, False)
+        self.drawStringGrayHelvetica(canvas, "explode?", 29.17, 1158, 1517, False)
+        
+        self.drawStringGrayHelvetica(canvas, "OMG senseo sucks!", 29.17, 1158, 1391, False)
+        self.drawStringGrayHelvetica(canvas, "Keeps giving me warm", 29.17, 1158, 1361, False)
+        self.drawStringGrayHelvetica(canvas, "water instead of coffee", 29.17, 1158, 1331, False)
+        
+        self.drawStringGrayHelvetica(canvas, "Philips is not answering", 29.17, 1158, 1195, False)
+        self.drawStringGrayHelvetica(canvas, "my questions concerning", 29.17, 1158, 1165, False)
+        self.drawStringGrayHelvetica(canvas, "my broken coffee mach..", 29.17, 1158, 1135, False)
+        
+        self.drawStringGrayHelvetica(canvas, "I have no faith in Philips", 29.17, 1672, 1577, False)
+        self.drawStringGrayHelvetica(canvas, "any more, my Senseo", 29.17, 1672, 1547, False)
+        self.drawStringGrayHelvetica(canvas, "is fucked up!", 29.17, 1672, 1517, False)
+        
+        self.drawStringGrayHelvetica(canvas, "@PhilipsNL Why does", 29.17, 1672, 1391, False)
+        self.drawStringGrayHelvetica(canvas, "my brand new Senseo", 29.17, 1672, 1361, False)
+        self.drawStringGrayHelvetica(canvas, "explode? Unbelievable", 29.17, 1672, 1331, False)
+        
+        self.drawStringGrayHelvetica(canvas, "Philips is not", 29.17, 1672, 1195, False)
+        self.drawStringGrayHelvetica(canvas, "answering my questions", 29.17, 1672, 1165, False)
+        self.drawStringGrayHelvetica(canvas, "bad customer service", 29.17, 1672, 1135, False)    
 
     def create(self, name):
         c = canvas.Canvas('report-page-1-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1)

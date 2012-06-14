@@ -17,6 +17,7 @@ import itertools
 from pygeocoder import Geocoder
 import language
 import urllib
+from collections import defaultdict
 
 import gzip
 import math
@@ -47,6 +48,9 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
+SEARCH_PAGES = 100
+SEARCH_RPP = 1000
+
 #REPORT1
 import report1
 import report2
@@ -57,7 +61,8 @@ competitor1_data = []
 competitor2_data = []
 
 tweet_list = []
-
+tweet_list2 = []
+tweet_list3 = []
 
 #init sentiment analysis
 classifier = None
@@ -93,11 +98,11 @@ def sentiment(text):
 
 # search keywords
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
-for i in (map(lambda x : x+1, range(10))):
+for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
         try:
             print "Searching tweets page %i" % i
             # TODO: country language
-            search_results = twitter.search(q="koffie", page=i, rpp=1000)
+            search_results = twitter.search(q=MAIN_KEYWORD, page=i, rpp=SEARCH_RPP)
         except:
             pass
                  
@@ -159,6 +164,176 @@ main_data = sorted(main_data, key=lambda k: k['created_at'])
 report.spike_keyword = MAIN_KEYWORD
 report.spike_location = MAIN_LOCATION
 
+for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
+        try:
+            print "Searching tweets page %i" % i
+            # TODO: country language
+            search_results = twitter.search(q=COMPETITOR1_KEYWORD, page=i, rpp=SEARCH_RPP)
+        except:
+            pass
+                 
+        print "Indexing tweets page %i" % i
+        for tweet in search_results["results"]:
+            print tweet
+            tweet_data = {}
+            print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
+            #print tweet['text'].encode('utf-8'),"\n"
+            tweet_data['text'] = tweet['text'].encode('utf-8')
+            tweet_data['username'] = tweet['from_user']
+            tweet_data['created_at'] = tweet['created_at']
+            #===================================================================
+            # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
+            # try:
+            #    tweet_data['influence'] = klout.score()
+            #    tweet_data['influences'] =  klout.influences()
+            #    tweet_data['influence_topics'] = klout.topics()
+            # except:
+            #    tweet_data['influence'] = 0
+            #    tweet_data['influence_topics'] = {}
+            #===================================================================
+            tweet_data['influence'] = 0
+            tweet_data['sentiment'] = sentiment(tweet['text'])
+            tweet_data['ws'] = 0
+            tweet_data['hour_string'] = "00:00"
+            #geo
+            if tweet['geo']:
+                print tweet['geo']
+                tweet_data['geo'] = tweet['geo']
+                results = Geocoder.reverse_geocode(tweet_data['geo']['coordinates'][0], tweet_data['geo']['coordinates'][1])
+                tweet_data['country'] = results[0].country
+                tweet_data['city'] = results[0].locality
+                tweet_data['postalcode'] = results[0].postal_code
+
+                print results[0]
+            else:
+                tweet_data['geo'] = None
+                tweet_data['country'] = None
+                
+            #gender
+            #avatar
+            tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+
+            #language
+            #ld = language.LangDetect()
+            #tweet_data['lang'] = ld.detect(tweet_data['text'])
+            tweet_data['lang'] = tweet['iso_language_code']
+            print tweet_data['lang']
+            
+            #filter out retweets
+            if (MAIN_COUNTRY == tweet_data['country']) or (tweet_data['lang'] == MAIN_LANGUAGE) and (tweet_data['username'] not in MAIN_SCREEN_NAME_LIST) and (tweet_data['text'] not in tweet_list2):
+                competitor1_data.append(tweet_data)
+            
+            if tweet_data['text'] not in tweet_list2:
+                tweet_list2.append(tweet_data['text'])
+            
+competitor1_data = sorted(competitor1_data, key=lambda k: k['created_at'])
+
+for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
+        try:
+            print "Searching tweets page %i" % i
+            # TODO: country language
+            search_results = twitter.search(q=COMPETITOR2_KEYWORD, page=i, rpp=SEARCH_RPP)
+        except:
+            pass
+                 
+        print "Indexing tweets page %i" % i
+        for tweet in search_results["results"]:
+            print tweet
+            tweet_data = {}
+            print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
+            #print tweet['text'].encode('utf-8'),"\n"
+            tweet_data['text'] = tweet['text'].encode('utf-8')
+            tweet_data['username'] = tweet['from_user']
+            tweet_data['created_at'] = tweet['created_at']
+            #===================================================================
+            # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
+            # try:
+            #    tweet_data['influence'] = klout.score()
+            #    tweet_data['influences'] =  klout.influences()
+            #    tweet_data['influence_topics'] = klout.topics()
+            # except:
+            #    tweet_data['influence'] = 0
+            #    tweet_data['influence_topics'] = {}
+            #===================================================================
+            tweet_data['influence'] = 0
+            tweet_data['sentiment'] = sentiment(tweet['text'])
+            tweet_data['ws'] = 0
+            tweet_data['hour_string'] = "00:00"
+            #geo
+            if tweet['geo']:
+                print tweet['geo']
+                tweet_data['geo'] = tweet['geo']
+                results = Geocoder.reverse_geocode(tweet_data['geo']['coordinates'][0], tweet_data['geo']['coordinates'][1])
+                tweet_data['country'] = results[0].country
+                tweet_data['city'] = results[0].locality
+                tweet_data['postalcode'] = results[0].postal_code
+
+                #print results[0]
+            else:
+                tweet_data['geo'] = None
+                tweet_data['country'] = None
+                
+            #gender
+            #avatar
+            tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+
+            #language
+            #ld = language.LangDetect()
+            #tweet_data['lang'] = ld.detect(tweet_data['text'])
+            tweet_data['lang'] = tweet['iso_language_code']
+            print tweet_data['lang']
+            
+            #filter out retweets
+            if (MAIN_COUNTRY == tweet_data['country']) or (tweet_data['lang'] == MAIN_LANGUAGE) and (tweet_data['username'] not in MAIN_SCREEN_NAME_LIST) and (tweet_data['text'] not in tweet_list3):
+                competitor1_data.append(tweet_data)
+            
+            if tweet_data['text'] not in tweet_list3:
+                tweet_list3.append(tweet_data['text'])
+            
+competitor2_data = sorted(competitor2_data, key=lambda k: k['created_at'])
+
+print "Calculating cumulative volumes... comp2"
+x= []
+y = []
+volume = -1    
+for tweet_data in competitor2_data:
+    d = parser.parse(tweet_data['created_at']).hour #daily or hourly 
+    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
+
+    if not d in x:
+        if volume != -1: 
+            y.append(volume)
+        volume = 0
+        x.append(d)
+    volume += 1
+    
+y.append(volume)
+
+print x
+print y
+report.volumegraph3 = tuple(y)
+
+print "Calculating cumulative volumes... comp1"
+x= []
+y = []
+volume = -1    
+for tweet_data in competitor1_data:
+    d = parser.parse(tweet_data['created_at']).hour #daily or hourly 
+    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
+
+    if not d in x:
+        if volume != -1: 
+            y.append(volume)
+        volume = 0
+        x.append(d)
+    volume += 1
+    
+y.append(volume)
+
+print x
+print y
+report.volumegraph2 = tuple(y)
+
 print "Calculating cumulative volumes..."
 x= []
 y = []
@@ -180,10 +355,9 @@ print x
 print y
 report.volumegraph1 = tuple(y)
 
-report.volumekeywords = [MAIN_KEYWORD, '', '']
+report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 report.volumeendtime = str(parser.parse(main_data[-1]['created_at']).hour) + ":" + str(parser.parse(main_data[-1]['created_at']).minute)
-report.volumegraph1 = y
 
 print "Calculating the freq times..."
 def pairwise(iterable):
@@ -413,15 +587,25 @@ print "Top 5 Positive:"
 
 for conv in sorted_positive:
     print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
-  
+
 
 print "Top 5 Negative:"
 
 for conv in sorted_negative:
     print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
     
+#word cloud
+#Collect word statistics
+counts = defaultdict(int) 
+stemmed_sentences = []
+for sent in stemmed_sentences:
+    for stem in sent:
+        counts[stem] += 1
 
+#This block deletes all words with count <3
+#They are not relevant and sorting will be way faster
+pairs = [(x,y) for x,y in counts.items() if y >= 3]
+
+#Sort (stem,count) pairs based on count 
+sorted_stems = sorted(pairs, key = lambda x: x[1])
 report.create(MAIN_ENTERPRISE)
-        
-        
-
