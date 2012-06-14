@@ -1,6 +1,6 @@
 from controllers.controller1 import Controller1
 from controllers.controller2 import Controller2
-from controllers.users import UserRegister
+from controllers.users import *
 from kiss.core import events as Event
 from kiss.models import SqliteDatabase, MySQLDatabase
 from kiss.core.exceptions import InternalServerError
@@ -20,7 +20,7 @@ options = {
 			"3": Controller1,
 			"4": Controller2
 		},
-        "register": UserRegister,
+        "login": UserLogin,
 	},
 	"views": {
 		"templates_path": "views.templates",
