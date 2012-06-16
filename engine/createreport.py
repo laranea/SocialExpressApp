@@ -50,7 +50,7 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
 SEARCH_PAGES = 10
-SEARCH_RPP = 10
+SEARCH_RPP = 5000
 
 #REPORT1
 import report
@@ -614,7 +614,7 @@ for tweet in main_data:
         #for word in word_tokenize(tweet['text']):
         for word in tweet['text'].split():
             word = word.lower()
-            if len(word) > 5 and word not in corpus.stopwords.words('dutch'):
+            if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@':
                 print word
                 if word_cloud.has_key(word):
                     word_cloud[word] += tweet['sentiment']

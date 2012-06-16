@@ -16,6 +16,8 @@ from reportlab.lib.units import inch
 from reportlab.graphics.shapes import Drawing, Circle
 from reportlab.graphics.charts.linecharts import HorizontalLineChart
 from reportlab.lib.utils import ImageReader
+from reportlab.graphics.widgets.markers import makeMarker
+from positions import HorizontalChartNew
 
 
 class Report(object):
@@ -92,9 +94,10 @@ class Report(object):
         drawing.add(lc)
         return drawing
 
-    def twitterMentionsGraph(self, data, yaxis_names=[]):
+    def twitterMentionsGraph(self, data, canvas, yaxis_names=[]):
         drawing = Drawing(100, 300)
-        lc = HorizontalLineChart()
+        #lc = HorizontalLineChart()
+        lc = HorizontalChartNew()
         #lc.strokeColor = colors.darkorange
         lc.x = 0
         lc.y = 0
@@ -102,6 +105,7 @@ class Report(object):
         lc.height = 780  # Length of Y-axis
         lc.joinedLines = 1
         lc.data = data
+        #print data[0]
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
@@ -116,8 +120,15 @@ class Report(object):
         lc.valueAxis.valueMax = max(data[0])
         lc.valueAxis.valueStep = max(data[0]) / 20
         lc.lines[0].strokeWidth = 2.5
+        '''lc.lines[0].symbol = makeMarker('FilledCircle')
+        lc.lines[0].symbol.fillColor = colors.green
+        lc.lines[0].symbol.strokeColor = colors.green
+        lc.lines[0].symbol.size = 10'''
         lc.lines[1].strokeWidth = 2.5
+        positions = lc.calcPositions_xy()
+        self.optima = positions[0]
         drawing.add(lc)
+        
         return drawing
 
     def createCircle(self, canvas, x, y, radius, color):
@@ -246,10 +257,23 @@ class Report(object):
 
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
-        self.twitterMentionsGraph([self.volumegraph1], time_list).drawOn(canvas, 365, 1880)
+        self.twitterMentionsGraph([self.volumegraph1], canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Create Circle on Twitter Mention Graph
         #self.createCircle(canvas, 400, 2000, self.graphcircleradius, "#00611C")
+
+        colorList = ['#0198E1', '#236B8E', '#838B8B']
+        index = 0
+        for position in self.optima:
+            # colorList - colors for each circle on the graph 
+            try:
+                color = colorList[index]
+            except:
+                color = '#0198E1'
+            # X & Y positions returned is added with the coordinates of the graph    
+            print self.optima
+            self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 3])
+            index += 1
 
     #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
 
@@ -712,8 +736,6 @@ class Report(object):
         c.showPage()
         self.page2(c)
         c.showPage()
-        
-        #c.showPage()
         #self.page3()
         #c.showPage()
         c.save()
