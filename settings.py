@@ -21,6 +21,9 @@ options = {
 			"4": Controller2
 		},
         "login": UserLogin,
+        "wizard": UserProfile,
+        "registration": UserRegistration,
+        "register": UserRegister,
 	},
 	"views": {
 		"templates_path": "views.templates",

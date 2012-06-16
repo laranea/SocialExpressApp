@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="css/eigen.css" rel="stylesheet" type="text/css" />
+<link href="styles/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="styles/eigen.css" rel="stylesheet" type="text/css" />
 
 <meta name="description" content="SocialExpress™ - Social media management with instant reporting." />
 <meta name="keywords" content="Social Media Marketing, social media management, cms for social media, CRM, helpdesk, customer support, artificial intelligence" />
@@ -22,14 +22,14 @@
     </div>
 <div class="container">
 
-    <form class="well">
+    <form class="well" method="POST" action="/register">
     <fieldset>
 
     <div class="control-group">
 
     <label class="control-label" for="input01">E-mail</label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" name="email" id="input01">
     </div>
     
     </div>
@@ -39,23 +39,24 @@
 
     <label class="control-label" for="input01">Company</label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" name="company" id="input01">
     </div>
     
     </div>
     
     
         <div class="control-group">
-    <label class="control-label" for="input01">Password</label>
+    <label class="control-label" for="input01" >Password</label>
     <div class="controls">
-    <input type="password"   class="input-xlarge" id="input01" > 
+    <input type="password" name="password"  class="input-xlarge" id="input01" > 
 
     </div>    
     </div>
-        <button class="btn btn-large btn-primary" type="submit">
+    <a href="/registration" >   <button class="btn btn-large btn-primary" >
 
 Cancel
 </button>
+</a>
     <button class="btn btn-large btn-warning" id="btnRegister"  type="submit" >
     <i class="icon-ok icon-white"></i>
 Register
