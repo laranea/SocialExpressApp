@@ -10,6 +10,8 @@ html {
 body{
 	background-color:#d8ebf5;
 	background-repeat: repeat;
+	background-image:url(img/bggroot.png);
+
 
 	
 }
@@ -18,6 +20,7 @@ body{
 
 	position: absolute; top: 25%;
 	left:33%;
+
 }
 
 .input-xlarge{
@@ -25,11 +28,87 @@ body{
 	height:30px;
 }
 
+#headerken{
+	
+	margin-left:35px;
+}
+#connect{
+	margin-right:60px;
+	
+	margin-bottom:25px;
+	
+}
 .well{
 	width:280px;
 	
 }
 
+#lallie{
+	
+padding-top:25px;
+font-size:12px;
+min-width: 200px;
+border-right: 1px solid  #e5e5e5;
+}
+
+#witmaken{
+	background-color:white;
+	max-width: 100%;
+
+
+	
+}
+#lee{
+	
+with:1000px;
+}
+
+.container-fluid{
+		background-color:white;
+
+	padding-right:0px;
+	
+}
+
+#logout{
+	 top: 4px;
+    right: 8px;
+position: absolute;
+
+	
+}
+#locatie{
+	
+	position:relative;
+	left:-333px;
+}
+
+#lblLoc{
+	
+	position:relative,
+	top:-200px;
+}
+
+#input031{
+position:relative;
+	top:-52px;
+	left:-60px;
+	
+}
+#verwijder{
+	margin-left:20px;
+	
+}
+
+input03{
+	position:relative;
+	top:40px;
+}
+#wellie{
+	width:1000px;
+	height:440px;
+	
+}
 #btnpass{
 	
 	position:relative;
@@ -47,201 +126,4 @@ body{
 }
 
 
-#heroke{
-	
-	height:42px;
-background-color:white;
-	padding-left:10px;
-	padding-top:12px;
-	
-}
 
-#navieke{
-float:left;
-margin-left:8px;
-}
-
-#inboxbadge{
-position:absolute;
-	left:150px;
-	top:61px;
-	
-}
-
-#onholdbadge{
-position:absolute;
-	left:150px;
-	top:85px;
-
-}
-
-#conv{
-
-	width:850px;
-	
-	position:fixed;
-	left:240px;
-	top:90px;
-	height:60px;
-	margin-right: 50px;
-	box-shadow: 0px 0px 1px #888888;
-
-}
-
-#conv2{
-
-	
-	width:850px;
-	
-	position:fixed;
-	left:240px;
-	top:300px;
-	height:60px;
-	margin-right: 50px;
-		box-shadow: 0px 0px 1px #888888;
-
-}
-
-#conv3{
-
-	
-width:850px;
-
-	
-	position:fixed;
-	left:240px;
-	top:510px;
-	height:60px;
-	margin-right: 50px;
-	
-	box-shadow: 0px 0px 1px #888888;
-}
-
-#conv4{
-
-	
-width:850px;
-
-	
-	position:fixed;
-	left:240px;
-	top:720px;
-	height:60px;
-	margin-right: 50px;
-	
-	box-shadow: 0px 0px 1px #888888;
-}
-
-.inboxx{
-color:white;	
-text-shadow: black;
-	
-}
-#input01{
-	
-	height:200px;
-}
-#demessage{
-	position:relative;
-	left:130px;
-	top:-20px;
-
-}
-
-#ago{
-color:#b9b9b9;
-	position:relative;
-	left:130px;
-	top:-20px;
-
-}
-
-#archive{
-position:relative;
-left:930px;
-top:-90px;
-	
-width:80px;
-}
-
-#onhold{
-position:relative;
-left:814px;
-top:-46px;
-	width:80px;
-}
-
-#tag{
-position:relative;
-left:699px;
-top:-2px;
-	width:80px;
-}
-
-#reply{
-position:relative;
-left:584px;
-top:42px;
-width:80px;
-}
-
-
-#fotoke{
-	position:relative;
-
-}
-#archivebadge{
-position:absolute;
-	left:150px;
-	top:109px;
-	
-}
-
-#problemsbadge{
-position:absolute;
-	left:150px;
-	top:152px;
-	
-}
-
-#complimentsbadge{
-position:absolute;
-		left:150px;
-	top:176px;
-	
-}
-
-
-#nov{
-	
-	float:left;
-	position: relative;
-	left:220px;
-	top:-29px;
-	
-}
-
-#barrie{
-width:500px;
-
-position:relative;
-margin-left:auto;
-margin-right:auto;
-top:50%;
-}
-
-#left{
-padding-top:40px;
-margin-left:8px;
-position:fixed;
-left:-10px;
-top:53px;
-color:white;
-text-decoration: none;
-font-style: none;
-font-variant: none;
-
-	width:200px;
-background-image:url(img/Linen.jpg);
-height:1000px;
-}
