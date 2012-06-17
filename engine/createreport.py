@@ -37,6 +37,8 @@ from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 from nltk import word_tokenize, sent_tokenize, corpus
 
+DEBUG = True
+
 MAIN_KEYWORD = 'koffie'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
@@ -147,7 +149,8 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             #gender
             #avatar
             tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
-
+            #number, save and use
+            
             #language
             #ld = language.LangDetect()
             #tweet_data['lang'] = ld.detect(tweet_data['text'])
@@ -312,7 +315,7 @@ y.append(volume)
 
 print x
 print y
-report.volumegraph3 = tuple(y)
+volumegraph3 = tuple(y)
 
 print "Calculating cumulative volumes... comp1"
 x= []
@@ -333,7 +336,7 @@ y.append(volume)
 
 print x
 print y
-report.volumegraph2 = tuple(y)
+volumegraph2 = tuple(y)
 
 print "Calculating cumulative volumes..."
 x= []
@@ -354,11 +357,12 @@ y.append(volume)
 
 print x
 print y
-report.volumegraph1 = tuple(y)
+volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 report.volumeendtime = str(parser.parse(main_data[-1]['created_at']).hour) + ":" + str(parser.parse(main_data[-1]['created_at']).minute)
+report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
 
 print "Calculating the freq times..."
 def pairwise(iterable):
@@ -614,9 +618,9 @@ for tweet in main_data:
         #for word in word_tokenize(tweet['text']):
         for word in tweet['text'].split():
             word = word.lower()
-            if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@':
+            if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@' and re.match("^[A-Za-z0-9_-]*(\#)*[A-Za-z0-9_-]*$", word):
                 print word
-                if word_cloud.has_key(word):
+                if word_cloud.has_key(word): 
                     word_cloud[word] += tweet['sentiment']
                 else:
                     word_cloud[word] = tweet['sentiment']
@@ -637,8 +641,9 @@ for tweet in main_data:
                         word_klout[word] = -1 
                 c += 1
                 
-                if c > 100:
-                    break
+        if DEBUG:
+            if c > 100:
+                break
                 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)    
 report.key_infl = key_infl

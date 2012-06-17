@@ -18,8 +18,9 @@ from reportlab.graphics.charts.linecharts import HorizontalLineChart
 from reportlab.lib.utils import ImageReader
 from reportlab.graphics.widgets.markers import makeMarker
 from positions import HorizontalChartNew
+import numpy as np
 
-
+#todo: increase font
 class Report(object):
 
     def __init__(self, realtime=True):
@@ -33,9 +34,7 @@ class Report(object):
         self.volumekeywords = ['c', 'd', 'e']
         self.volumebegintime = "08:00"
         self.volumeendtime = "15:30"
-        self.volumegraph1 = (5, 4, 300)
-        self.volumegraph2 = (2, 900, 120)
-        self.volumegraph3 = (700, 60, 5)
+        self.volumegraphs = [(5, 4, 300), (2, 900, 120), (700, 60, 5)]
         self.conversationlist = []
         self.top5positive = []
         self.top5negative = []
@@ -109,16 +108,16 @@ class Report(object):
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
-        lc.lines[0].strokeColor = colors.magenta
+        lc.lines[0].strokeColor = colors.brown
     #    lc.inFill = 1
-        lc.lines[1].strokeColor = colors.lightblue
+        lc.lines[1].strokeColor = colors.red
         lc.lines[2].strokeColor = colors.yellow
         lc.categoryAxis.categoryNames = catNames
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
         lc.valueAxis.valueMin = 0
-        lc.valueAxis.valueMax = max(data[0])
-        lc.valueAxis.valueStep = max(data[0]) / 20
+        lc.valueAxis.valueMax = max(data[0] + data[1] + data[2]) * 2
+        lc.valueAxis.valueStep = max(data[0] + data[1] + data[2]) / 10
         lc.lines[0].strokeWidth = 2.5
         '''lc.lines[0].symbol = makeMarker('FilledCircle')
         lc.lines[0].symbol.fillColor = colors.green
@@ -146,6 +145,15 @@ class Report(object):
         first, second, third = '', '', ''
         # isConversation = 1 for TimeLine Conversation
         # isConversation = 0 for Positive & Negative Comments
+        
+        if len(list) < 9:
+            sentence_list.append(sentence)
+            sentence_list.append('')
+            return sentence_list
+            
+        if len(list) < 18:
+            isConversation = 0
+            
         if isConversation:
             for i in range(9):
                 try:
@@ -257,12 +265,12 @@ class Report(object):
 
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
-        self.twitterMentionsGraph([self.volumegraph1], canvas, time_list).drawOn(canvas, 365, 1880)
+        self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Create Circle on Twitter Mention Graph
         #self.createCircle(canvas, 400, 2000, self.graphcircleradius, "#00611C")
 
-        colorList = ['#0198E1', '#236B8E', '#838B8B']
+        colorList = ['#725E43', '#C04C4E', '#FFED5E', '#4FDF58', '#E2509F', '#47C4C9', '#F95D58', '#507AD2', '#F5AF21']
         index = 0
         for position in self.optima:
             # colorList - colors for each circle on the graph 
@@ -272,7 +280,7 @@ class Report(object):
                 color = '#0198E1'
             # X & Y positions returned is added with the coordinates of the graph    
             print self.optima
-            self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 3])
+            self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 9])
             index += 1
 
     #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
@@ -318,37 +326,41 @@ class Report(object):
         #circles ?i'll push
 
         # Timeline Time - Rect Box
-        self.setFillStrokeColor(canvas, '#808080')  # Set Color to Rectangular Box
+        # Set Color to Rectangular Box
         #TODO: right points ?
-        '''        
+        
+        self.setFillStrokeColor(canvas, colorList[0])        
         canvas.roundRect(393, 1600, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(393, 1453, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(393, 1243, 105, 50, 2, stroke=1, fill=1)
 
+        self.setFillStrokeColor(canvas, colorList[1])
         canvas.roundRect(992, 1565, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(992, 1376, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(992, 1177, 105, 50, 2, stroke=1, fill=1)
 
+        self.setFillStrokeColor(canvas, colorList[2])
         canvas.roundRect(1503, 1565, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(1503, 1378, 105, 50, 2, stroke=1, fill=1)
         canvas.roundRect(1503, 1177, 105, 50, 2, stroke=1, fill=1)
-        '''
 
         #   Timeline Conversations
-        if len(self.conversationlist) > 0:
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#FFFFFF')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, colorList[0])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, colorList[0])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, colorList[0])
             #Second Column
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, '#FFFFFF')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, colorList[1])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, colorList[1])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, colorList[1])
             #Third Column
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#FFFFFF')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, '#FFFFFF')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, colorList[2])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, colorList[2])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, colorList[2])
 
             self.drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
+        except:
+            pass
         
         #First Column
         i = 0
@@ -358,9 +370,12 @@ class Report(object):
             deltay_text = i * 112
             sentence_list = self.splitSentence(conv['text'], 1)       
         
-            self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570, 1463 - deltay_text, False)
-            self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570, 1433 - deltay_text, False)
-            self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570, 1404 - deltay_text, False)
+            try:
+                self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570, 1463 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570, 1433 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570, 1404 - deltay_text, False)
+            except:
+                pass
             
             i += 1
             
@@ -375,20 +390,20 @@ class Report(object):
         mentions, cityname = self.spike_percentage, self.spike_location
         percentage_increase = self.spike_percentage
         keyword, hour, date = self.keyword, 1, datetime.now().date()
-        twit_mentions, sentiments, followers = self.mentions_percentage, self.sentiment_percentage, self.followers_percentage
+        twit_mentions, sentiments, followers = round(self.mentions_percentage), round(self.sentiment_percentage), round(self.followers_percentage)
         #bg
         canvas.drawImage("reports/EMPTYPhilipsRealTimeReport2.png", 0, 0, 2479,\
             3507)        
         #volume spike
         if self.spike_kind == 'volume':
             self.drawStringOrangeHelvetica(canvas, "VOLUME SPIKE : ", 54.17, 170, 3350, True)
-            if self.spike_moreorless == 'more':
+            if np.sign(mentions):
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% more mentions", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% less mentions", 54.17, 653, 3350, True)
         else:
             self.drawStringOrangeHelvetica(canvas, "SENTIMENT SPIKE : ", 54.17, 170, 3350, True)
-            if self.spike_moreorless == 'more':
+            if np.sign(mentions):
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment increase", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment decrease", 54.17, 653, 3350, True)
@@ -405,10 +420,10 @@ class Report(object):
         #    " hour " + date, 54.17, 610, 3250)
     
         # % mentions, sentiment, followers (in order)
-        self.drawStringGrayHelvetica(canvas, str(self.mentions_percentage), 90.65, 480, 2672, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, str(round(self.mentions_percentage)) + " %", 90.65, 480, 2672, False, '#7cc576')
         # note that X-Axis varies for '+' & '-' as to align in same width
-        self.drawStringGrayHelvetica(canvas, str(self.sentiment_percentage), 90.65, 499, 2452, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, str(self.followers_percentage), 90.65, 499, 2220, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(round(self.sentiment_percentage)) + " %", 90.65, 499, 2452, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(round(self.followers_percentage)) + " %", 90.65, 499, 2220, False, '#e68383')
     
         #Arrows
         if self.mentions_percentage >= 0:
@@ -430,20 +445,20 @@ class Report(object):
         #Hottest Topics
         self.drawStringGrayHelvetica(canvas, 'Topics mention together with the word ' + self.spike_keyword, 23.26, 379, 1780, False, '#000000')
         #Green
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[0][0], 80.65, 400, 1590, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[1][0], 80.65, 645, 1490, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[2][0], 80.65, 470, 1410, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[3][0], 80.65, 400, 1300, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[0][0], 72, 400, 1590, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[1][0], 72, 645, 1490, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[2][0], 72, 470, 1410, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[3][0], 72, 400, 1300, False, '#7cc576')
         #Black
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[4][0], 80.65, 1200, 1590, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[5][0], 80.65, 1100, 1450, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[6][0], 80.65, 1370, 1400, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[7][0], 80.65, 1000, 1300, False)
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[4][0], 72, 1200, 1590, False)
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[5][0], 72, 1100, 1450, False)
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[6][0], 72, 1370, 1400, False)
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[7][0], 72, 1000, 1300, False)
         #Red
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-1][0], 80.65, 1780, 1640, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-2][0], 80.65, 1840, 1540, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-3][0], 80.65, 1690, 1430, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-4][0], 80.65, 1930, 1370, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[-1][0], 72, 1780, 1640, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[-2][0], 72, 1840, 1540, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[-3][0], 72, 1690, 1430, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, self.word_cloud[-4][0], 72, 1930, 1370, False, '#e68383')
     
         #Key influencers by Topic
         self.drawStringGrayHelvetica(canvas, self.word_klout[0][0], 23.26, 476, 864, False, '#000000')
@@ -454,7 +469,6 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, self.word_klout[5][0], 23.26, 2055, 864, False, '#000000')
     
         # Sentiment Graphs
-        graph_tuple = (1.5, 1.35, 1.37, 1.42, 1.22, 1.31, 1.1, .9, .80, .85, .75, .82, .69, .72, .55)
         self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[0][0]])).drawOn(canvas, 398, 740)
         self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[1][0]])).drawOn(canvas, 712, 740)
         self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[2][0]])).drawOn(canvas, 1021, 740)
@@ -569,7 +583,7 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 584, False)
         '''    
         #Influencer Info above Top Row
-        self.drawStringGrayHelvetica(canvas, 'A', 18.61, 468, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(self.word_klout[0][1]), 18.61, 468, 324, False, '#000000')
         self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 775, 324, False, '#000000')
         self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1087, 324, False, '#000000')
         self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 324, False, '#000000')
