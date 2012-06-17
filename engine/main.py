@@ -1,22 +1,17 @@
-__author__ = 'kristof.leroux@gmail.com'
+import tornado.ioloop
+import tornado.web
+from  tornado.template import Loader
 
-import sys
-from celery.task import task
-from tweeql import status_handlers
-from tweeql.exceptions import TweeQLException
-from tweeql.query_runner import QueryRunner
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        #self.write("Hello, world")
+	loader = tornado.template.Loader("/home/ubuntu/socialexpress/views/templates")
+	self.write(loader.load("index.html").generate(error="hello"))
 
-import functions
+application = tornado.web.Application([
+    (r"/", MainHandler),
+])
 
-def addslashes(string):
-    return "'" + string + "'"
-
-@task
-def runQuery(keywords):
-    map(addslashes, keywords)
-    runner = QueryRunner()
-    keywords = " OR ".join(keywords)
-    print "keywords: " + keywords
-    runner.run_query("SELECT text, sentiment(text) AS sentiment, location, language(text) AS language, influence(screen_name) AS influence FROM Twitter WHERE text CONTAINS '%s';" % keywords, False)
-
-runQuery(['abn', 'amro', 'abn-amro', 'abnamro', 'pin', 'pas'])
+if __name__ == "__main__":
+    application.listen(80)
+    tornado.ioloop.IOLoop.instance().start()
