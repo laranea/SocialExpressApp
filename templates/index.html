@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="css/eigen.css" rel="stylesheet" type="text/css" />
+<link href="static/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="static/css/eigen.css" rel="stylesheet" type="text/css" />
 
 <meta name="description" content="SocialExpress™ - Social media management with instant reporting." />
 <meta name="keywords" content="Social Media Marketing, social media management, cms for social media, CRM, helpdesk, customer support, artificial intelligence" />
@@ -22,28 +22,33 @@
  in your mailbox.</h2>
      <h6>Powered by SocialExpress</h6>
 </br>
-    <form class="well">
+<form class="well" action="" method="POST">
+    {% raw xsrf_form_html() %}
     <fieldset>
-
+    {% if error %} 
+        <div style="color:red"><p>Login Failed</p></div>
+    {% end %}
     <div class="control-group">
 
-    <label class="control-label" for="input01">E-mail</label>
+    <label class="control-label" for="input01" >E-mail</label>
     <div class="controls">
-    <input type="text" class="input-xlarge" >
+    <input type="text" class="input-xlarge" name="email">
 
     </div>
     </div>
         <div class="control-group">
-    <label class="control-label" for="input01">Password</label>
+    <label class="control-label" for="input01" >Password</label>
     <div class="controls">
-    <input type="password"   class="input-xlarge"  > 
+    <input type="password"   class="input-xlarge"  name="password"> 
 
     </div>    
     </div>
-        <button class="btn btn-large btn-primary" type="submit">
+    <a href="/register" >
+        <button class="btn btn-large btn-primary" >
 
 Create an account
 </button>
+</a>
     <button class="btn btn-large btn-warning" id="btnPass"  type="submit" >
     <i class="icon-ok icon-white"></i>
 Login

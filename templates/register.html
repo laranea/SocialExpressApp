@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="css/eigen.css" rel="stylesheet" type="text/css" />
+<link href="static/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="static/css/eigen.css" rel="stylesheet" type="text/css" />
 
 <meta name="description" content="SocialExpress™ - Social media management with instant reporting." />
 <meta name="keywords" content="Social Media Marketing, social media management, cms for social media, CRM, helpdesk, customer support, artificial intelligence" />
@@ -18,14 +18,15 @@
 <div class="container">
  <h2>Register now!</h2>  <h6>Powered by SocialExpress</h6>
 </br>
-    <form class="well">
+<form class="well" method="POST" action="">
+    {% raw xsrf_form_html() %}
     <fieldset>
 
     <div class="control-group">
 
     <label class="control-label" for="input01">E-mail</label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" id="input01" name="email">
     </div>
     
     </div>
@@ -35,7 +36,7 @@
 
     <label class="control-label" for="input01">Company</label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" id="input01" name="company">
     </div>
     
     </div>
@@ -44,14 +45,14 @@
         <div class="control-group">
     <label class="control-label" for="input01">Password</label>
     <div class="controls">
-    <input type="password"   class="input-xlarge" id="input01" > 
+    <input type="password"   class="input-xlarge" id="input01" name="password"> 
 
     </div>    
     </div>
-        <button class="btn btn-large btn-primary" type="submit">
+    <a href="/register" >  <button class="btn btn-large btn-primary" >
 
 Cancel
-</button>
+</button> </a>
     <button class="btn btn-large btn-warning" id="btnRegister"  type="submit" >
     <i class="icon-ok icon-white"></i>
 Register
