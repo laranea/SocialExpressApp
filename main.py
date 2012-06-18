@@ -1,8 +1,6 @@
 import tornado.ioloop
 import tornado.web
 from  tornado.template import Loader
-from tornado.web.UIModule import css_files
-
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
