@@ -1,9 +1,29 @@
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
     <head>
-        <title>Tornado Boilerplate</title>
+        <title>{% block title %}Tornado Boilerplate{% end %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        {% block styles %} 
+           <link href="static/css/bootstrap.css" rel="stylesheet" type="text/css" />
+            <link href="static/css/eigen.css" rel="stylesheet" type="text/css" /> 
+            
+            {% end %}
+         {% block meta %}{% end %}
     </head>
 
     <body>
-        <h1>It worked!</h1>
+        <div class="login_status">
+            {% if current_user %}
+            <a href ="/signout" >
+                <button class="btn btn-primary">
+                    Sign Out
+                </button>
+            </a>
+            {% end  %}
+
+        </div>
+        <div class="container">
+      {% block container  %}
+      {% end %}
+        </div>
     </body>
 </html>

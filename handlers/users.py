@@ -30,4 +30,10 @@ class UserWizardHandler(BaseHandler):
     def get(self):
         self.render("wizard.html")
 
+class UserSignout(BaseHandler):
+
+    @tornado.web.authenticated
+    def get(self):
+        self.clear_cookie('user')
+        self.redirect("/")
 

@@ -7,4 +7,5 @@ url_patterns = [
     (r"/", MainHandler),
     (r"/wizard", UserWizardHandler),
     (r"/register", UserRegisterHandler),
+    (r"/signout", UserSignout),
 ]
