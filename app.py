@@ -3,7 +3,7 @@
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-from tornado.options import options
+#from tornado.options import options
 
 from settings import settings
 from urls import url_patterns
@@ -16,7 +16,7 @@ class TornadoBoilerplate(tornado.web.Application):
 def main():
     app = TornadoBoilerplate()
     http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(options.port)
+    http_server.listen(8080)
     tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":
