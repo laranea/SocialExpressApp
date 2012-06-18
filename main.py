@@ -7,7 +7,7 @@ from tornado.web.UIModule import css_files
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         #self.write("Hello, world")
-        loader = tornado.template.Loader("/home/ubuntu/socialexpress/views/templates")
+        loader = tornado.template.Loader("/home/ubuntu/socialexpress/")
         self.write(loader.load("index.html").generate(error="hello"))
 
 application = tornado.web.Application([
