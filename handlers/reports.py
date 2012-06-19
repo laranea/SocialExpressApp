@@ -15,7 +15,17 @@ class NewWeeklyReport(BaseHandler):
 class ManageExistingReport(BaseHandler):
 
     def get(self):
-        self.render("manageexistingreports.html")
+        connection = ConnectDB()
+        sql = "SELECT id FROM user WHERE email=" + self.current_user
+        data = connection.connect(sql)
+        for user in data:
+            user_id = user[0]
+            break
+        sql = "SELECT * FROM reportcriteria WHERE creator_id=" + str(user_id)
+        data = connection.connect(sql)
+        if not data:
+            data = ()
+        self.render("manageexistingreports.html", list=data)
 
 
 class GeneratedWeeklyReports(BaseHandler):
