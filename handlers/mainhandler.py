@@ -29,7 +29,7 @@ class MainHandler(BaseHandler):
         data = connection.connect(sql)
         for user in data:
             self.set_secure_cookie("user", tornado.escape.json_encode(email))
-            self.redirect('/wizard')
+            self.redirect('/reports')
         else:
             error = 1
             self.render("index.html", error=error)
