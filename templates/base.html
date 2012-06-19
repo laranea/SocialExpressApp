@@ -18,7 +18,7 @@
          {% end %}
          <script>
          $(document).ready(function() {
-             var name = window.location.pathname.split("/")[1]
+             var name = window.location.pathname
              $('a[href="'+name+'"]').parent("li").addClass("active");
             });
          </script>
@@ -50,19 +50,19 @@
     <ul class="nav nav-list" id="lallie">
    <h4> Weekly reporting</h4>
     <li class="test">
-    <a class="inboxx" href="newweeklyreport">
+    <a class="inboxx" href="/newweeklyreport">
     <i class="icon-pencil icon-black"></i>
     New weekly report
     </a>
     </li>
      <li>
-    <a class="inboxx" href="manageexistingreports">
+    <a class="inboxx" href="/manageexistingreports">
     <i class="icon-cog icon-black"></i>
     Manage existing reports
     </a>
     </li>
     <li>
-    <a class="inboxx" href="generatedweeklyreports">
+    <a class="inboxx" href="/generatedweeklyreports">
     <i class="icon-book icon-black"></i>
     Generated reports
     </a>
@@ -71,19 +71,19 @@
 
    <h4>Real-time reporting</h4>
    <li>
-    <a class="inboxx" href="newrealtimereport">
+    <a class="inboxx" href="/newrealtimereport">
     <i class="icon-pencil icon-black"></i>
     New trigger
     </a>
     </li>
  <li>
-    <a class="inboxx" href="manageexistingrules">
+    <a class="inboxx" href="/manageexistingrules">
     <i class="icon-cog icon-black"></i>
     Manage existing triggers
     </a>
     </li>
    <li>
-    <a class="inboxx" href="generatedrealtimereports">
+    <a class="inboxx" href="/generatedrealtimereports">
     <i class="icon-book icon-black"></i>
     Generated reports
     </a>
