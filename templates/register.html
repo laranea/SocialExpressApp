@@ -14,7 +14,9 @@ in your mailbox. {% end %}
 <form class="well" method="POST" action="">
     {% raw xsrf_form_html() %}
     <fieldset>
-
+    {% if error %}
+        <div style="color:red"><p>User Email Already Exits</p></div>
+    {% end %}
     <div class="control-group">
 
     <label class="control-label" for="input01">E-mail</label>
