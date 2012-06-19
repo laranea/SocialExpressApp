@@ -2,10 +2,10 @@ from kiss.models import Model, IntegerField, BooleanField, FloatField, CharField
 # Create your models here.
 class Account(Model):
     account_id = IntegerField()
-    
+
     def __unicode__(self):
         return self.account_id
-    
+
 class User(Model):
     user_id = IntegerField()
     username = CharField(max_length=255)
@@ -18,22 +18,22 @@ class User(Model):
     is_superuser = BooleanField()
     last_login = DateTimeField()
     date_joined = DateTimeField()
-    
+
     departement = CharField(max_length=255)
     account = ForeignKeyField(Account)
     #
-    
+
     def __unicode__(self):
         return self.user_id
-    
+
 class ClientProfile(Model):
     twitter_username = CharField(max_length=255)
     twitter_password = CharField(max_length=255)
     user = ForeignKeyField(User)
-    
+
     def __unicode__(self):
         return self.twitter_username
-    
+
 class Feed(Model):
     feed_id = IntegerField()
     text = CharField(max_length=255)
@@ -53,10 +53,10 @@ class Feed(Model):
     )
 
     feed_type = IntegerField(choices=TYPES, default=0)
-    
+
     def __unicode__(self):
         return self.text
-        
+
 class Rule(Model):
     rule_id = IntegerField()
     if_clause = CharField(max_length=255)
@@ -69,10 +69,10 @@ class Rule(Model):
     )
 
     rule_type = IntegerField(choices=TYPES, default=0)
-    
+
     def __unicode__(self):
-        return "if " + self.if_clause + " then " + self.then_clause + " do " + self.action_clause 
-    
+        return "if " + self.if_clause + " then " + self.then_clause + " do " + self.action_clause
+
 class SEInbox(Feed):
     pass
 
@@ -82,10 +82,19 @@ class SEArchive(Feed):
 class Blog(Model):
     creator = CharField()
     name = CharField()
-    
+
 class Entry(Model):
     blog = ForeignKeyField(Blog)
     title = CharField()
     body = TextField()
     pub_date = DateTimeField()
     published = BooleanField(default=True)
+
+
+class ReportCriteria(Model):
+    keyword = CharField()
+    competitor = TextField()
+    country = CharField()
+    mailing_list = TextField()
+    creator = ForeignKeyField(User)
+    file = CharField()
