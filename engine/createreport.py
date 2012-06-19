@@ -99,6 +99,7 @@ def sentiment(text):
     return retval
 
 
+#TODO: real-time
 # search keywords
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
@@ -166,7 +167,7 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             
 main_data = sorted(main_data, key=lambda k: k['created_at'])
 report.spike_keyword = MAIN_KEYWORD
-report.spike_location = MAIN_LOCATION
+report.spike_location = MAIN_COUNTRY
 
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
         try:
@@ -360,8 +361,9 @@ print y
 volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
-report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
-report.volumeendtime = str(parser.parse(main_data[-1]['created_at']).hour) + ":" + str(parser.parse(main_data[-1]['created_at']).minute)
+report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute) 
+max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
+report.volumeendtime = str(max_hour + 1) + ":00"
 report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
 
 print "Calculating the freq times..."
@@ -642,7 +644,7 @@ for tweet in main_data:
                 c += 1
                 
         if DEBUG:
-            if c > 100:
+            if c > 1000:
                 break
                 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)    

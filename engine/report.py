@@ -232,13 +232,13 @@ class Report(object):
         #volume spike
         if self.spike_kind == 'volume':
             self.drawStringOrangeHelvetica(canvas, "VOLUME SPIKE : ", 54.17, 170, 3350, True)
-            if self.spike_moreorless == 'more':
+            if mentions >= 0:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% more mentions", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% less mentions", 54.17, 653, 3350, True)
         else:
             self.drawStringOrangeHelvetica(canvas, "SENTIMENT SPIKE : ", 54.17, 170, 3350, True)
-            if self.spike_moreorless == 'more':
+            if mentions >= 0:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment increase", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment decrease", 54.17, 653, 3350, True)
@@ -295,7 +295,7 @@ class Report(object):
             sentence_list = self.splitSentence(pos['text'], 0)
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 452, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 452, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 762, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
@@ -314,7 +314,7 @@ class Report(object):
             sentence_list = self.splitSentence(neg['text'], 0)
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 1512, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 1512, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1965, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
@@ -397,13 +397,13 @@ class Report(object):
         #volume spike
         if self.spike_kind == 'volume':
             self.drawStringOrangeHelvetica(canvas, "VOLUME SPIKE : ", 54.17, 170, 3350, True)
-            if np.sign(mentions):
+            if mentions >= 0:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% more mentions", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% less mentions", 54.17, 653, 3350, True)
         else:
             self.drawStringOrangeHelvetica(canvas, "SENTIMENT SPIKE : ", 54.17, 170, 3350, True)
-            if np.sign(mentions):
+            if mentions >= 0:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment increase", 54.17, 653, 3350, True)
             else:
                 self.drawStringOrangeHelvetica(canvas, str(mentions) + "% sentiment decrease", 54.17, 653, 3350, True)
@@ -420,10 +420,10 @@ class Report(object):
         #    " hour " + date, 54.17, 610, 3250)
     
         # % mentions, sentiment, followers (in order)
-        self.drawStringGrayHelvetica(canvas, str(round(self.mentions_percentage)) + " %", 90.65, 480, 2672, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, str(round(self.mentions_percentage, 0)) + " %", 90.65, 480, 2672, False, '#7cc576')
         # note that X-Axis varies for '+' & '-' as to align in same width
-        self.drawStringGrayHelvetica(canvas, str(round(self.sentiment_percentage)) + " %", 90.65, 499, 2452, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, str(round(self.followers_percentage)) + " %", 90.65, 499, 2220, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(round(self.sentiment_percentage, 0)) + " %", 90.65, 499, 2452, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(round(self.followers_percentage, 0)) + " %", 90.65, 499, 2220, False, '#e68383')
     
         #Arrows
         if self.mentions_percentage >= 0:
@@ -508,17 +508,17 @@ class Report(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 710, 30, 30)
     
         #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[0][1]), 13.96, 490, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[0][1], 2)), 13.96, 490, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 515, 710, False) # 25 from expertise - left align
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[1][1]), 13.96, 797, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[1][1], 2)), 13.96, 797, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 822, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[2][1]), 13.96, 1109, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[2][1], 2)), 13.96, 1109, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 1134, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[3][1]), 13.96, 1429, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[3][1], 2)), 13.96, 1429, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 1454, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[4][1]), 13.96, 1749, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[4][1], 2)), 13.96, 1749, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 1774, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[5][1]), 13.96, 2065, 710, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[5][1], 2)), 13.96, 2065, 710, False, '#000000')
         self.drawStringGrayHelvetica(canvas, '', 13.96, 2090, 710, False)
     
         '''
@@ -583,13 +583,13 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 584, False)
         '''    
         #Influencer Info above Top Row
-        self.drawStringGrayHelvetica(canvas, str(self.word_klout[0][1]), 18.61, 468, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 775, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1087, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1407, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 1727, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, 'Jonathan Leroux', 18.61, 2043, 324, False, '#000000')
-        ''' s
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[6][0]], 18.61, 468, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[7][0]], 18.61, 775, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[8][0]], 18.61, 1087, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[9][0]], 18.61, 1407, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[10][0]], 18.61, 1727, 324, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[11][0]], 18.61, 2043, 324, False, '#000000')
+        
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 304, 30, 30)
         canvas.drawImage("reports/TabulaMagica-1.png", 727, 304, 30, 30)
@@ -599,13 +599,14 @@ class Report(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 304, 30, 30)
     
         #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 490, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 797, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1109, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1429, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 1749, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '44', 13.96, 2065, 304, False, '#000000')
-    
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[6][1], 2)), 13.96, 490, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[7][1], 2)), 13.96, 797, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[8][1], 2)), 13.96, 1109, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[9][1], 2)), 13.96, 1429, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[10][1], 2)), 13.96, 1749, 304, False, '#000000')
+        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[11][1], 2)), 13.96, 2065, 304, False, '#000000')
+        
+        '''
         #Expertise Field Top Row
         self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 515, 304, False)
         self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 822, 304, False)
@@ -682,6 +683,7 @@ class Report(object):
         #bg
         canvas.drawImage("reports/EMPTYPhilipsWeeklyConversationProblemsReport.png", 0, 0, 2479, 3507)
 
+        #TODO: avatars
         #Avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 368, 2230, 125, 125)
         canvas.drawImage("reports/TabulaMagica-1.png", 368, 2060, 125, 125)
