@@ -7,7 +7,7 @@
 
 <meta name="description" content="SocialExpress™ - Social media management with instant reporting." />
 <meta name="keywords" content="Social Media Marketing, social media management, cms for social media, CRM, helpdesk, customer support, artificial intelligence" />
-<title>SocialExpress™ - Real-time social media insights 
+<title>SocialExpress™ - Real-time social media insights
  in your mailbox.</title>
 
 </head>
@@ -15,17 +15,17 @@
 <body>
 
 
- 
+
 <div class="container">
 
- <h2>Real-time social media  </br>insights 
+ <h2>Real-time social media  </br>insights
  in your mailbox.</h2>
      <h6>Powered by SocialExpress</h6>
 </br>
 <form class="well" action="" method="POST">
     {% raw xsrf_form_html() %}
     <fieldset>
-    {% if error %} 
+    {% if error %}
         <div style="color:red"><p>Login Failed</p></div>
     {% end %}
     <div class="control-group">
@@ -39,21 +39,21 @@
         <div class="control-group">
     <label class="control-label" for="input01" >Password</label>
     <div class="controls">
-    <input type="password"   class="input-xlarge"  name="password"> 
+    <input type="password"   class="input-xlarge"  name="password">
 
-    </div>    
     </div>
+    </div>
+
+    <button class="btn btn-large btn-warning" id="btnPass"  type="submit" >
+    <i class="icon-ok icon-white"></i>
+Login
+</button>
     <a href="/register" >
         <button class="btn btn-large btn-primary" >
 
 Create an account
 </button>
 </a>
-    <button class="btn btn-large btn-warning" id="btnPass"  type="submit" >
-    <i class="icon-ok icon-white"></i>
-Login
-</button>
-
     </fieldset>
     </form>
 

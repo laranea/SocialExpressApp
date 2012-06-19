@@ -110,9 +110,8 @@ input03{
 
 }
 #btnpass{
-
-	position:relative;
-	left:27px;
+    float:right;
+	margin-right: 20px;
 }
 #btnRegister{
 
