@@ -16,6 +16,12 @@
             <meta name="description" content="SocialExpress™ - Social media management with instant reporting." />
 <meta name="keywords" content="Social Media Marketing, social media management, cms for social media, CRM, helpdesk, customer support, artificial intelligence" />
          {% end %}
+         <script>
+         $(document).ready(function() {
+             var name = window.location.pathname.split("/")[1]
+             $('a[href="'+name+'"]').parent("li").addClass("active");
+            });
+         </script>
     </head>
 
     <body>
@@ -43,7 +49,7 @@
 
     <ul class="nav nav-list" id="lallie">
    <h4> Weekly reporting</h4>
-    <li class="active">
+    <li class="test">
     <a class="inboxx" href="newweeklyreport">
     <i class="icon-pencil icon-black"></i>
     New weekly report
