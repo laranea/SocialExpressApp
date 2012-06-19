@@ -1,4 +1,4 @@
-from kiss.models import Model, IntegerField, BooleanField, FloatField, CharField, TextField, DateTimeField, BooleanField, ForeignKeyField
+from kiss.models import Model, IntegerField, BooleanField, FloatField, CharField, TextField, DateTimeField, BooleanField, ForeignKeyField, DateField
 # Create your models here.
 class Account(Model):
     account_id = IntegerField()
@@ -98,3 +98,4 @@ class ReportCriteria(Model):
     mailing_list = TextField()
     creator = ForeignKeyField(User)
     file = CharField()
+    reportdate = DateField()
