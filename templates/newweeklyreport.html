@@ -9,18 +9,18 @@
 <h1>New weekly report</h1><h5>Fill in criteria to receive a weekly report</h5></br>
 
 
- <form class="well new_report" id="wellie" >
+ <form class="well new_report" id="wellie" action="" >
     <fieldset >
 
     <div class="control-group" >
 
     <label class="control-label" for="input01"><h3>Main keyword</h3><p>Enter a main keyword you want to monitor</p></label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" id="keyword">
     </div>
     <label class="control-label" for="input01"><h3>Compare with another product or competitor</h3><p>Max of 2 keywords allowed. Use "AND" between keywords to enter multiple keywords. Example: "CocaCola AND Fanta"</p></label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" id="compare">
     </div>
 
 
@@ -28,15 +28,17 @@
 
  <label class="control-label" for="input01" ><h3>Country</h3><p>Choose a country to filter on a specific country</p></label>
     <div class="controls">
-     <select class="input-xlarge" id="input01">
-
+     <select class="input-xlarge" id="country">
+        <option value="">Select Country</option>
+        <option value="1">Country 1 </option>
+        <option value="2">Country 2 </option>
      </select>
 
     </div>
 
       <label class="control-label" for="input01"><h3>Send report weekly to</h3><p>Use "AND" between addresses to enter multiple addresses. Example: "responsibleperson@cocacola.com AND marketing@cocacola.com"</p></label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="input01">
+    <input type="text" class="input-xlarge" id="emails">
     </div>
 
 </div>

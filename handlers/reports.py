@@ -28,3 +28,16 @@ class NewRealTimeReport(BaseHandler):
 
     def get(self):
         self.render("newrealtimereport.html")
+
+
+class ManageExistingRules(BaseHandler):
+
+    def get(self):
+        self.render("manageexistingrules.html")
+
+
+class GeneratedRealTimeReports(BaseHandler):
+
+    def get(self):
+        self.render("generatedrealtimereports.html")
+

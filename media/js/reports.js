@@ -1,4 +1,6 @@
-$('.control-label').click(function () {
-    alert("asdasd");
+$(document).ready(function() {
+$("#add_rule").click(function() {
+
     return false;
+});
 });

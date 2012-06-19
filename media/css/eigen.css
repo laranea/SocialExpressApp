@@ -1,6 +1,6 @@
 .btn{
-	
-	
+
+
 }
 
 html {
@@ -10,10 +10,10 @@ html {
 body{
 	background-color:#d8ebf5;
 	background-repeat: repeat;
-	background-image:url(img/bggroot.png);
+	background-image:url(../images/bggroot.png);
 
 
-	
+
 }
 
 .container{
@@ -24,27 +24,27 @@ body{
 }
 
 .input-xlarge{
-	
+
 	height:30px;
 }
 
 #headerken{
-	
+
 	margin-left:35px;
 }
 #connect{
 	margin-right:60px;
-	
+
 	margin-bottom:25px;
-	
+
 }
 .well{
 	width:280px;
-	
+
 }
 
 #lallie{
-	
+
 padding-top:25px;
 font-size:12px;
 min-width: 200px;
@@ -56,10 +56,10 @@ border-right: 1px solid  #e5e5e5;
 	max-width: 100%;
 
 
-	
+
 }
 #lee{
-	
+
 with:1000px;
 }
 
@@ -67,7 +67,7 @@ with:1000px;
 		background-color:white;
 
 	padding-right:0px;
-	
+
 }
 
 #logout{
@@ -75,16 +75,16 @@ with:1000px;
     right: 8px;
 position: absolute;
 
-	
+
 }
 #locatie{
-	
+
 	position:relative;
 	left:-333px;
 }
 
 #lblLoc{
-	
+
 	position:relative,
 	top:-200px;
 }
@@ -93,11 +93,11 @@ position: absolute;
 position:relative;
 	top:-52px;
 	left:-60px;
-	
+
 }
 #verwijder{
 	margin-left:20px;
-	
+
 }
 
 input03{
@@ -107,15 +107,15 @@ input03{
 #wellie{
 	width:1000px;
 	height:440px;
-	
+
 }
 #btnpass{
-	
+
 	position:relative;
 	left:27px;
 }
 #btnRegister{
-	
+
 	position:relative;
 	left:86px;
 }

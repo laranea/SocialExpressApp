@@ -13,4 +13,6 @@ url_patterns = [
     (r"/manageexistingreports", ManageExistingReport),
     (r"/generatedweeklyreports", GeneratedWeeklyReports),
     (r"/newrealtimereport", NewRealTimeReport),
+    (r"/manageexistingrules", ManageExistingRules),
+    (r"/generatedrealtimereports", GeneratedRealTimeReports),
 ]

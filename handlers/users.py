@@ -20,15 +20,15 @@ class UserRegisterHandler(BaseHandler):
         sql = "INSERT INTO user (email, password, last_login, date_joined) VALUES ('%s', '%s', '2012-06-12 00:00:00', '2012-06-12 00:00:00')" % (email, password)
         print sql
         data = connection.connect(sql, 1)
-        self.redirect('/wizard')
+        self.redirect('/newweeklyreport')
 
 
 class UserWizardHandler(BaseHandler):
 
-
     @tornado.web.authenticated
     def get(self):
         self.render("wizard.html")
+
 
 class UserSignout(BaseHandler):
 

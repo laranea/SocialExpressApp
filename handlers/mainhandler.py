@@ -8,6 +8,7 @@ from basehandler import BaseHandler
 #import logging
 #logger = logging.getLogger('boilerplate.' + __name__)
 
+
 class MainHandler(BaseHandler):
 
     @property
@@ -17,7 +18,7 @@ class MainHandler(BaseHandler):
     def get(self):
         user_id = self.get_secure_cookie("user")
         if user_id:
-            self.redirect('/wizard')
+            self.redirect('/newweeklyreport')
         error = 0
         self.render("index.html", error=error)
 
@@ -29,7 +30,7 @@ class MainHandler(BaseHandler):
         data = connection.connect(sql)
         for user in data:
             self.set_secure_cookie("user", tornado.escape.json_encode(email))
-            self.redirect('/wizard')
+            self.redirect('/newweeklyreport')
         else:
             error = 1
             self.render("index.html", error=error)
