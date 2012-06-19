@@ -6,7 +6,7 @@ from settings import MEDIA_ROOT as static_path
 
 url_patterns = [
     (r"/", MainHandler),
-    (r"/wizard", UserWizardHandler),
+    (r"/reports", ReportHandler),
     (r"/register", UserRegisterHandler),
     (r"/signout", UserSignout),
     (r"/newweeklyreport", NewWeeklyReport),

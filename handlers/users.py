@@ -27,7 +27,7 @@ class UserWizardHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
-        self.render("wizard.html")
+        self.render("newweeklyreport.html")
 
 
 class UserSignout(BaseHandler):
