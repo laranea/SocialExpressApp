@@ -362,7 +362,15 @@ volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute) 
-max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
+max_hour = 0
+try:
+    max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
+except:
+    try:
+        max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour)
+    except:
+        max_hour = parser.parse(main_data[-1]['created_at']).hour
+        
 report.volumeendtime = str(max_hour + 1) + ":00"
 report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
 
