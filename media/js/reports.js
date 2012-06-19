@@ -1,13 +1,15 @@
-var id = 0;
+var trigger_id = 0;
+var report_id = 0;
 $(document).ready(function() {
     $.ajaxSetup({ cache: false });
-
     var getCookie = function(name) {
         var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
         return r ? r[1] : undefined;
     };
 
     $("#add_rule").click(function() {
+      $("#rule_add_alert").fadeIn(1600);
+      $("#rule_add_alert").delay(1200).fadeOut(1600);
       $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
@@ -22,24 +24,43 @@ $(document).ready(function() {
         success: function (data) {
         }
       });
+
       return false;
     });
 
-    $('.delete-report').click(function() {
+    var delete_report = function() {
+        $("#"+report_id).parent('td').parent('tr').fadeOut(1000);
         $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
         url: "/deletereport",
         data: {
-            'reportId': $(this).attr("id"),
+            'reportId': report_id,
             '_xsrf': getCookie("_xsrf")
           },
         success: function (data) {
           }
         });
+    };
+
+    $('.delete-report').click(function() {
+        report_id = $(this).attr("id");
+        $("#delete_rpt_alert").delay(400).fadeIn(1600);
+    });
+
+    $('#report_del_yes').click(function() {
+        delete_report();
+        $("#delete_rpt_alert").delay(600).fadeOut(1600);
+    });
+
+    $('#report_del_no').click(function() {
+        report_id = 0;
+        $("#delete_rpt_alert").delay(600).fadeOut(1600);
     });
 
     $('.dwnld-report').click(function() {
+        $("#dwnld_rpt_alert").fadeIn(1600);
+        $("#dwnld_rpt_alert").delay(1200).fadeOut(1600);
         $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
@@ -54,6 +75,8 @@ $(document).ready(function() {
     });
 
     $('#realtime-report').click(function() {
+        $("#new_trigger_alert").fadeIn(1600);
+        $("#new_trigger_alert").delay(1200).fadeOut(1600);
         $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
@@ -75,12 +98,13 @@ $(document).ready(function() {
     });
 
     var delete_trigger = function () {
+        $("#"+trigger_id).parent('td').parent('tr').fadeOut(1000);
         $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
         url: "/deletetrigger",
         data: {
-            'triggerId': id,
+            'triggerId': trigger_id,
             '_xsrf': getCookie("_xsrf")
           },
         success: function (data) {
@@ -89,11 +113,23 @@ $(document).ready(function() {
     };
 
     $('.delete-trigger').click(function() {
-        id = $(this).attr("id");
+        trigger_id = $(this).attr("id");
+        $("#delete_trigger_alert").delay(400).fadeIn(1600);
+    });
+
+    $('#trigger_del_yes').click(function() {
         delete_trigger();
+        $("#delete_trigger_alert").delay(600).fadeOut(1600);
+    });
+
+    $('#trigger_del_no').click(function() {
+        trigger_id = 0;
+        $("#delete_trigger_alert").delay(600).fadeOut(1600);
     });
 
     $('.dwnld-realtime-report').click(function() {
+        $("#dwnld_trigger_alert").fadeIn(1600);
+        $("#dwnld_trigger_alert").delay(1200).fadeOut(1600);
         $.ajax({
         headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
         type: "POST",
