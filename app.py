@@ -9,10 +9,11 @@ from settings import settings
 from urls import url_patterns
 from db import ConnectDB
 
+
 class TornadoBoilerplate(tornado.web.Application):
     def __init__(self):
         tornado.web.Application.__init__(self, url_patterns, **settings)
-        self.session = ConnectDB()
+#        self.session = ConnectDB()
 
 
 def main():

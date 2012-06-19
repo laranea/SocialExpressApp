@@ -15,4 +15,10 @@ url_patterns = [
     (r"/newrealtimereport", NewRealTimeReport),
     (r"/manageexistingrules", ManageExistingRules),
     (r"/generatedrealtimereports", GeneratedRealTimeReports),
+    (r"/addrule", AddRule),
+    (r"/deletereport", DeleteReport),
+    (r"/downloadreport", DownloadReport),
+    (r"/newrealtimereportcrieria", RealTimeReportCrieria),
+    (r"/deletetrigger", DeleteTrigger),
+    (r"/downloadrealtimereport", DownloadRealTimeReport),
 ]
