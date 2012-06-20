@@ -99,3 +99,20 @@ class ReportCriteria(Model):
     creator = ForeignKeyField(User)
     file = CharField()
     reportdate = DateField()
+
+
+class RealTimeReportCriteria(Model):
+    keyword = CharField()
+    sentiment = CharField()
+    country = CharField()
+    language = CharField()
+    changes = CharField()
+    change_rate = CharField()
+    mailing_list = TextField()
+    creator = ForeignKeyField(User)
+
+
+class RealTimeReport(Model):
+    trigger = ForeignKeyField(RealTimeReportCriteria)
+    file = CharField()
+    date = DateField()

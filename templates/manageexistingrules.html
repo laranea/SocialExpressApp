@@ -12,6 +12,7 @@ value="Yes" id="trigger_del_yes">
 value="No" id="trigger_del_no">
 
 </div>
+    {% if list %}
     <table class="table">
     <thead>
     <tr>
@@ -21,28 +22,19 @@ value="No" id="trigger_del_no">
     </tr>
     </thead>
     <tbody>
-    <tr>
-    <td>1</td>
-    <td>Philips AND Senseo</td>
-    <td><input class="btn-danger delete-trigger" type="button"
-value="Delete" id="1"></td>
+    {% for report in list %}
+        <tr>
+        <td>{{report[0]}}</td>
+        <td>{{report[1]}}</td>
+        <td><input class="btn-danger delete-trigger" type="button"
+        value="Delete" id="{{report[0]}}"></td>
     </tr>
-      <tr>
-    <td>2</td>
-    <td>Philips AND Saeco</td>
-    <td><input class="btn-danger delete-trigger" type="button"
-value="Delete" id="2"></td>
-    </tr>
-      <tr>
-    <td>3</td>
-    <td>Koffie</td>
-    <td><input class="btn-danger delete-trigger" type="button"
-value="Delete" id="3"></td>
-    </tr>
+    {% end %}
     </tbody>
-
     </table>
-
+    {% else %}
+        <strong class="no_report"><p>No Reports Yet</p><strong>
+    {% end %}
     <!--Body content-->
     </div>
     </div>
