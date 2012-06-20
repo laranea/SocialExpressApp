@@ -8,12 +8,14 @@ from basehandler import BaseHandler
 
 class NewWeeklyReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("newweeklyreport.html")
 
 
 class ManageExistingReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         connection = ConnectDB()
         sql = "SELECT id FROM user WHERE email=" + self.current_user
@@ -30,6 +32,7 @@ class ManageExistingReport(BaseHandler):
 
 class GeneratedWeeklyReports(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         connection = ConnectDB()
         sql = "SELECT id FROM user WHERE email=" + self.current_user
@@ -47,18 +50,21 @@ class GeneratedWeeklyReports(BaseHandler):
 
 class NewRealTimeReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("newrealtimereport.html")
 
 
 class ManageExistingRules(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("manageexistingrules.html")
 
 
 class GeneratedRealTimeReports(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("generatedrealtimereports.html")
 
