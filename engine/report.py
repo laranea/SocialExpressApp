@@ -247,7 +247,7 @@ class Report(object):
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1290, 3350, True)
 
         self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + \
-            "% increase", 64.22, 1920, 3280, True)
+            "%", 64.22, 1920, 3280, True)
 
         self.drawStringGrayHelvetica(canvas, "concerning", 54.17, 170, 3250, False)
         self.drawStringOrangeHelvetica(canvas, self.spike_keyword, 54.17, 450, 3250, False)

@@ -36,7 +36,7 @@ class GeneratedWeeklyReports(BaseHandler):
         data = connection.connect(sql)
         for user in data:
             user_id = user[0]
-            break
+            breake
         sql = "SELECT * FROM reportcriteria WHERE creator_id=" + str(user_id) +\
              " AND file IS NOT NULL"
         data = connection.connect(sql)

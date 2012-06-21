@@ -37,7 +37,10 @@ from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 from nltk import word_tokenize, sent_tokenize, corpus
 
+import getopt
+
 DEBUG = True
+REALTIME = False
 
 MAIN_KEYWORD = 'koffie'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
@@ -53,6 +56,41 @@ MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
 SEARCH_PAGES = 10
 SEARCH_RPP = 5000
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
+except getopt.GetoptError, err:
+    # print help information and exit:
+    print str(err) # will print something like "option -a not recognized"
+    #usage()
+    sys.exit(2)
+output = None
+verbose = False
+for o, a in opts:
+    if o == "-r":
+        REALTIME = True
+    elif o == "-d":
+        DEBUG = True
+    elif o  == "--main_keyword":
+        MAIN_KEYWORD = o
+    elif o == "--competitor1_keyword":
+        COMPETITOR1_KEYWORD = o
+    elif o == "--competitor2_keyword":
+        COMPETITOR2_KEYWORD = o
+    elif o == "--main_enterprise":
+        MAIN_ENTERPRISE = o
+    elif o == "--main_location":
+        MAIN_LOCATION = o
+    elif o == "--main_language":
+        MAIN_LANGUAGE = o
+    elif o == "--main_country":
+        MAIN_COUNTRY = o
+    elif o == "--main_screen_name_list":
+        MAIN_SCREEN_NAME_LIST = o
+    elif o == "--mail_to_list":
+        MAIL_TO_LIST = o
+    else:
+        assert False, "unhandled option"
 
 #REPORT1
 import report
