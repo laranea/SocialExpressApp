@@ -4,6 +4,7 @@ from  tornado.template import Loader
 from models.models import *
 from connectdb import ConnectDB
 from basehandler import BaseHandler
+import subprocess
 
 
 class NewWeeklyReport(BaseHandler):
@@ -145,6 +146,11 @@ class RealTimeReportCrieria(BaseHandler):
         sql += ", language, changes, change_rate, mailing_list, creator_id) "
         sql += "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d') " % (keyword, sentiment, country, language, changes, change_rate, email, user_id)
         data = connection.connect(sql, 1)
+
+        list = ['python', 'handlers/script.py']
+        list.append('argument1')
+        list.append('argument3')
+        process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
 
 
 class DeleteTrigger(BaseHandler):
