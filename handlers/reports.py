@@ -8,12 +8,14 @@ from basehandler import BaseHandler
 
 class NewWeeklyReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("newweeklyreport.html")
 
 
 class ManageExistingReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         connection = ConnectDB()
         sql = "SELECT id FROM user WHERE email=" + self.current_user
@@ -30,6 +32,7 @@ class ManageExistingReport(BaseHandler):
 
 class GeneratedWeeklyReports(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         connection = ConnectDB()
         sql = "SELECT id FROM user WHERE email=" + self.current_user
@@ -47,20 +50,42 @@ class GeneratedWeeklyReports(BaseHandler):
 
 class NewRealTimeReport(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
         self.render("newrealtimereport.html")
 
 
 class ManageExistingRules(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
-        self.render("manageexistingrules.html")
+        user_id = self.get_userid()
+        sql = "SELECT * FROM realtimereportcriteria WHERE creator_id= " + \
+            user_id
+        connection = ConnectDB()
+        data = connection.connect(sql)
+        if not data:
+            data = ()
+        self.render("manageexistingrules.html", list=data)
 
 
 class GeneratedRealTimeReports(BaseHandler):
 
+    @tornado.web.authenticated
     def get(self):
-        self.render("generatedrealtimereports.html")
+        user_id = self.get_userid()
+        triggerid = "SELECT id FROM realtimereportcriteria WHERE creator_id="\
+         + user_id
+        sql = "SELECT realtimereport.*, realtimereportcriteria.keyword FROM realtimereport "
+        sql += " Left JOIN realtimereportcriteria ON "
+        sql += " realtimereport.trigger_id=realtimereportcriteria.id"
+        sql += " WHERE trigger_id IN (" + triggerid + ")"
+        connection = ConnectDB()
+        data = connection.connect(sql)
+        print data
+        if not data:
+            data = ()
+        self.render("generatedrealtimereports.html", list=data)
 
 
 class AddRule(BaseHandler):
@@ -70,13 +95,24 @@ class AddRule(BaseHandler):
         compare = self.get_argument("compare", default="")
         country = self.get_argument("country", default="")
         email = self.get_argument("emails", default="")
-        print keyword, compare, country, email
+        connection = ConnectDB()
+        sql = "SELECT id FROM user WHERE email=" + self.current_user
+        data = connection.connect(sql)
+        for user in data:
+            user_id = user[0]
+            break
+        sql = "INSERT INTO reportcriteria (keyword, competitor, country,"
+        sql += " mailing_list, creator_id) VALUES ('%s', '%s', '%s', '%s', '%d')" % (keyword, compare, country, email, user_id)
+        data = connection.connect(sql, 1)
 
 
 class DeleteReport(BaseHandler):
 
     def post(self):
         report_id = self.get_argument("reportId", default="")
+        sql = "DELETE FROM reportcriteria WHERE id=" + report_id
+        connection = ConnectDB()
+        data = connection.connect(sql, 1)
         print report_id
 
 
@@ -97,14 +133,27 @@ class RealTimeReportCrieria(BaseHandler):
         changes = self.get_argument("changes", default="")
         change_rate = self.get_argument("change-rate", default="")
         email = self.get_argument("emails", default="")
-        print keyword, sentiment, country, language, changes, change_rate, email
+
+        connection = ConnectDB()
+        sql = "SELECT id FROM user WHERE email=" + self.current_user
+        data = connection.connect(sql)
+        for user in data:
+            user_id = user[0]
+            break
+
+        sql = "INSERT INTO realtimereportcriteria (keyword, sentiment, country"
+        sql += ", language, changes, change_rate, mailing_list, creator_id) "
+        sql += "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d') " % (keyword, sentiment, country, language, changes, change_rate, email, user_id)
+        data = connection.connect(sql, 1)
 
 
 class DeleteTrigger(BaseHandler):
 
     def post(self):
         trigger_id = self.get_argument("triggerId", default="")
-        print trigger_id
+        sql = "DELETE FROM realtimereportcriteria WHERE id=" + trigger_id
+        connection = ConnectDB()
+        data = connection.connect(sql, 1)
 
 
 class DownloadRealTimeReport(BaseHandler):

@@ -26,7 +26,8 @@ class MainHandler(BaseHandler):
         email = self.get_argument("email", default="")
         password = self.get_argument("password", default="")
         connection = ConnectDB()
-        sql = "Select * FROM user WHERE email='" + email + "'" + " AND password = '" + password + "'"
+        sql = "Select * FROM user WHERE email='" + email + "'" + " AND "
+        sql += "password = '" + password + "'"
         data = connection.connect(sql)
         for user in data:
             self.set_secure_cookie("user", tornado.escape.json_encode(email))
