@@ -150,7 +150,8 @@ class RealTimeReportCrieria(BaseHandler):
         list = ['python', 'handlers/script.py']
         list.append('argument1')
         list.append('argument3')
-        process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
+        process = subprocess.Popen(list, shell=False)
+#        print process.stdout.readline()
 
 
 class DeleteTrigger(BaseHandler):
