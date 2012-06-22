@@ -28,7 +28,7 @@ value="No" id="report_del_no">
       {% for report in list %}
         <tr>
             <td>{{report[0]}}</td>
-            <td>{{report[1]}}</td>
+            <td>{{report[2]}}</td>
             <td><input class="btn-danger delete-report" type="button" value="Delete" id="{{report[0]}}"></td>
         </tr>
       {% end %}
