@@ -40,7 +40,7 @@ class GeneratedWeeklyReports(BaseHandler):
         data = connection.connect(sql)
         for user in data:
             user_id = user[0]
-            breake
+            break
         sql = "SELECT * FROM reportcriteria WHERE creator_id=" + str(user_id) +\
              " AND file IS NOT NULL"
         data = connection.connect(sql)
@@ -105,6 +105,11 @@ class AddRule(BaseHandler):
         sql = "INSERT INTO reportcriteria (keyword, competitor, country,"
         sql += " mailing_list, creator_id) VALUES ('%s', '%s', '%s', '%s', '%d')" % (keyword, compare, country, email, user_id)
         data = connection.connect(sql, 1)
+        
+        list = ['python', 'engine/createreport.py']
+        list.append('argument1')
+        list.append('argument3')
+        process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
 
 
 class DeleteReport(BaseHandler):
@@ -148,8 +153,8 @@ class RealTimeReportCrieria(BaseHandler):
         data = connection.connect(sql, 1)
 
         list = ['python', 'handlers/script.py']
-        list.append('argument1')
-        list.append('argument3')
+        #list.append("--main_keyword='%'" % keyword)
+        #list.append("--competitor1_data='%'" % )
         process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
 
 
