@@ -5,7 +5,7 @@ Created on May 21, 2012
 '''
 import os
 import math
-from datetime import datetime
+from datetime import datetime, timedelta
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_JUSTIFY
@@ -30,10 +30,10 @@ class Report(object):
         self.spike_location = 'Netherlands'
         self.spike_keyword = 'coffee'
         self.freq_time = 15
-        self.sentimentgraph = [(1, 2, 3)]
+        self.sentimentgraph = (1, 2, 3)
         self.volumekeywords = ['c', 'd', 'e']
-        self.volumebegintime = "08:00"
-        self.volumeendtime = "15:30"
+        self.volumebegintime = "26/6/2012 23:00"
+        self.volumeendtime = "27/6/2012 02:30"
         self.volumegraphs = [(5, 4, 300), (2, 900, 120), (700, 60, 5)]
         self.conversationlist = []
         self.top5positive = []
@@ -46,12 +46,11 @@ class Report(object):
         self.cityname = "Amsterdam"
         self.start_date = "22/04/2012"
         self.end_date = "29/04/2012"
-        self.word_cloud = []
+        self.word_cloud = [["asd"], ["asd"], ["asd"], ["asd"], ["asd"], ["asd"], ["asd"], ["asd"]]
         self.key_infl = {}
-        self.word_sent = {}
-        self.word_klout = []
+        self.word_sent = {"0":"123123"}
+        self.word_klout = [['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ["0"]]
         self.optima = []
-
     def drawStringOrangeHelvetica(self, canvas, string, size, x, y, isBold=False):
         canvas.setFillColor(colors.darkorange)
 
@@ -207,23 +206,38 @@ class Report(object):
         mentions, cityname = self.spike_percentage, self.spike_location
         percentage_increase = self.spike_percentage
         keyword, hour, date, twitter_mins = self.spike_keyword, 1, datetime.now().date(), self.freq_time
-        start, end = self.volumebegintime, self.volumeendtime
+
+        start_day, end_day = self.volumebegintime, self.volumeendtime
+        start = start_day.split(" ")[1]
+        end = end_day.split(" ")[1]
+        date_format = "%d/%m/%Y %H:%M"
+        start_day = graph_date_obj  = datetime.strptime(start_day, date_format)
+        end_day = datetime.strptime(end_day, date_format)
+        delta = end_day - start_day
+        num_days = delta.days
+        hours = divmod(delta.days * 86400 + delta.seconds, 3600)
+        graph_date = start_day.strftime("%d/%m/%Y")
         start_date = time = map(int, start.split(':'))
         end_date = map(int, end.split(':'))
-        if end_date[0] < start_date[0]:
-            end_date[0] += 12
-        time_list = [start]
-        if end_date[1] and not start_date[1]:
-            loop_count = range((end_date[0] - start_date[0]) * 2 + 1)
+        time_list = [start + " " + graph_date]
+
+        if hours[1]:
+            loop_count = range(num_days*48 + hours[0]* 2 + 1)
         else:
-            loop_count = range((end_date[0] - start_date[0]) * 2)
+            loop_count = range(num_days*48 + hours[0]* 2)
         for i in loop_count:
             if time[1]:
-                time_list.append(str(time[0] + 1) + ":00")
-                time[0] += 1
+                if time[0] + 1 == 24:
+                    graph_date_obj += timedelta(days=1)
+                    graph_date = graph_date_obj.strftime("%d/%m/%Y")
+                    time_list.append("00:00 " + graph_date)
+                    time[0] = 00
+                else:
+                    time_list.append(str(time[0] + 1) + ":00 " + graph_date)
+                    time[0] += 1
                 time[1] = 0
             else:
-                time_list.append(str(time[0]) + ":30")
+                time_list.append(str(time[0]) + ":30 "+ graph_date)
                 time[1] = 30
 
         #bg
@@ -752,11 +766,11 @@ class Report(object):
         c.showPage()
         self.page2(c)
         c.showPage()
-        #self.page3()
-        #c.showPage()
+        self.page3()
+        c.showPage()
         c.save()
-        #os.system('/usr/bin/gnome-open report-%s.pdf' % name)
-        os.system("open -a Preview report-%s.pdf" % name)
+#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+#        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
     report = Report()
