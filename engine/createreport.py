@@ -27,6 +27,7 @@ import pickle
 import sys
 
 import numpy as np
+'''
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
@@ -34,6 +35,7 @@ import matplotlib.mlab as mlab
 import matplotlib.cbook as cbook
 import matplotlib.ticker as ticker 
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
+'''
 
 from nltk import word_tokenize, sent_tokenize, corpus
 
