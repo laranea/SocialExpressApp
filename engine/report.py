@@ -19,6 +19,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.graphics.widgets.markers import makeMarker
 from positions import HorizontalChartNew
 import numpy as np
+import urllib
 
 #todo: increase font
 class Report(object):
@@ -296,7 +297,9 @@ class Report(object):
         self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Create Circle on Twitter Mention Graph
-        #self.createCircle(canvas, 400, 2000, self.graphcircleradius, "#00611C")
+        self.createCircle(canvas, 948, 2530, self.graphcircleradius, "#FF0000")
+        self.createCircle(canvas, 947, 2486, self.graphcircleradius, "#00611C")
+        self.createCircle(canvas, 948, 2444, self.graphcircleradius, "#0000A0")
 
         colorList = ['#725E43', '#C04C4E', '#FFED5E', '#4FDF58', '#E2509F', '#47C4C9', '#F95D58', '#507AD2', '#F5AF21']
         index = 0
@@ -338,6 +341,26 @@ class Report(object):
         #   Most Negative Coversations
         i = 0
 
+        # Save image for avatar from twitter
+        urllib.urlretrieve("http://newspaper.li/static/92e27a515d81e6210f0e849aac7a12f9.png", "local-filename.jpg")
+
+        #Positive Avatars
+        canvas.drawImage("local-filename.jpg", 320, 630, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 515, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 390, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 265, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 140, 80, 80)
+
+        #Negative Avatars
+        canvas.drawImage("local-filename.jpg", 1365, 630, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 515, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 390, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 265, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 140, 80, 80)
+
+
+        #remove the file created
+        os.remove('local-filename.jpg')
 
         for neg in self.top5negative:
             if i > 4:
