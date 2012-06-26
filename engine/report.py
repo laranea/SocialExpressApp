@@ -252,8 +252,10 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 1220, 3350, False)
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1290, 3350, True)
 
-        self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + \
-            "%", 64.22, 1920, 3280, True)
+        if mentions > 0:
+            self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% increase", 64.22, 1920, 3280, True)
+        else:
+            self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% decrease", 64.22, 1920, 3280, True)
 
         self.drawStringGrayHelvetica(canvas, "concerning", 54.17, 170, 3250, False)
         self.drawStringOrangeHelvetica(canvas, self.spike_keyword, 54.17, 450, 3250, False)
@@ -263,7 +265,7 @@ class Report(object):
         if self.freq_time <= 60:
             self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time) + " seconds someone is twittering..", 25, 484, 2627)
         else:
-             self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time / 60) + " minutes someone is twittering..", 25, 484, 2627)
+            self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time / 60) + " minutes someone is twittering..", 25, 484, 2627)
            
         #keyword related to legends
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[0], 26.07, 970, 2435, False)
@@ -359,9 +361,9 @@ class Report(object):
             self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#ffffff')
             self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#ffffff')
             #Second Column
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1577, False, '#ffffff')
             self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, '#ffffff')
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1195, False, '#ffffff')
             #Third Column
             self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#ffffff')
             self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#ffffff')
@@ -374,9 +376,9 @@ class Report(object):
         #First Column
         i = 0
         deltax_text = deltay_text = text_xaxis = 0
-        self.conversationlist = [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "1only2"}]
-        self.conversationlist += [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"}]
-        self.conversationlist += [{"text": "asd3432er"},{"text": "7777er"},{"text": "999999999999999"}]
+        #self.conversationlist = [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "1only2"}]
+        #self.conversationlist += [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"}]
+        #self.conversationlist += [{"text": "asd3432er"},{"text": "7777er"},{"text": "999999999999999"}]
         for conv in self.conversationlist:
             if i > 7:
                 break
@@ -434,8 +436,11 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, "in", 54.17, 1220, 3350, False)
         self.drawStringOrangeHelvetica(canvas, cityname, 54.17, 1290, 3350, True)
 
-        self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + \
-            "% increase", 64.22, 1920, 3280, True)
+        if mentions > 0:
+            self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% increase", 64.22, 1920, 3280, True)
+        else:
+            self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% decrease", 64.22, 1920, 3280, True)
+           
 
         self.drawStringGrayHelvetica(canvas, "concerning", 54.17, 170, 3250, False)
         self.drawStringOrangeHelvetica(canvas, self.spike_keyword, 54.17, 450, 3250, False)

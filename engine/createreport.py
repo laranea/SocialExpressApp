@@ -564,7 +564,7 @@ print a
 print b
 print c
 
-d = np.diff(y) # local min+max
+d = np.diff(np.sign(np.diff(y)))
 
 print d
 
