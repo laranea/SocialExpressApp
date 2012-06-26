@@ -105,7 +105,7 @@ class AddRule(BaseHandler):
         sql = "INSERT INTO reportcriteria (keyword, competitor, country,"
         sql += " mailing_list, creator_id) VALUES ('%s', '%s', '%s', '%s', '%d')" % (keyword, compare, country, email, user_id)
         data = connection.connect(sql, 1)
-        
+
         list = ['python', 'engine/createreport.py']
         list.append("main_enterprise='ThinkMedia'")
         list.append("main_keyword=%" % keyword)
@@ -163,16 +163,13 @@ class RealTimeReportCrieria(BaseHandler):
         data = connection.connect(sql, 1)
 
         list = ['python', 'handlers/script.py']
-<<<<<<< HEAD
         list.append('argument1')
         list.append('argument3')
         process = subprocess.Popen(list, shell=False)
 #        print process.stdout.readline()
-=======
         #list.append("--main_keyword='%'" % keyword)
         #list.append("--competitor1_data='%'" % )
         process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
->>>>>>> b1717b363174c44094cf84a3a1132ba7d816cbfb
 
 
 class DeleteTrigger(BaseHandler):

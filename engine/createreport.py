@@ -564,7 +564,7 @@ print a
 print b
 print c
 
-d = np.diff(y).nonzero()[0] + 1 # local min+max
+d = np.diff(y) # local min+max
 
 print d
 

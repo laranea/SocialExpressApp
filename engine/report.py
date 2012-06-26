@@ -142,44 +142,36 @@ class Report(object):
         list = sentence.split()
         sentence_list = []
         first, second, third = '', '', ''
+        is_first, is_second, is_third = 1, 0, 0
         # isConversation = 1 for TimeLine Conversation
         # isConversation = 0 for Positive & Negative Comments
-
-        if len(list) < 9:
-            sentence_list.append(sentence)
-            sentence_list.append('')
-            return sentence_list
-
-        if len(list) < 18:
-            isConversation = 0
-
         if isConversation:
-            for i in range(9):
+            for i in range(len(list)):
                 try:
-                    if i < 8:
+                    if len(first + list[i]) < 27 and is_first == 1:
                         first += list[i] + " "
                     else:
-                        first += list[i]
+                        is_first = 0
+                        is_second = 1
+                    if len(second + list[i]) < 27 and is_second == 1:
+                        second += list[i] + " "
+                    elif not is_first:
+                        is_second = 0
+                        is_third = 1
+                    if len(third + list[i]) < 27 and is_third == 1:
+                        third += list[i] + " "
+                    elif not is_first and not is_second:
+                        is_third = 0
+                        for j in range(len(list[i])):
+                            if len(third + list[i][j] + "..") < 27:
+                                third += list[i][j]
+                            else:
+                                third += list[i][j] + ".."
+                                break
                 except:
                     break
             sentence_list.append(first)
-            for i in range(9, 18):
-                try:
-                    if i < 17:
-                        second += list[i] + " "
-                    else:
-                        second += list[i]
-                except:
-                    break
             sentence_list.append(second)
-            for i in range(18, len(list)):
-                try:
-                    if i < len(list) - 1:
-                        third += list[i] + " "
-                    else:
-                        third += list[i]
-                except:
-                    break
             sentence_list.append(third)
         else:
             for i in range(9):
@@ -296,7 +288,7 @@ class Report(object):
             except:
                 color = '#0198E1'
             # X & Y positions returned is added with the coordinates of the graph
-            print self.optima
+            print 'optimaaa', position
             self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 9])
             index += 1
 
@@ -381,27 +373,41 @@ class Report(object):
 
         #First Column
         i = 0
-
+        deltax_text = deltay_text = text_xaxis = 0
+        self.conversationlist = [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "1only2"}]
+        self.conversationlist += [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"}]
+        self.conversationlist += [{"text": "asd3432er"},{"text": "7777er"},{"text": "999999999999999"}]
         for conv in self.conversationlist:
-            deltax_text = 0
-            deltay_text = i * 112
+            if i > 7:
+                break
+            if i == 0:
+                deltay_text = i * 112
             sentence_list = self.splitSentence(conv['text'], 1)
-
             try:
-                self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570 + deltax_text, 1463 - deltay_text, False)
-                self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570 + deltax_text, 1433 - deltay_text, False)
-                self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570 + deltax_text, 1404 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570 + text_xaxis, 1463 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570 + text_xaxis, 1433 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570 + text_xaxis, 1404 - deltay_text, False)
             except:
                 pass
 
             i += 1
-
-            if i == 2 and deltax_text==0:
-                i = 0
-                deltax_text = 588
-            elif i == 3 and deltax_text == 588:
-                i = 0
-                deltax_text = 514
+            if i == 1:
+                deltay_text = 200
+            elif i == 4 or i == 7:
+                deltay_text = 265
+            elif i == 2 or i == 5:
+                deltay_text = -110
+            elif i == 3 or i == 6:
+                deltay_text = 75
+            if i == 2 and deltax_text == 0:
+#                i = 0
+#                deltax_text = 588
+                text_xaxis = 580
+#            elif i == 3 and deltax_text == 588:
+#                i = 0
+#                deltax_text = 514
+            if i == 5:
+                text_xaxis += 500
 
     def page2(self, canvas):
         mentions, cityname = self.spike_percentage, self.spike_location
