@@ -43,7 +43,7 @@ DEBUG = True
 REALTIME = False
 
 
-MAIN_KEYWORD = 'senseo' 
+MAIN_KEYWORD = 'koffie' 
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -579,10 +579,34 @@ print ymins
 print xmaxs
 print ymaxs
 
+'''xopt = [x[i] for i in a]
+yopt = [y[i] for i in a]
+
+report.optima = zip(xopt, yopt)'''
+
+ok = []
+sum_deltas = 0
+count_deltas = 1
+i = 0
+for (d0, d1) in pairwise(d):
+    delta = d1 - d0
+    if delta >= 2 or delta <= -2:
+        ok.append(i+1)
+    i += 1
+    
+xopt = [x[i] for i in ok]
+yopt = [y[i] for i in ok]
+
+report.optima = zip(xopt, yopt)
+
+print ok
+print xopt
+print yopt
+
 bla = raw_input()
 
-report.optima = zip(xmins, ymins)
-report.optima.extend(zip(xmaxs, xmins))
+#report.optima = zip(xmins, ymins)
+#report.optima.extend(zip(xmaxs, xmins))
 
 '''
 if b.any():

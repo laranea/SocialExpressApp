@@ -108,10 +108,10 @@ class Report(object):
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
-        lc.lines[0].strokeColor = colors.brown
+        lc.lines[0].strokeColor = colors.green
     #    lc.inFill = 1
         lc.lines[1].strokeColor = colors.red
-        lc.lines[2].strokeColor = colors.yellow
+        lc.lines[2].strokeColor = colors.blue
         lc.categoryAxis.categoryNames = catNames
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
@@ -349,6 +349,7 @@ class Report(object):
         # Save image for avatar from twitter
         urllib.urlretrieve("http://newspaper.li/static/92e27a515d81e6210f0e849aac7a12f9.png", "local-filename.jpg")
 
+        '''       
         #Positive Avatars
         canvas.drawImage("local-filename.jpg", 320, 630, 80, 80)
         canvas.drawImage("local-filename.jpg", 320, 515, 80, 80)
@@ -362,10 +363,11 @@ class Report(object):
         canvas.drawImage("local-filename.jpg", 1365, 390, 80, 80)
         canvas.drawImage("local-filename.jpg", 1365, 265, 80, 80)
         canvas.drawImage("local-filename.jpg", 1365, 140, 80, 80)
+        '''
 
 
         #remove the file created
-        os.remove('local-filename.jpg')
+        #os.remove('local-filename.jpg')
 
         for neg in self.top5negative:
             if i > 4:
@@ -821,7 +823,7 @@ class Report(object):
 
 
     def create(self, name):
-        c = canvas.Canvas('report-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
         self.page2(c)
