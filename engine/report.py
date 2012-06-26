@@ -52,6 +52,9 @@ class Report(object):
         self.word_sent = {"0":"123123"}
         self.word_klout = [['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ['0'], ["0"]]
         self.optima = []
+        self.avatar_negative_urls = []
+        self.avatar_positive_urls = []
+
     def drawStringOrangeHelvetica(self, canvas, string, size, x, y, isBold=False):
         canvas.setFillColor(colors.darkorange)
 
@@ -338,30 +341,39 @@ class Report(object):
 
             i += 1
 
-        #   Most Negative Coversations
-        i = 0
-
-        # Save image for avatar from twitter
-        urllib.urlretrieve("http://newspaper.li/static/92e27a515d81e6210f0e849aac7a12f9.png", "local-filename.jpg")
+        #Avatar axis
+        self.avatar_x = [320, 1365]
+        self.avatar_y = [630, 515, 390, 265, 140]
 
         #Positive Avatars
-        canvas.drawImage("local-filename.jpg", 320, 630, 80, 80)
-        canvas.drawImage("local-filename.jpg", 320, 515, 80, 80)
-        canvas.drawImage("local-filename.jpg", 320, 390, 80, 80)
-        canvas.drawImage("local-filename.jpg", 320, 265, 80, 80)
-        canvas.drawImage("local-filename.jpg", 320, 140, 80, 80)
+        i=0
+        for url in self.avatar_positive_urls:
+            if i > 4:
+                break
+            filename =  url.split('/')[-1]
+            # Save image for avatar from twitter
+            urllib.urlretrieve(url, filename)
+            canvas.drawImage(filename, self.avatar_x[0], self.avatar_y[i], 80, 80)
+            #remove the file created
+            os.remove(filename)
+            i += 1
 
         #Negative Avatars
-        canvas.drawImage("local-filename.jpg", 1365, 630, 80, 80)
-        canvas.drawImage("local-filename.jpg", 1365, 515, 80, 80)
-        canvas.drawImage("local-filename.jpg", 1365, 390, 80, 80)
-        canvas.drawImage("local-filename.jpg", 1365, 265, 80, 80)
-        canvas.drawImage("local-filename.jpg", 1365, 140, 80, 80)
+        i=0
+        for url in self.avatar_negative_urls:
+            if i > 4:
+                break
+            filename =  url.split('/')[-1]
+            # Save image for avatar from twitter
+            urllib.urlretrieve(url, filename)
+            canvas.drawImage(filename, self.avatar_x[1], self.avatar_y[i], 80, 80)
+            #remove the file created
+            os.remove(filename)
+            i += 1
 
 
-        #remove the file created
-        os.remove('local-filename.jpg')
-
+        #   Most Negative Coversations
+        i = 0
         for neg in self.top5negative:
             if i > 4:
                 break
