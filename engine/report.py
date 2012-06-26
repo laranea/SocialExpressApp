@@ -293,7 +293,7 @@ class Report(object):
             except:
                 color = '#0198E1'
             # X & Y positions returned is added with the coordinates of the graph
-            print self.optima
+            print 'optimaaa', self.optima
             self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 9])
             index += 1
 
@@ -764,12 +764,12 @@ class Report(object):
         c = canvas.Canvas('report-%s.pdf' % name, pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
-        self.page2(c)
-        c.showPage()
-        self.page3()
-        c.showPage()
+#        self.page2(c)
+#        c.showPage()
+#        self.page3()
+#        c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
