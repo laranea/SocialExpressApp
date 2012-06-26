@@ -107,8 +107,18 @@ class AddRule(BaseHandler):
         data = connection.connect(sql, 1)
 
         list = ['python', 'engine/createreport.py']
-        list.append('argument1')
-        list.append('argument3')
+        list.append("main_enterprise='ThinkMedia'")
+        list.append("main_keyword=%" % keyword)
+        list.append("competitor1_keyword=%" % compare)
+        list.append("main_langage=nl")
+        
+        if country == 1:
+            list.append("main_country='The Netherlands'")
+        else:
+            list.append("main_country='Belgium'")
+        
+        list.append("mail_to_list=%" % email)
+        list.append("main_screen_name_list='ThinkMedia'")
         process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
 
 
