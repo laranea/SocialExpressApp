@@ -19,6 +19,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.graphics.widgets.markers import makeMarker
 from positions import HorizontalChartNew
 import numpy as np
+import urllib
 
 #todo: increase font
 class Report(object):
@@ -138,7 +139,7 @@ class Report(object):
         canvas.setFillColor(colors.HexColor(color))
         canvas.setStrokeColor(colors.HexColor(color))
 
-    def splitSentence(self, sentence, isConversation=1):
+    def splitSentence(self, sentence, isConversation=1, name=''):
         list = sentence.split()
         sentence_list = []
         first, second, third = '', '', ''
@@ -174,23 +175,45 @@ class Report(object):
             sentence_list.append(second)
             sentence_list.append(third)
         else:
-            for i in range(9):
+            for i in range(len(list)):
                 try:
-                    if i < 8:
+                    if len(first + list[i]) < 55 and is_first:
                         first += list[i] + " "
                     else:
-                        first += list[i]
-                except:
-                    break
-            sentence_list.append(first)
-            for i in range(9, len(list)):
-                try:
-                    if i < len(list) - 1:
+                        is_first = 0
+                        is_second = 1
+                    if len(second + list[i] + "   " + name) < 50 and is_second == 1:
                         second += list[i] + " "
-                    else:
-                        second += list[i]
+                    elif not is_first:
+                        is_second = 0
+                        second += ".. "
+                        break
+#                        for j in range(len(list[i])):
+#                            if len(second + list[i][j] + ".. " + name) < 55:
+#                                second += list[i][j]
+#                            else:
+#                                second += list[i][j] + ".. " + name
+#                                break
                 except:
-                    break
+                        break
+
+#            for i in range(9):
+#                try:
+#                    if i < 8:
+#                        first += list[i] + " "
+#                    else:
+#                        first += list[i]
+#                except:
+#                    break
+            sentence_list.append(first)
+#            for i in range(9, len(list)):
+#                try:
+#                    if i < len(list) - 1:
+#                        second += list[i] + " "
+#                    else:
+#                        second += list[i]
+#                except:
+#                    break
             sentence_list.append(second)
         return sentence_list
 
@@ -279,7 +302,9 @@ class Report(object):
         self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Create Circle on Twitter Mention Graph
-        #self.createCircle(canvas, 400, 2000, self.graphcircleradius, "#00611C")
+        self.createCircle(canvas, 948, 2530, self.graphcircleradius, "#FF0000")
+        self.createCircle(canvas, 947, 2486, self.graphcircleradius, "#00611C")
+        self.createCircle(canvas, 948, 2444, self.graphcircleradius, "#0000A0")
 
         colorList = ['#725E43', '#C04C4E', '#FFED5E', '#4FDF58', '#E2509F', '#47C4C9', '#F95D58', '#507AD2', '#F5AF21']
         index = 0
@@ -301,12 +326,14 @@ class Report(object):
         i = 0
 
         for pos in self.top5positive:
+            if i > 4:
+                break;
             deltay_text = i * 124
 
             sentence_list = self.splitSentence(pos['text'], 0)
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 452, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 452, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 762, 613 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 1010, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
@@ -319,13 +346,35 @@ class Report(object):
         #   Most Negative Coversations
         i = 0
 
-        for neg in self.top5negative:
-            deltay_text = i * 124
+        # Save image for avatar from twitter
+        urllib.urlretrieve("http://newspaper.li/static/92e27a515d81e6210f0e849aac7a12f9.png", "local-filename.jpg")
 
-            sentence_list = self.splitSentence(neg['text'], 0)
+        #Positive Avatars
+        canvas.drawImage("local-filename.jpg", 320, 630, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 515, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 390, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 265, 80, 80)
+        canvas.drawImage("local-filename.jpg", 320, 140, 80, 80)
+
+        #Negative Avatars
+        canvas.drawImage("local-filename.jpg", 1365, 630, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 515, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 390, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 265, 80, 80)
+        canvas.drawImage("local-filename.jpg", 1365, 140, 80, 80)
+
+
+        #remove the file created
+        os.remove('local-filename.jpg')
+
+        for neg in self.top5negative:
+            if i > 4:
+                break
+            deltay_text = i * 124
+            sentence_list = self.splitSentence(neg['text'], 0, neg['username'])
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 1512, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 1512, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1965, 613 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 2070, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
@@ -376,9 +425,6 @@ class Report(object):
         #First Column
         i = 0
         deltax_text = deltay_text = text_xaxis = 0
-        #self.conversationlist = [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "1only2"}]
-        #self.conversationlist += [{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"},{"text": "asd3432er"},{"text": "Coffee machine exploded what the hell is this? Can not believe this is happening!!"}]
-        #self.conversationlist += [{"text": "asd3432er"},{"text": "7777er"},{"text": "999999999999999"}]
         for conv in self.conversationlist:
             if i > 7:
                 break
