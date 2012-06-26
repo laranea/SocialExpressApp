@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.mlab as mlab
 import matplotlib.cbook as cbook
-import matplotlib.ticker as ticker
+import matplotlib.ticker as ticker 
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 from nltk import word_tokenize, sent_tokenize, corpus
@@ -43,7 +43,7 @@ DEBUG = True
 REALTIME = False
 
 
-MAIN_KEYWORD = 'koffie'
+MAIN_KEYWORD = 'senseo' 
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -55,11 +55,8 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
-COMPETITOR1_KEYWORD = ''
-COMPETITOR2_KEYWORD = ''
-
 SEARCH_PAGES = 10
-SEARCH_RPP = 100
+SEARCH_RPP = 1000
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -394,7 +391,7 @@ y = []
 volume = -1
 for tweet_data in main_data:
     d = parser.parse(tweet_data['created_at']).hour #daily or hourly
-    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
+    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour).zfill(2) + ":" + str(parser.parse(tweet_data['created_at']).minute).zfill(2)
 
     if not d in x:
         if volume != -1:
@@ -563,6 +560,15 @@ a = np.diff(np.sign(np.diff(y))).nonzero()[0] + 1 # local min+max
 b = (np.diff(np.sign(np.diff(y))) > 0).nonzero()[0] + 1 # local min
 c = (np.diff(np.sign(np.diff(y))) < 0).nonzero()[0] + 1 # local max
 
+print a
+print b
+print c
+
+d = np.diff(y).nonzero()[0] + 1 # local min+max
+
+print d
+
+
 xmins = [x[i] for i in b]
 ymins = [y[i] for i in b]
 xmaxs = [x[i] for i in c]
@@ -572,6 +578,8 @@ print xmins
 print ymins
 print xmaxs
 print ymaxs
+
+bla = raw_input()
 
 report.optima = zip(xmins, ymins)
 report.optima.extend(zip(xmaxs, xmins))

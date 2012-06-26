@@ -268,8 +268,11 @@ class Report(object):
         #self.drawStringGrayHelvetica(canvas, "than usual in " + str(hour) +\
         #    " hour " + date, 54.17, 610, 3250)
 
-        self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time) + " seconds someone is twittering..", 25, 484, 2627)
-
+        if self.freq_time <= 60:
+            self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time) + " seconds someone is twittering..", 25, 484, 2627)
+        else:
+             self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time / 60) + " minutes someone is twittering..", 25, 484, 2627)
+           
         #keyword related to legends
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[0], 26.07, 970, 2435, False)
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[1], 26.07, 970, 2477, False)
@@ -360,17 +363,17 @@ class Report(object):
 
         #   Timeline Conversations
         try:
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, colorList[0])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, colorList[0])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, colorList[0])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[0]['hour_string'], 29.17, 410, 1616, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[1]['hour_string'], 29.17, 410, 1468, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[2]['hour_string'], 29.17, 410, 1258, False, '#ffffff')
             #Second Column
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, colorList[1])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, colorList[1])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, colorList[1])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[3]['hour_string'], 29.17, 1005, 1577, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[4]['hour_string'], 29.17, 1005, 1391, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[5]['hour_string'], 29.17, 1005, 1195, False, '#ffffff')
             #Third Column
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, colorList[2])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, colorList[2])
-            self.drawStringGrayHelvetica(canvas, self.conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, colorList[2])
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[6]['hour_string'], 29.17, 1518, 1577, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[7]['hour_string'], 29.17, 1518, 1391, False, '#ffffff')
+            self.drawStringGrayHelvetica(canvas, self.conversationlist[8]['hour_string'], 29.17, 1518, 1195, False, '#ffffff')
 
             self.drawStringGrayHelvetica(canvas, "", 29.17, 568, 1616, False)
         except:
@@ -385,9 +388,9 @@ class Report(object):
             sentence_list = self.splitSentence(conv['text'], 1)
 
             try:
-                self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570, 1463 - deltay_text, False)
-                self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570, 1433 - deltay_text, False)
-                self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570, 1404 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[0], 29.17, 570 + deltax_text, 1463 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[1], 29.17, 570 + deltax_text, 1433 - deltay_text, False)
+                self.drawStringGrayHelvetica(canvas, sentence_list[2], 29.17, 570 + deltax_text, 1404 - deltay_text, False)
             except:
                 pass
 
@@ -434,10 +437,10 @@ class Report(object):
         #    " hour " + date, 54.17, 610, 3250)
 
         # % mentions, sentiment, followers (in order)
-        self.drawStringGrayHelvetica(canvas, str(round(self.mentions_percentage, 0)) + " %", 90.65, 480, 2672, False, '#7cc576')
+        self.drawStringGrayHelvetica(canvas, str(int(round(self.mentions_percentage))) + "%", 65, 480, 2672, False, '#7cc576')
         # note that X-Axis varies for '+' & '-' as to align in same width
-        self.drawStringGrayHelvetica(canvas, str(round(self.sentiment_percentage, 0)) + " %", 90.65, 499, 2452, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, str(round(self.followers_percentage, 0)) + " %", 90.65, 499, 2220, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(int(round(self.sentiment_percentage))) + "%", 65, 499, 2452, False, '#e68383')
+        self.drawStringGrayHelvetica(canvas, str(int(round(self.followers_percentage))) + "%", 65, 499, 2220, False, '#e68383')
 
         #Arrows
         if self.mentions_percentage >= 0:
@@ -766,8 +769,8 @@ class Report(object):
         c.showPage()
         self.page2(c)
         c.showPage()
-        self.page3()
-        c.showPage()
+        #self.page3()
+        #c.showPage()
         c.save()
 #        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
