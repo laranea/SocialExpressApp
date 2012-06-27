@@ -111,10 +111,10 @@ class Report(object):
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
-        lc.lines[0].strokeColor = colors.green
+        lc.lines[0].strokeColor = colors.HexColor("#0000A0")
     #    lc.inFill = 1
-        lc.lines[1].strokeColor = colors.red
-        lc.lines[2].strokeColor = colors.blue
+        lc.lines[1].strokeColor = colors.HexColor("#00611C")
+        lc.lines[2].strokeColor = colors.HexColor("#FF00000")
         lc.categoryAxis.categoryNames = catNames
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
@@ -127,8 +127,8 @@ class Report(object):
         lc.lines[0].symbol.strokeColor = colors.green
         lc.lines[0].symbol.size = 10'''
         lc.lines[1].strokeWidth = 2.5
-        positions = lc.calcPositions_xy()
-        self.optima = positions[0]
+        #positions = lc.calcPositions_xy()
+        #self.optima = positions[0]
         drawing.add(lc)
 
         return drawing
@@ -848,7 +848,7 @@ class Report(object):
                 '''
 
     def create(self, name):
-        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        c = canvas.Canvas("report-latest.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
         self.page2(c)

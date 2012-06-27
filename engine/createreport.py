@@ -3,6 +3,7 @@ Created on Jun 6, 2012
 
 @author: kristof
 '''
+import operator
 import time
 import datetime
 import general_settings
@@ -45,7 +46,7 @@ DEBUG = True
 REALTIME = False
 
 
-MAIN_KEYWORD = 'koffie' 
+MAIN_KEYWORD = 'senseo' 
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -455,6 +456,7 @@ max_volume_delta = 0
 max_volume_sign = 1
 max_volume_s0 = 1
 max_volume_s1 = 0
+deltas_volume = {}
 
 for comb in comb_list:
     delta = abs(comb[1] - comb[0])
@@ -566,7 +568,11 @@ print a
 print b
 print c
 
-d = np.diff(np.sign(np.diff(y)))
+ya = [y[i] for i in a]
+
+
+
+d = np.diff(ya)
 
 print d
 
@@ -590,14 +596,35 @@ ok = []
 sum_deltas = 0
 count_deltas = 1
 i = 0
-for (d0, d1) in pairwise(d):
-    delta = d1 - d0
-    if delta >= 2 or delta <= -2:
-        ok.append(i+1)
+j = 0
+k = 0
+l = 0
+max_delta1 = 0
+max_delta2 = 0
+max_delta3 = 0
+
+max_deltas = []
+
+for (y0, y1) in pairwise(ya):
+    delta = abs(y1 - y0)
+    
+    if delta > max_delta3:
+        max_delta3 = delta
+        j = i
+    elif delta > max_delta2:
+        max_delta2 = delta
+        k = i
+    elif delta > max_delta1:
+        max_delta1 = delta
+        l = i
     i += 1
     
-xopt = [x[i] for i in ok]
-yopt = [y[i] for i in ok]
+#sorted_max_deltas = max_deltas.sort()
+
+#print sorted_max_deltas
+    
+xopt = [x[i] for i in [l, k, j]]
+yopt = [y[i] for i in [l, k, j]]
 
 report.optima = zip(xopt, yopt)
 
@@ -605,7 +632,7 @@ print ok
 print xopt
 print yopt
 
-bla = raw_input()
+#bla = raw_input()
 
 #report.optima = zip(xmins, ymins)
 #report.optima.extend(zip(xmaxs, xmins))
@@ -739,7 +766,7 @@ for tweet in main_data:
                 c += 1
 
         if DEBUG:
-            if c > 1000:
+            if c > 100:
                 break
 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
