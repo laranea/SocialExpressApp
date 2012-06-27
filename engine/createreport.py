@@ -632,7 +632,7 @@ print ok
 print xopt
 print yopt
 
-#bla = raw_input()
+bla = raw_input()
 
 #report.optima = zip(xmins, ymins)
 #report.optima.extend(zip(xmaxs, xmins))
