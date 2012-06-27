@@ -292,7 +292,7 @@ class Report(object):
             self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time) + " seconds someone is twittering..", 25, 484, 2627)
         else:
             self.drawStringOrangeHelvetica(canvas, "Every " + str(self.freq_time / 60) + " minutes someone is twittering..", 25, 484, 2627)
-           
+
         #keyword related to legends
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[0], 26.07, 970, 2435, False)
         self.drawStringGrayHelvetica(canvas, self.volumekeywords[1], 26.07, 970, 2477, False)
@@ -498,7 +498,7 @@ class Report(object):
             self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% increase", 64.22, 1920, 3280, True)
         else:
             self.drawStringOrangeHelvetica(canvas, str(self.spike_percentage) + "% decrease", 64.22, 1920, 3280, True)
-           
+
 
         self.drawStringGrayHelvetica(canvas, "concerning", 54.17, 170, 3250, False)
         self.drawStringOrangeHelvetica(canvas, self.spike_keyword, 54.17, 450, 3250, False)
@@ -838,8 +838,8 @@ class Report(object):
         c.showPage()
         self.page2(c)
         c.showPage()
-        #self.page3()
-        #c.showPage()
+        self.page3()
+        c.showPage()
         c.save()
 #        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
