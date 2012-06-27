@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.mlab as mlab
 import matplotlib.cbook as cbook
-import matplotlib.ticker as ticker 
+import matplotlib.ticker as ticker
 from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 '''
 
@@ -45,7 +45,7 @@ DEBUG = True
 REALTIME = False
 
 
-MAIN_KEYWORD = 'koffie' 
+MAIN_KEYWORD = 'koffie'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -142,12 +142,12 @@ def sentiment(text):
 
     return retval
 
-
 #TODO: real-time
 # search keywords
 search_result = []
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
+
         try:
             print "Searching tweets page %i" % i
             # TODO: country language
@@ -265,7 +265,7 @@ if COMPETITOR1_KEYWORD:
                 #gender
                 #avatar
                 tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
-
+                print tweet_data['avatar']
                 #language
                 #ld = language.LangDetect()
                 #tweet_data['lang'] = ld.detect(tweet_data['text'])
@@ -595,7 +595,7 @@ for (d0, d1) in pairwise(d):
     if delta >= 2 or delta <= -2:
         ok.append(i+1)
     i += 1
-    
+
 xopt = [x[i] for i in ok]
 yopt = [y[i] for i in ok]
 
@@ -693,6 +693,7 @@ report.top5negative = sorted_negative
 print "Top 5 Positive:"
 
 for conv in sorted_positive:
+    print "positive cov---", conv
     print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
 
 
@@ -713,6 +714,7 @@ c = 0
 #TODO calculate KLOUT, partnership with KLOUT ???
 for tweet in main_data:
         #for word in word_tokenize(tweet['text']):
+        print "tweet url check---", tweet
         for word in tweet['text'].split():
             word = word.lower()
             if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@' and re.match("^[A-Za-z0-9_-]*(\#)*[A-Za-z0-9_-]*$", word):

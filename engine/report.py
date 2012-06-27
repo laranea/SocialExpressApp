@@ -35,7 +35,7 @@ class Report(object):
         self.volumekeywords = ['c', 'd', 'e']
         self.volumebegintime = "26/6/2012 23:00"
         self.volumeendtime = "27/6/2012 02:30"
-        self.volumegraphs = [(5, 4, 300), (2, 900, 120), (700, 60, 5)]
+        self.volumegraphs = [(5, 4, 300)]
         self.conversationlist = []
         self.top5positive = []
         self.top5negative = []
@@ -107,7 +107,6 @@ class Report(object):
         lc.height = 780  # Length of Y-axis
         lc.joinedLines = 1
         lc.data = data
-        #print data[0]
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
@@ -116,17 +115,20 @@ class Report(object):
         lc.lines[1].strokeColor = colors.red
         lc.lines[2].strokeColor = colors.blue
         lc.categoryAxis.categoryNames = catNames
+        for i in range(len(catNames)):
+            lc.categoryAxis.labels[i].fontSize = 14
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
         lc.valueAxis.valueMin = 0
-        lc.valueAxis.valueMax = max(data[0] + data[1] + data[2]) * 2
-        lc.valueAxis.valueStep = max(data[0] + data[1] + data[2]) / 10
-        lc.lines[0].strokeWidth = 2.5
+        lc.valueAxis.valueMax = max(data[0]) * 2
+        lc.valueAxis.valueStep = max(data[0]) / 10
+        for i in range(len(data)):
+            lc.lines[i].strokeWidth = 4
         '''lc.lines[0].symbol = makeMarker('FilledCircle')
         lc.lines[0].symbol.fillColor = colors.green
         lc.lines[0].symbol.strokeColor = colors.green
         lc.lines[0].symbol.size = 10'''
-        lc.lines[1].strokeWidth = 2.5
+        cordinates = []
         positions = lc.calcPositions_xy()
         self.optima = positions[0]
         drawing.add(lc)
@@ -327,7 +329,11 @@ class Report(object):
     #   Most Positive Conversations
         #TODO: calculate length for sentence
         i = 0
+        #Avatar axis
+        self.avatar_x = [320, 1365]
+        self.avatar_y = [630, 515, 390, 265, 140]
 
+        i = 0
         for pos in self.top5positive:
             if i > 4:
                 break;
@@ -342,15 +348,17 @@ class Report(object):
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
 
             #avatar
-            canvas.drawImage("reports/TabulaMagica-1.png", 300, 635 - deltay_text, 80, 80)
-
+            filename =  pos['avatar'].split('/')[-1]
+            # Save image for avatar from twitter
+            urllib.urlretrieve(pos['avatar'], "tmp/" + filename)
+            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
+            #remove the file created
+            os.remove("tmp/" + filename)
             i += 1
 
-        #Avatar axis
-        self.avatar_x = [320, 1365]
-        self.avatar_y = [630, 515, 390, 265, 140]
 
-        '''       
+
+        '''
         #Positive Avatars
         i=0
         for url in self.avatar_positive_urls:
@@ -374,7 +382,7 @@ class Report(object):
         '''
 
 
-        '''        
+        '''
         #remove the file created
         #os.remove('local-filename.jpg')
         i=0
@@ -389,7 +397,6 @@ class Report(object):
             os.remove(filename)
             i += 1
         '''
-
 
         #   Most Negative Coversations
         i = 0
@@ -406,7 +413,13 @@ class Report(object):
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
 
             #avatar
-            canvas.drawImage("reports/TabulaMagica-1.png", 1360, 635 - deltay_text, 80, 80)
+            filename =  neg['avatar'].split('/')[-1]
+            # Save image for avatar from twitter
+            urllib.urlretrieve(neg['avatar'], "tmp/" + filename)
+            canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
+            #remove the file created
+            os.remove("tmp/" + filename)
+
 
             i += 1
         #circles ?i'll push
@@ -780,10 +793,10 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 177, False)
         '''
     def page3(self, canvas):
-                ''' 
+                '''
                 #bg
                 canvas.drawImage("reports/EMPTYPhilipsWeeklyConversationProblemsReport.png", 0, 0, 2479, 3507)
-        
+
                 #TODO: avatars
                 #Avatars
                 canvas.drawImage("reports/TabulaMagica-1.png", 368, 2230, 125, 125)
@@ -795,7 +808,7 @@ class Report(object):
                 canvas.drawImage("reports/TabulaMagica-1.png", 368, 798, 125, 125)
                 canvas.drawImage("reports/TabulaMagica-1.png", 368, 618, 125, 125)
                 canvas.drawImage("reports/TabulaMagica-1.png", 368, 428, 125, 125)
-        
+
                 #Conversational Problems Report
                 self.drawStringGrayHelvetica(canvas, "Weekly generated social media report", 54.17, 176, 3083, False)
                 self.drawStringGrayHelvetica(canvas, "on", 54.17, 176, 3023, False)
@@ -803,60 +816,61 @@ class Report(object):
                 self.drawStringGrayHelvetica(canvas, "in", 54.17, 415, 3023, False)
                 self.drawStringOrangeHelvetica(canvas, self.cityname, 54.17, 470, 3023, False)
                 self.drawStringGrayHelvetica(canvas, "(between " + self.start_date + " and " + self.end_date + ")", 54.17, 760, 3023, False)
-        
+
                 #Problem Subjects
                 self.drawStringGrayHelvetica(canvas, "Motor Break Down", 58.33, 371, 2435, True)
                 self.drawStringGrayHelvetica(canvas, "Explosion", 58.33, 371, 1737, True)
                 self.drawStringGrayHelvetica(canvas, "New Problem", 58.33, 371, 1060, True)
-        
+
                 #Problems
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 2300, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 2250, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 2250, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 2124, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 2074, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 2074, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 1940, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 1890, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 1890, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 1572, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 1522, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 1522, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 1388, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 1338, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 1338, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 1212, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 1162, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 1162, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 848, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 798, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 798, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 680, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 630, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 630, False, '#000000', True)
-        
+
                 self.drawStringGrayHelvetica(canvas, "'What is going on with my coffee machine? Seriously, cannot believe this is", 41.67, 593, 488, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "happening!'", 41.67, 593, 438, False, '#555555')
                 self.drawStringGrayHelvetica(canvas, "Ivo Minjauw", 41.67, 825, 438, False, '#000000', True)
                 '''
 
     def create(self, name):
-        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+#        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        c = canvas.Canvas(('report-%s.pdf' % name), pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
-        self.page2(c)
-        c.showPage()
-        self.page3()
-        c.showPage()
+#        self.page2(c)
+#        c.showPage()
+#        self.page3()
+#        c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':

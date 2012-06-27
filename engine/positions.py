@@ -32,7 +32,7 @@ class HorizontalChartNew(HorizontalLineChart):
             normWidth = self.groupSpacing
             availWidth = self.categoryAxis.scale(0)[1]
             normFactor = availWidth / normWidth
-        
+
         self._positions = []
         for rowNo in range(len(self.data)):
             lineRow = []
