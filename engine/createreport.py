@@ -149,7 +149,6 @@ def sentiment(text):
 search_result = []
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
-
         try:
             print "Searching tweets page %i" % i
             # TODO: country language
@@ -196,7 +195,10 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
 
             #gender
             #avatar
-            tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+            try:
+                tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+            except:
+                tweet_data['avatar'] = (tweet['profile_image_url_https'])
             #number, save and use
 
             #language
@@ -266,7 +268,10 @@ if COMPETITOR1_KEYWORD:
 
                 #gender
                 #avatar
-                tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+                try:
+                    tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+                except:
+                    tweet_data['avatar'] = (tweet['profile_image_url_https'])
                 print tweet_data['avatar']
                 #language
                 #ld = language.LangDetect()
@@ -331,7 +336,10 @@ if COMPETITOR2_KEYWORD:
 
                 #gender
                 #avatar
-                tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+                try:
+                    tweet_data['avatar'] = urllib.urlretrieve(tweet['profile_image_url_https'])
+                except:
+                    tweet_data['avatar'] = (tweet['profile_image_url_https'])
 
                 #language
                 #ld = language.LangDetect()

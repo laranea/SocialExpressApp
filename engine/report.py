@@ -33,7 +33,7 @@ class Report(object):
         self.freq_time = 15
         self.sentimentgraph = (1, 2, 3)
         self.volumekeywords = ['c', 'd', 'e']
-        self.volumebegintime = "26/6/2012 23:00"
+        self.volumebegintime = "26/6/2012 22:00"
         self.volumeendtime = "27/6/2012 02:30"
         self.volumegraphs = [(5, 4, 300)]
         self.conversationlist = []
@@ -107,6 +107,7 @@ class Report(object):
         lc.height = 780  # Length of Y-axis
         lc.joinedLines = 1
         lc.data = data
+
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
@@ -120,8 +121,14 @@ class Report(object):
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
         lc.valueAxis.valueMin = 0
-        lc.valueAxis.valueMax = max(data[0]) * 2
-        lc.valueAxis.valueStep = max(data[0]) / 10
+        try:
+            lc.valueAxis.valueMax = max(data[0] + data[1] + data[2]) * 2
+        except:
+            lc.valueAxis.valueMax = max(data[0] ) * 2
+        try:
+            lc.valueAxis.valueStep = float(max(data[0]+ data[1] + data[2])) / 10
+        except:
+            lc.valueAxis.valueStep = float(max(data[0])) / 10
         for i in range(len(data)):
             lc.lines[i].strokeWidth = 4
         '''lc.lines[0].symbol = makeMarker('FilledCircle')
@@ -232,7 +239,15 @@ class Report(object):
         end = end_day.split(" ")[1]
         date_format = "%d/%m/%Y %H:%M"
         start_day = graph_date_obj  = datetime.strptime(start_day, date_format)
-        end_day = datetime.strptime(end_day, date_format)
+        try:
+            end_day = datetime.strptime(end_day, date_format)
+        except:
+            datelist = end_day.split()
+            if datelist[1] == "24:00":
+                end_day = datelist[0] + " 00:00"
+                end_day = datetime.strptime(end_day, date_format)
+                end_day += timedelta(days=1)
+
         delta = end_day - start_day
         num_days = delta.days
         hours = divmod(delta.days * 86400 + delta.seconds, 3600)
@@ -306,11 +321,11 @@ class Report(object):
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
         self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
-        #Create Circle on Twitter Mention Graph
+        #Legend Circles
         self.createCircle(canvas, 948, 2530, self.graphcircleradius, "#FF0000")
         self.createCircle(canvas, 947, 2486, self.graphcircleradius, "#00611C")
         self.createCircle(canvas, 948, 2444, self.graphcircleradius, "#0000A0")
-
+        #Create Circle on Twitter Mention Graph
         colorList = ['#725E43', '#C04C4E', '#FFED5E', '#4FDF58', '#E2509F', '#47C4C9', '#F95D58', '#507AD2', '#F5AF21']
         index = 0
         for position in self.optima:
@@ -342,18 +357,18 @@ class Report(object):
             sentence_list = self.splitSentence(pos['text'], 0)
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 452, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 452, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 1010, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 1110 - len(pos['username'])*14, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
 
             #avatar
-            filename =  pos['avatar'].split('/')[-1]
-            # Save image for avatar from twitter
-            urllib.urlretrieve(pos['avatar'], "tmp/" + filename)
-            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
-            #remove the file created
-            os.remove("tmp/" + filename)
+#            filename =  pos['avatar'][0].split('/')[-1]
+#            # Save image for avatar from twitter
+#            urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
+#            canvas.drawImage("tmp/" + filename, 300, 635 - deltay_text, 80, 80)
+#            #remove the file created
+#            os.remove("tmp/" + filename)
             i += 1
 
 
@@ -407,16 +422,16 @@ class Report(object):
             sentence_list = self.splitSentence(neg['text'], 0, neg['username'])
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 1512, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 1512, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 2070, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 2055, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
 
             #avatar
-            filename =  neg['avatar'].split('/')[-1]
+            filename = neg['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(neg['avatar'], "tmp/" + filename)
-            canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
+            urllib.urlretrieve(neg['avatar'][0], "tmp/" + filename)
+            canvas.drawImage("tmp/" + filename, 1360, 635 - deltay_text, 80, 80)
             #remove the file created
             os.remove("tmp/" + filename)
 
@@ -861,15 +876,16 @@ class Report(object):
                 '''
 
     def create(self, name):
-        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+#        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        c = canvas.Canvas(('report-%s.pdf' % name), pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
-        self.page2(c)
-        c.showPage()
-        self.page3()
-        c.showPage()
+#        self.page2(c)
+#        c.showPage()
+#        self.page3()
+#        c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
