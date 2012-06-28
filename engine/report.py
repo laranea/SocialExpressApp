@@ -33,8 +33,8 @@ class Report(object):
         self.freq_time = 15
         self.sentimentgraph = (1, 2, 3)
         self.volumekeywords = ['c', 'd', 'e']
-        self.volumebegintime = "26/6/2012 22:00"
-        self.volumeendtime = "27/6/2012 02:30"
+        self.volumebegintime = "2012-6-26 22:00"
+        self.volumeendtime = "2012-6-27 02:30"
         self.volumegraphs = [(5, 4, 300)]
         self.conversationlist = []
         self.top5positive = []
@@ -237,16 +237,16 @@ class Report(object):
         start_day, end_day = self.volumebegintime, self.volumeendtime
         start = start_day.split(" ")[1]
         end = end_day.split(" ")[1]
-        date_format = "%d/%m/%Y %H:%M"
+        date_format = "%Y-%m-%d %H:%M"
         start_day = graph_date_obj  = datetime.strptime(start_day, date_format)
-        try:
-            end_day = datetime.strptime(end_day, date_format)
-        except:
-            datelist = end_day.split()
-            if datelist[1] == "24:00":
-                end_day = datelist[0] + " 00:00"
-                end_day = datetime.strptime(end_day, date_format)
-                end_day += timedelta(days=1)
+#        try:
+        end_day = datetime.strptime(end_day, date_format)
+#        except:
+#            datelist = end_day.split()
+#            if datelist[1] == "24:00":
+#                end_day = datelist[0] + " 00:00"
+#                end_day = datetime.strptime(end_day, date_format)
+#                end_day += timedelta(days=1)
 
         delta = end_day - start_day
         num_days = delta.days
@@ -363,12 +363,12 @@ class Report(object):
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
 
             #avatar
-#            filename =  pos['avatar'][0].split('/')[-1]
-#            # Save image for avatar from twitter
-#            urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
-#            canvas.drawImage("tmp/" + filename, 300, 635 - deltay_text, 80, 80)
-#            #remove the file created
-#            os.remove("tmp/" + filename)
+            filename =  pos['avatar'][0].split('/')[-1]
+            # Save image for avatar from twitter
+            urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
+            canvas.drawImage("tmp/" + filename, 300, 635 - deltay_text, 80, 80)
+            #remove the file created
+            os.remove("tmp/" + filename)
             i += 1
 
 
@@ -876,16 +876,19 @@ class Report(object):
                 '''
 
     def create(self, name):
-#        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
-        c = canvas.Canvas(('report-%s.pdf' % name), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        try:
+            c = canvas.Canvas(("report-%s-%s-%s-%s.pdf" % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        except:
+            c = canvas.Canvas("report.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
+
         self.page1(c)
         c.showPage()
-#        self.page2(c)
-#        c.showPage()
-#        self.page3()
-#        c.showPage()
+        self.page2(c)
+        c.showPage()
+        self.page3()
+        c.showPage()
         c.save()
-        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':

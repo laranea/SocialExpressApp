@@ -420,7 +420,7 @@ volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 #report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
-report.volumebegintime = "26/6/2012 " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
+report.volumebegintime = str(parser.parse(main_data[0]['created_at']).date()) + " " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 
 max_hour = 0
 try:
@@ -432,7 +432,7 @@ except:
         max_hour = parser.parse(main_data[-1]['created_at']).hour
 
 #report.volumeendtime = str(max_hour + 1) + ":00"
-report.volumeendtime = "27/6/2012 " + str(max_hour + 1) + ":00"
+report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
 
 report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
 
@@ -641,7 +641,7 @@ print ok
 print xopt
 print yopt
 
-#bla = raw_input()
+bla = raw_input()
 
 #report.optima = zip(xmins, ymins)
 #report.optima.extend(zip(xmaxs, xmins))
