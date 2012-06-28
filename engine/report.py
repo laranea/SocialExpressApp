@@ -230,7 +230,7 @@ class Report(object):
         start_day, end_day = self.volumebegintime, self.volumeendtime
         start = start_day.split(" ")[1]
         end = end_day.split(" ")[1]
-        date_format = "%d/%m/%Y %H:%M"
+        date_format = "%Y-%m-%d %H:%M"
         start_day = graph_date_obj  = datetime.strptime(start_day, date_format)
         end_day = datetime.strptime(end_day, date_format)
         delta = end_day - start_day
@@ -348,9 +348,10 @@ class Report(object):
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
 
             #avatar
-            filename =  pos['avatar'].split('/')[-1]
+            print pos['avatar']
+            filename =  pos['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(pos['avatar'], "tmp/" + filename)
+            urllib.urlretrieve(pos['avatar'][1], filename)
             canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
             #remove the file created
             os.remove("tmp/" + filename)
@@ -413,9 +414,9 @@ class Report(object):
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
 
             #avatar
-            filename =  neg['avatar'].split('/')[-1]
+            filename =  neg['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(neg['avatar'], "tmp/" + filename)
+            urllib.urlretrieve(neg['avatar'][1], filename)
             canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
             #remove the file created
             os.remove("tmp/" + filename)
@@ -861,13 +862,17 @@ class Report(object):
                 '''
 
     def create(self, name):
-        c = canvas.Canvas(('report-%s-%s-%s-%s.pdf' % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        try:
+            c = canvas.Canvas(("report-%s-%s-%s-%s.pdf" % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+        except:
+            c = canvas.Canvas("report.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
+           
         self.page1(c)
         c.showPage()
         self.page2(c)
         c.showPage()
-        self.page3()
-        c.showPage()
+        #self.page3()
+        #c.showPage()
         c.save()
 #        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
