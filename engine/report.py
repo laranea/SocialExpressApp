@@ -136,8 +136,8 @@ class Report(object):
         lc.lines[0].symbol.strokeColor = colors.green
         lc.lines[0].symbol.size = 10'''
         cordinates = []
-        #positions = lc.calcPositions_xy()
-        #self.optima = positions[0]
+        positions = lc.map_optima(self.optima)
+        self.optima = positions[0]
         drawing.add(lc)
 
         return drawing
@@ -365,10 +365,14 @@ class Report(object):
             #avatar
             filename =  pos['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
-            canvas.drawImage("tmp/" + filename, 300, 635 - deltay_text, 80, 80)
+            #ubuntu
+            #urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
+            #mac
+            urllib.urlretrieve(pos['avatar'][0], filename)
+
+            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
             #remove the file created
-            os.remove("tmp/" + filename)
+            os.remove(filename)
             i += 1
 
 
@@ -430,10 +434,10 @@ class Report(object):
             #avatar
             filename = neg['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(neg['avatar'][0], "tmp/" + filename)
-            canvas.drawImage("tmp/" + filename, 1360, 635 - deltay_text, 80, 80)
+            urllib.urlretrieve(neg['avatar'][0], filename)
+            canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
             #remove the file created
-            os.remove("tmp/" + filename)
+            os.remove(filename)
 
 
             i += 1
@@ -885,8 +889,8 @@ class Report(object):
         c.showPage()
         self.page2(c)
         c.showPage()
-        self.page3()
-        c.showPage()
+        #self.page3()
+        #c.showPage()
         c.save()
 #        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
