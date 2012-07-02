@@ -350,17 +350,41 @@ if COMPETITOR2_KEYWORD:
 
                 #filter out retweets
                 if (MAIN_COUNTRY == tweet_data['country']) or (tweet_data['lang'] == MAIN_LANGUAGE) and (tweet_data['username'] not in MAIN_SCREEN_NAME_LIST) and (tweet_data['text'] not in tweet_list3):
-                    competitor1_data.append(tweet_data)
+                    competitor2_data.append(tweet_data)
 
                 if tweet_data['text'] not in tweet_list3:
                     tweet_list3.append(tweet_data['text'])
 
     competitor2_data = sorted(competitor2_data, key=lambda k: k['created_at'])
 
+
+report.volumebegintime = str(parser.parse(main_data[0]['created_at']).date()) + " " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
+print "Begin time", report.volumebegintime
+
+max_hour = 0
+try:
+    max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
+except:
+    try:
+        max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour)
+    except:
+        max_hour = parser.parse(main_data[-1]['created_at']).hour
+
+if max_hour == 23:
+    max_hour = -1
+
+#report.volumeendtime = str(max_hour + 1) + ":00"
+report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
+print "End time", report.volumeendtime
+
+timelist = report.getTimeList()
+
 print "Calculating cumulative volumes... comp2"
 x= []
 y = []
 volume = -1
+
+volume_axis = {}
 for tweet_data in competitor2_data:
     dt = parser.parse(tweet_data['created_at'])
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
@@ -370,13 +394,17 @@ for tweet_data in competitor2_data:
             y.append(volume)
         volume = 0
         x.append(d)
+    if volume_axis[dt]:
+        volume_axis[dt] += 1
+    else:
+        volume_axis[dt] = 1
     volume += 1
-
 y.append(volume)
 
 print x
 print y
 volumegraph3 = tuple(y)
+volume_axis = {}
 
 print "Calculating cumulative volumes... comp1"
 x= []
@@ -386,19 +414,45 @@ for tweet_data in competitor1_data:
     dt = parser.parse(tweet_data['created_at'])
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
-
+#    graph_date_obj  = datetime.strptime(start_day, date_format)
+#    if datetime.strptime(dt, "%H:%M %d/%m/%Y") dt.strftime()
+    if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
+        continue
     if not d in x:
         if volume != -1:
             y.append(volume)
         volume = 0
         x.append(d)
+
     volume += 1
+    if parser.parse(tweet_data['created_at']).minute and parser.parse(tweet_data['created_at']).minute < 30:
+        try:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+    else:
+        if parser.parse(tweet_data['created_at']).minute:
+            dt += datetime.timedelta(hours = 1)
+        try:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+print "volume axisssss", volume_axis
+print "timelistssssssss", timelist
+volumegraph2 = []
+for time in timelist:
+    if str(time) in volume_axis.keys():
+        volumegraph2.append(float(volume_axis[str(time)])/len(volume_axis))
+    else:
+        volumegraph2.append(0)
 
 y.append(volume)
-
 print x
 print y
-volumegraph2 = tuple(y)
+#volumegraph2 = tuple(y)
+volumegraph2 = tuple(volumegraph2)
+#volumegraph2 = tuple(map(lambda x: float(x)/len(volume_axis), volume_axis.values()))
+print "volumegraph2", volumegraph2
 
 print "Calculating cumulative volumes..."
 x= []
@@ -424,24 +478,7 @@ volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 #report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
-report.volumebegintime = str(parser.parse(main_data[0]['created_at']).date()) + " " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
-print "Begin time", report.volumebegintime
 
-max_hour = 0
-try:
-    max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
-except:
-    try:
-        max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour)
-    except:
-        max_hour = parser.parse(main_data[-1]['created_at']).hour
-
-if max_hour == 23:
-    max_hour = -1
-
-#report.volumeendtime = str(max_hour + 1) + ":00"
-report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
-print "End time", report.volumeendtime
 
 report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
 print "graph points ", report.volumegraphs
@@ -742,17 +779,17 @@ sorted_positive = sorted_sentiment[-6:-1]
 report.top5positive = sorted_positive
 report.top5negative = sorted_negative
 
-print "Top 5 Positive:"
+#print "Top 5 Positive:"
+#
+#for conv in sorted_positive:
+#    print "positive cov---", conv
+#    print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
+#
 
-for conv in sorted_positive:
-    print "positive cov---", conv
-    print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
-
-
-print "Top 5 Negative:"
-
-for conv in sorted_negative:
-    print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
+#print "Top 5 Negative:"
+#
+#for conv in sorted_negative:
+#    print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
 
 word_cloud = {}
 key_infl = {}
@@ -766,11 +803,9 @@ c = 0
 #TODO calculate KLOUT, partnership with KLOUT ???
 for tweet in main_data:
         #for word in word_tokenize(tweet['text']):
-        print "tweet url check---", tweet
         for word in tweet['text'].split():
             word = word.lower()
             if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@' and re.match("^[A-Za-z0-9_-]*(\#)*[A-Za-z0-9_-]*$", word):
-                print "print word-----------", word
                 if word_cloud.has_key(word):
                     word_cloud[word] += tweet['sentiment']
                 else:

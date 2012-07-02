@@ -107,7 +107,6 @@ class Report(object):
         lc.height = 780  # Length of Y-axis
         lc.joinedLines = 1
         lc.data = data
-        print "time listtt", yaxis_names
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
@@ -229,13 +228,12 @@ class Report(object):
             sentence_list.append(second)
         return sentence_list
 
-    def page1(self, canvas):
-        mentions, cityname = self.spike_percentage, self.spike_location
-        percentage_increase = self.spike_percentage
-        keyword, hour, date, twitter_mins = self.spike_keyword, 1, datetime.now().date(), self.freq_time
-
+    def getTimeList(self):
         start_day, end_day = self.volumebegintime, self.volumeendtime
-        start = start_day.split(" ")[1]
+        if start_day.split(" ")[1].split(":")[1]:
+            start = start_day.split(" ")[1].split(":")[0] + ":30"
+        else:
+            start = start_day.split(" ")[1]
         end = end_day.split(" ")[1]
         date_format = "%Y-%m-%d %H:%M"
         start_day = graph_date_obj  = datetime.strptime(start_day, date_format)
@@ -274,6 +272,14 @@ class Report(object):
             else:
                 time_list.append(str(time[0]) + ":30 "+ graph_date)
                 time[1] = 30
+        return time_list
+
+    def page1(self, canvas):
+        mentions, cityname = self.spike_percentage, self.spike_location
+        percentage_increase = self.spike_percentage
+        keyword, hour, date, twitter_mins = self.spike_keyword, 1, datetime.now().date(), self.freq_time
+
+        time_list = self.getTimeList()
 
         #bg
         canvas.drawImage("reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
@@ -914,7 +920,7 @@ class Report(object):
         #self.page3()
         #c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+#        os.system('/usr/bin/gnome-open report.pdf')
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
