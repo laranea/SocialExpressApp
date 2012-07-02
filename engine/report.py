@@ -320,7 +320,7 @@ class Report(object):
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
         print "volume graph pointsss", self.volumegraphs
-        self.twitterMentionsGraph([(1,2,3,4,5,6,7,8,9), (9,8,7,6,5,4), (5,5,5,5,5,5)], canvas, time_list).drawOn(canvas, 365, 1880)
+        self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Legend Circles
         self.createCircle(canvas, 948, 2530, self.graphcircleradius, "#FF0000")
@@ -427,7 +427,7 @@ class Report(object):
             sentence_list = self.splitSentence(neg['text'], 0, neg['username'])
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 1512, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 1512, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 2055, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 2135 - len(neg['username'])*14, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['text'], 26.07, 1512, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, neg['username'], 26.07, 1865, 650 - deltay_text, False)
