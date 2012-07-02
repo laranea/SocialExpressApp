@@ -61,7 +61,7 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
 SEARCH_PAGES = 10
-SEARCH_RPP = 2
+SEARCH_RPP = 1000
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -505,7 +505,7 @@ counter = 0
 for tweet_data in main_data:
     dt = parser.parse(tweet_data['created_at'])
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
-    
+
     if not d in x:
         if sentiment > -100:
             y.append((sentiment/counter))
@@ -603,10 +603,10 @@ ymins = [y[i] for i in b]
 xmaxs = [x[i] for i in c]
 ymaxs = [y[i] for i in c]
 
-print xmins
-print ymins
-print xmaxs
-print ymaxs
+print "x minss", xmins
+print "y minss", ymins
+print "x maxss", xmaxs
+print "y maxss", ymaxs
 
 '''xopt = [x[i] for i in a]
 yopt = [y[i] for i in a]
@@ -728,7 +728,7 @@ conversationlist.extend(sorted_cluster3[:3])
 conversationlist.extend(sorted_cluster4[:3])
 
 conversations = sorted(conversationlist, key=lambda k: k['created_at'])
-
+print "conversation listtt", conversations
 for conv in conversations:
     print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
 

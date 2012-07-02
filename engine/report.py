@@ -358,7 +358,7 @@ class Report(object):
             sentence_list = self.splitSentence(pos['text'], 0)
             self.drawStringGrayHelvetica(canvas, sentence_list[0], 26.07, 452, 687 - deltay_text, False, '#636363')
             self.drawStringGrayHelvetica(canvas, sentence_list[1], 26.07, 452, 650 - deltay_text, False, '#636363')
-            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 1110 - len(pos['username'])*14, 650 - deltay_text, False)
+            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 1100 - len(pos['username'])*14, 650 - deltay_text, False)
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 687 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['text'], 26.07, 452, 650 - deltay_text, False, '#636363')
 #            self.drawStringGrayHelvetica(canvas, pos['username'], 26.07, 662, 650 - deltay_text, False)
@@ -905,16 +905,16 @@ class Report(object):
         try:
             c = canvas.Canvas(("report-%s-%s-%s-%s.pdf" % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
         except:
-            c = canvas.Canvas("report-%s.pdf" % name, pagesize=(2480, 3508), bottomup=1, verbosity=1)
+            c = canvas.Canvas("report.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
 
         self.page1(c)
         c.showPage()
-#        self.page2(c)
-#        c.showPage()
+        self.page2(c)
+        c.showPage()
         #self.page3()
         #c.showPage()
         c.save()
-        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
