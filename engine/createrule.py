@@ -1,5 +1,5 @@
 '''
-Created on Jun 6, 2012
+Created on Jun 29, 2012
 
 @author: kristof
 '''
@@ -16,7 +16,7 @@ from dateutil import parser
 import itertools
 from pygeocoder import Geocoder
 import language
-import urllib
+import urllibjihip
 from collections import defaultdict
 import ordereddict
 
@@ -46,8 +46,8 @@ DEBUG = True
 REALTIME = False
 
 
-#MAIN_KEYWORD = 'koffie'
-MAIN_KEYWORD = 'senseo'
+MAIN_KEYWORD = 'koffie'
+#MAIN_KEYWORD = 'senseo'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -361,7 +361,7 @@ x= []
 y = []
 volume = -1
 for tweet_data in competitor2_data:
-    d = parser.parse(tweet_data['created_at'])
+    d = parser.parse(tweet_data['created_at']).hour #daily or hourly
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
     if not d in x:
         if volume != -1:
@@ -381,7 +381,7 @@ x= []
 y = []
 volume = -1
 for tweet_data in competitor1_data:
-    d = parser.parse(tweet_data['created_at'])
+    d = parser.parse(tweet_data['created_at']).hour #daily or hourly
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
 
     if not d in x:
@@ -402,7 +402,7 @@ x= []
 y = []
 volume = -1
 for tweet_data in main_data:
-    d = parser.parse(tweet_data['created_at'])
+    d = parser.parse(tweet_data['created_at']).hour #daily or hourly
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour).zfill(2) + ":" + str(parser.parse(tweet_data['created_at']).minute).zfill(2)
 
     if not d in x:
@@ -430,9 +430,6 @@ except:
         max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour)
     except:
         max_hour = parser.parse(main_data[-1]['created_at']).hour
-    
-if max_hour == 23:
-    max_hour = -1
 
 #report.volumeendtime = str(max_hour + 1) + ":00"
 report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
@@ -496,7 +493,7 @@ y = []
 sentiment = -100
 counter = 0
 for tweet_data in main_data:
-    d = parser.parse(tweet_data['created_at']).hour + parser.parse(tweet_data['created_at']).date().day * 100 + parser.parse(tweet_data['created_at']).date().month  * 1000 + parser.parse(tweet_data['created_at']).date().year * 10000
+    d = parser.parse(tweet_data['created_at']).hour
     if not d in x:
         if sentiment > -100:
             y.append((sentiment/counter))
@@ -638,8 +635,7 @@ for (y0, y1) in pairwise(ya):
 xopt = [x[i] for i in [l, k, j]]
 yopt = [y[i] for i in [l, k, j]]
 
-#report.optima = zip(xopt, yopt)
-report.optima = [l, k, j].sort()
+report.optima = zip(xopt, yopt)
 
 print ok
 print xopt
