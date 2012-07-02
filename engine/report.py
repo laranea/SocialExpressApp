@@ -892,7 +892,7 @@ class Report(object):
         #self.page3()
         #c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
+        os.system('/usr/bin/gnome-open report-%s.pdf' % name)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
