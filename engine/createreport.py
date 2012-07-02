@@ -60,7 +60,7 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
 SEARCH_PAGES = 10
-SEARCH_RPP = 1000
+SEARCH_RPP = 2
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -421,6 +421,7 @@ volumegraph1 = tuple(y)
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 #report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 report.volumebegintime = str(parser.parse(main_data[0]['created_at']).date()) + " " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
+print "Begin time", report.volumebegintime
 
 max_hour = 0
 try:
@@ -430,14 +431,16 @@ except:
         max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour)
     except:
         max_hour = parser.parse(main_data[-1]['created_at']).hour
-    
+
 if max_hour == 23:
     max_hour = -1
 
 #report.volumeendtime = str(max_hour + 1) + ":00"
 report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
+print "End time", report.volumeendtime
 
 report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
+print "graph points ", report.volumegraphs
 
 print "Calculating the freq times..."
 def pairwise(iterable):
@@ -577,7 +580,7 @@ b = (np.diff(np.sign(np.diff(y))) > 0).nonzero()[0] + 1 # local min
 c = (np.diff(np.sign(np.diff(y))) < 0).nonzero()[0] + 1 # local max
 
 print a
-print b
+print "bbb", b
 print c
 
 ya = [y[i] for i in a]
@@ -634,18 +637,21 @@ for (y0, y1) in pairwise(ya):
 #sorted_max_deltas = max_deltas.sort()
 
 #print sorted_max_deltas
-
+print 'ya', ya
 xopt = [x[i] for i in [l, k, j]]
 yopt = [y[i] for i in [l, k, j]]
-
 #report.optima = zip(xopt, yopt)
 report.optima = [l, k, j].sort()
 
-print ok
-print xopt
-print yopt
+print "l", l
+print "k", k
+print "j", j
+print "xopt", xopt
+print "yopt", yopt
+print "xxx", x
+print "yyy", y
 
-bla = raw_input()
+#bla = raw_input()
 
 #report.optima = zip(xmins, ymins)
 #report.optima.extend(zip(xmaxs, xmins))

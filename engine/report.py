@@ -107,7 +107,7 @@ class Report(object):
         lc.height = 780  # Length of Y-axis
         lc.joinedLines = 1
         lc.data = data
-
+        print "time listtt", yaxis_names
         #catNames = string.split('8:00 8:30 9:00 9:30 10:00 10:30 11:00 11:30 12:00 12:30 13:00 13:30 14:00 14:30 13:00 13:30', ' ')
         catNames = yaxis_names
         lc.valueAxis.visible = 0  # Make Y-Axis Invisible
@@ -319,7 +319,8 @@ class Report(object):
 
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
-        self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
+        print "volume graph pointsss", self.volumegraphs
+        self.twitterMentionsGraph([(1,2,3,4,5,6,7,8,9), (9,8,7,6,5,4), (5,5,5,5,5,5)], canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Legend Circles
         self.createCircle(canvas, 948, 2530, self.graphcircleradius, "#FF0000")
@@ -582,54 +583,75 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, self.word_cloud[2][0], 72, 470, 1410, False, '#7cc576')
         self.drawStringGrayHelvetica(canvas, self.word_cloud[3][0], 72, 400, 1300, False, '#7cc576')
         #Black
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[4][0], 72, 1200, 1590, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[5][0], 72, 1100, 1450, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[6][0], 72, 1370, 1400, False)
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[7][0], 72, 1000, 1300, False)
+        try:
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[4][0], 72, 1200, 1590, False)
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[5][0], 72, 1100, 1450, False)
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[6][0], 72, 1370, 1400, False)
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[7][0], 72, 1000, 1300, False)
+        except:
+            pass
         #Red
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-1][0], 72, 1780, 1640, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-2][0], 72, 1840, 1540, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-3][0], 72, 1690, 1430, False, '#e68383')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[-4][0], 72, 1930, 1370, False, '#e68383')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[-1][0], 72, 1780, 1640, False, '#e68383')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[-2][0], 72, 1840, 1540, False, '#e68383')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[-3][0], 72, 1690, 1430, False, '#e68383')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[-4][0], 72, 1930, 1370, False, '#e68383')
+        except:
+            pass
 
         #Key influencers by Topic
-        self.drawStringGrayHelvetica(canvas, self.word_klout[0][0], 23.26, 476, 864, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[1][0], 23.26, 785, 864, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[2][0], 23.26, 1087, 864, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[3][0], 23.26, 1409, 864, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[4][0], 23.26, 1739, 864, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[5][0], 23.26, 2055, 864, False, '#000000')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.word_klout[0][0], 23.26, 476, 864, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[1][0], 23.26, 785, 864, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[2][0], 23.26, 1087, 864, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[3][0], 23.26, 1409, 864, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[4][0], 23.26, 1739, 864, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[5][0], 23.26, 2055, 864, False, '#000000')
+        except:
+            pass
 
         # Sentiment Graphs
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[0][0]])).drawOn(canvas, 398, 740)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[1][0]])).drawOn(canvas, 712, 740)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[2][0]])).drawOn(canvas, 1021, 740)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[3][0]])).drawOn(canvas, 1338, 740)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[4][0]])).drawOn(canvas, 1661, 740)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[5][0]])).drawOn(canvas, 1973, 740)
+        try:
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[0][0]])).drawOn(canvas, 398, 740)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[1][0]])).drawOn(canvas, 712, 740)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[2][0]])).drawOn(canvas, 1021, 740)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[3][0]])).drawOn(canvas, 1338, 740)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[4][0]])).drawOn(canvas, 1661, 740)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[5][0]])).drawOn(canvas, 1973, 740)
+        except:
+            pass
 
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[6][0]])).drawOn(canvas, 398, 332)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[7][0]])).drawOn(canvas, 712, 332)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[8][0]])).drawOn(canvas, 1021, 332)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[9][0]])).drawOn(canvas, 1338, 332)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[10][0]])).drawOn(canvas, 1661, 332)
-        self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[11][0]])).drawOn(canvas, 1973, 332)
+        try:
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[6][0]])).drawOn(canvas, 398, 332)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[7][0]])).drawOn(canvas, 712, 332)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[8][0]])).drawOn(canvas, 1021, 332)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[9][0]])).drawOn(canvas, 1338, 332)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[10][0]])).drawOn(canvas, 1661, 332)
+            self.drawSentimentGraph(tuple(self.word_sent[self.word_klout[11][0]])).drawOn(canvas, 1973, 332)
+        except:
+            pass
 
         #Key influencers by Topic Second Row
-        self.drawStringGrayHelvetica(canvas, self.word_klout[6][0], 23.26, 476, 458, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[7][0], 23.26, 785, 458, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[8][0], 23.26, 1087, 458, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[9][0], 23.26, 1409, 458, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[10][0], 23.26, 1739, 458, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.word_klout[11][0], 23.26, 2055, 458, False, '#000000')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.word_klout[6][0], 23.26, 476, 458, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[7][0], 23.26, 785, 458, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[8][0], 23.26, 1087, 458, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[9][0], 23.26, 1409, 458, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[10][0], 23.26, 1739, 458, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.word_klout[11][0], 23.26, 2055, 458, False, '#000000')
+        except:
+            pass
 
         #Influencer Info above Top Row
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[0][0]], 18.61, 468, 730, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[1][0]], 18.61, 775, 730, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[2][0]], 18.61, 1087, 730, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[3][0]], 18.61, 1407, 730, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[4][0]], 18.61, 1727, 730, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[5][0]], 18.61, 2043, 730, False, '#000000')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[0][0]], 18.61, 468, 730, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[1][0]], 18.61, 775, 730, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[2][0]], 18.61, 1087, 730, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[3][0]], 18.61, 1407, 730, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[4][0]], 18.61, 1727, 730, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[5][0]], 18.61, 2043, 730, False, '#000000')
+        except:
+            pass
 
         #avatars
         canvas.drawImage("reports/TabulaMagica-1.png", 420, 710, 30, 30)
@@ -883,12 +905,12 @@ class Report(object):
         try:
             c = canvas.Canvas(("report-%s-%s-%s-%s.pdf" % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
         except:
-            c = canvas.Canvas("report.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
+            c = canvas.Canvas("report-%s.pdf" % name, pagesize=(2480, 3508), bottomup=1, verbosity=1)
 
         self.page1(c)
         c.showPage()
-        self.page2(c)
-        c.showPage()
+#        self.page2(c)
+#        c.showPage()
         #self.page3()
         #c.showPage()
         c.save()
