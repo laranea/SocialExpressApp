@@ -27,6 +27,7 @@ import os
 import pickle
 import sys
 
+import json
 import numpy as np
 '''
 import matplotlib
@@ -46,8 +47,8 @@ DEBUG = True
 REALTIME = False
 
 
-#MAIN_KEYWORD = 'koffie'
-MAIN_KEYWORD = 'senseo'
+MAIN_KEYWORD = 'koffie'
+#MAIN_KEYWORD = 'senseo'
 COMPETITOR1_KEYWORD = 'koffieapparaat'
 COMPETITOR2_KEYWORD = ''
 MAIN_ENTERPRISE =  'PhilipsNL'
@@ -361,7 +362,8 @@ x= []
 y = []
 volume = -1
 for tweet_data in competitor2_data:
-    d = parser.parse(tweet_data['created_at'])
+    dt = parser.parse(tweet_data['created_at'])
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
     if not d in x:
         if volume != -1:
@@ -381,7 +383,8 @@ x= []
 y = []
 volume = -1
 for tweet_data in competitor1_data:
-    d = parser.parse(tweet_data['created_at'])
+    dt = parser.parse(tweet_data['created_at'])
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
 
     if not d in x:
@@ -402,7 +405,8 @@ x= []
 y = []
 volume = -1
 for tweet_data in main_data:
-    d = parser.parse(tweet_data['created_at'])
+    dt = parser.parse(tweet_data['created_at'])
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour).zfill(2) + ":" + str(parser.parse(tweet_data['created_at']).minute).zfill(2)
 
     if not d in x:
@@ -496,7 +500,9 @@ y = []
 sentiment = -100
 counter = 0
 for tweet_data in main_data:
-    d = parser.parse(tweet_data['created_at']).hour + parser.parse(tweet_data['created_at']).date().day * 100 + parser.parse(tweet_data['created_at']).date().month  * 1000 + parser.parse(tweet_data['created_at']).date().year * 10000
+    dt = parser.parse(tweet_data['created_at'])
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
+    
     if not d in x:
         if sentiment > -100:
             y.append((sentiment/counter))
