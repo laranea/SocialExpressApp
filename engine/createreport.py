@@ -363,7 +363,7 @@ y = []
 volume = -1
 for tweet_data in competitor2_data:
     dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
     if not d in x:
         if volume != -1:
@@ -384,7 +384,7 @@ y = []
 volume = -1
 for tweet_data in competitor1_data:
     dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
 
     if not d in x:
@@ -406,7 +406,7 @@ y = []
 volume = -1
 for tweet_data in main_data:
     dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour).zfill(2) + ":" + str(parser.parse(tweet_data['created_at']).minute).zfill(2)
 
     if not d in x:
