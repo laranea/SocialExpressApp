@@ -553,7 +553,7 @@ if COMPETITOR1_KEYWORD and COMPETITOR2_KEYWORD:
     report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2), tuple(volumegraph3)]
 elif COMPETITOR1_KEYWORD:
     report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2)]
-else
+else:
     report.volumegraphs = [tuple(volumegraph1)]
     
 print "graph points ", report.volumegraphs
