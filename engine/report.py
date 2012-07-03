@@ -117,6 +117,8 @@ class Report(object):
         lc.categoryAxis.categoryNames = catNames
         for i in range(len(catNames)):
             lc.categoryAxis.labels[i].fontSize = 14
+        lc.categoryAxis.labels.dy  = -50
+        lc.categoryAxis.labels.angle = 60
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
         lc.valueAxis.valueMin = 0
@@ -375,11 +377,11 @@ class Report(object):
             #ubuntu
             #urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
             #mac
-            urllib.urlretrieve(pos['avatar'][0], filename)
+#            urllib.urlretrieve(pos['avatar'][0], filename)
 
-            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
+#            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
             #remove the file created
-            os.remove(filename)
+#            os.remove(filename)
             i += 1
 
 
@@ -441,10 +443,10 @@ class Report(object):
             #avatar
             filename = neg['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-            urllib.urlretrieve(neg['avatar'][0], filename)
+#            urllib.urlretrieve(neg['avatar'][0], filename)
             canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
             #remove the file created
-            os.remove(filename)
+#            os.remove(filename)
 
 
             i += 1
@@ -915,12 +917,12 @@ class Report(object):
 
         self.page1(c)
         c.showPage()
-        self.page2(c)
-        c.showPage()
+#        self.page2(c)
+#        c.showPage()
         #self.page3()
         #c.showPage()
         c.save()
-#        os.system('/usr/bin/gnome-open report.pdf')
+        os.system('/usr/bin/gnome-open report.pdf')
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':
