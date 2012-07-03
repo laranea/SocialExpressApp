@@ -850,7 +850,7 @@ conversationlist.extend(sorted_cluster4[:3])
 conversations = sorted(conversationlist, key=lambda k: k['created_at'])
 print "conversation listtt", conversations
 for conv in conversations:
-    print "%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
+    print u"%s (%s): %s (sent: %f) (klout: %f)" % (conv['username'], conv['created_at'], conv['text'], conv['sentiment'], conv['influence'])
 
 report.conversationlist = conversations
 
