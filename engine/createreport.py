@@ -184,12 +184,15 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             if tweet['geo']:
                 print tweet['geo']
                 tweet_data['geo'] = tweet['geo']
-                results = Geocoder.reverse_geocode(tweet_data['geo']['coordinates'][0], tweet_data['geo']['coordinates'][1])
-                tweet_data['country'] = results[0].country
-                tweet_data['city'] = results[0].locality
-                tweet_data['postalcode'] = results[0].postal_code
-
-                print results[0]
+                try:
+                    results = Geocoder.reverse_geocode(tweet_data['geo']['coordinates'][0], tweet_data['geo']['coordinates'][1])
+                    tweet_data['country'] = results[0].country
+                    tweet_data['city'] = results[0].locality
+                    tweet_data['postalcode'] = results[0].postal_code
+    
+                    print results[0]
+                except:
+                    pass
             else:
                 tweet_data['geo'] = None
                 tweet_data['country'] = None
