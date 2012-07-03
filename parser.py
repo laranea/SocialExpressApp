@@ -92,7 +92,7 @@ for y in x:
 #    print "main_location-- ", y[4]
 #    print "main_language-- ", lang[str(y[4])]
     for keyword in competitor_keyword:
-        list = ['python', '../../engine/createreport.py']
+        list = ['python', 'engine/createreport.py']
         list.append("main_enterprise='Philips'")
         list.append("main_keyword=%s" % y[2])
         list.append("competitor1_keyword=%s" % keyword)
@@ -111,7 +111,7 @@ for y in enumerate(x):
         continue
     competitor_keyword = [w.strip(' ') for w in  y[1][3].split(",")]
     for keyword in competitor_keyword:
-        list = ['python', '../../engine/createreport.py']
+        list = ['python', 'engine/createreport.py']
         list.append("main_enterprise='Philips'")
         list.append("main_keyword=%s" % y[1][2])
         list.append("competitor1_keyword=%s" % keyword)
