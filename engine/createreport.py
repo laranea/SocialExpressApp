@@ -535,7 +535,7 @@ for tweet_data in main_data:
 
 y.append(volume)
 x_main = x
-volumegraph1 = [-1]
+volumegraph1 = []
 for time in timelist:
     try:
         volumegraph1.append(float(volume_axis[time]))
