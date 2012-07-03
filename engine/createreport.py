@@ -60,8 +60,8 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
-SEARCH_PAGES = 10
-SEARCH_RPP = 1000
+SEARCH_PAGES = 3
+SEARCH_RPP = 10
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -555,7 +555,7 @@ for tweet_data in main_data:
 y.append(sentiment/counter)
 
 print x
-print y
+print "sentimentplot yyyy", y
 
 report.sentimentgraph = tuple(y)
 
