@@ -435,7 +435,7 @@ y.append(volume)
 
 print x
 print y
-volumegraph3 = [-1]
+volumegraph3 = []
 if COMPETITOR2_KEYWORD:
     for time in timelist:
         try:
@@ -481,7 +481,7 @@ for tweet_data in competitor1_data:
             volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
 print "volume axisssss", volume_axis
 print "timelistssssssss", timelist
-volumegraph2 = [-1]
+volumegraph2 = []
 if COMPETITOR1_KEYWORD:
     for time in timelist:
         try:
@@ -549,8 +549,13 @@ print y
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 #report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 
-
-report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2), tuple(volumegraph3)]
+if COMPETITOR1_KEYWORD and COMPETITOR2_KEYWORD:
+    report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2), tuple(volumegraph3)]
+elif COMPETITOR1_KEYWORD:
+    report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2)]
+else
+    report.volumegraphs = [tuple(volumegraph1)]
+    
 print "graph points ", report.volumegraphs
 
 print "Calculating the freq times..."
