@@ -163,8 +163,8 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             tweet_data = {}
             print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
             #print tweet['text'].encode('utf-8'),"\n"
-            tweet_data['text'] = tweet['text']#.encode('utf-8')
-            tweet_data['username'] = tweet['from_user']
+            tweet_data['text'] = tweet['text'].encode('utf-8')
+            tweet_data['username'] = tweet['from_user'].encode('utf-8')
             tweet_data['created_at'] = parser.parse(tweet['created_at'])
             #===================================================================
             # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
