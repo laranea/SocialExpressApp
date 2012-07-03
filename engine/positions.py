@@ -13,7 +13,7 @@ class HorizontalChartNew(HorizontalLineChart):
         vA.setPosition(self.x, self.y, self.height)
         if vA: vA.joinAxis = cA
         if cA: cA.joinAxis = vA
-        vA.configure(self.data)
+        vA.configure(self.data[0])
         # If zero is in chart, put x axis there, otherwise
         # use bottom.
         xAxisCrossesAt = vA.scale(0)
