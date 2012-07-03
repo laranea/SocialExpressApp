@@ -3,6 +3,7 @@ import xml.dom.minidom
 import re
 import subprocess
 import os
+import time
 
 
 class XLSXReader:
@@ -79,7 +80,7 @@ class XLSXReader:
 
 
 i = 0
-lang = {"France": "fr", "Netherlands": "nl", "Belgium": "nl-be", "Germany": "de", "Italy": "it", "Russia": "ru", "The Netherlands": "nl"}
+lang = {"France": "fr", "Netherlands": "nl", "Belgium": "nl", "Germany": "de", "Italy": "it", "Russia": "ru", "The Netherlands": "nl"}
 x = XLSXReader(os.path.split(os.path.abspath(__file__))[0]+"/Copy_of_SocialExpress_pilot_keywords.xlsx")
 for y in x:
     if y[2] == "Main term" or not y[2]:
@@ -102,6 +103,7 @@ for y in x:
 #        list.append("main_screen_name_list='ThinkMedia'")
 #        if i == 1:
         process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
+        time.sleep(300)
     i += 1
 
 x = XLSXReader("SocialExpress_pilot_keywords_ABN_AMRO.xlsx")
@@ -112,7 +114,7 @@ for y in enumerate(x):
     competitor_keyword = [w.strip(' ') for w in  y[1][3].split(",")]
     for keyword in competitor_keyword:
         list = ['python', 'engine/createreport.py']
-        list.append("main_enterprise='Philips'")
+        list.append("main_enterprise='ABN Amro'")
         list.append("main_keyword=%s" % y[1][2])
         list.append("competitor1_keyword=%s" % keyword)
         try:
@@ -122,4 +124,5 @@ for y in enumerate(x):
         list.append("main_location=%s" % y[1][4])
         print list
         process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
+        time.sleep(300)
 print str(os.path.split(os.path.abspath(__file__))[0])
