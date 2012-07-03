@@ -364,7 +364,7 @@ except:
         begin_date = max(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
     except:
         begin_date = main_data[0]['created_at']
-  
+
 report.volumebegintime = str(begin_date.date()) + " " + str(begin_date.hour) + ":" + str(begin_date.minute)
 print "Begin time", report.volumebegintime
 
@@ -389,7 +389,7 @@ except:
         end_date = max(main_data[-1]['created_at'], competitor1_data[-1]['created_at'])
     except:
         end_date = main_data[-1]['created_at']
-   
+
 report.volumeendtime = str(end_date.date()) + " " + str(end_date.hour) + ":" + str(end_date.minute)
 print "End time", report.volumeendtime
 
@@ -406,14 +406,14 @@ for tweet_data in competitor2_data:
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
-        continue    
+        continue
     if not d in x:
         if volume != -1:
             y.append(volume)
         volume = 0
         x.append(d)
     volume += 1
-    
+
     if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
         try:
             volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
@@ -437,10 +437,10 @@ if COMPETITOR2_KEYWORD:
             volumegraph3.append(float(volume_axis[time]))
         except:
             volumegraph3.append(0)
-        
+
 print volumegraph3
-        
-        
+
+
 volume_axis = {}
 
 print "Calculating cumulative volumes... comp1"
@@ -483,8 +483,8 @@ if COMPETITOR1_KEYWORD:
             volumegraph2.append(float(volume_axis[time]))
         except:
             volumegraph2.append(0)
-        
-        
+
+
 #blah = raw_input()
 
 y.append(volume)
@@ -512,7 +512,7 @@ for tweet_data in main_data:
             y.append(volume)
         volume = 0
         x.append(d)
-        
+
     if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
         try:
             volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
@@ -525,7 +525,7 @@ for tweet_data in main_data:
             volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
         except:
             volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
-            
+
     volume += 1
 
 y.append(volume)
@@ -620,7 +620,7 @@ for tweet_data in main_data:
 y.append(sentiment/counter)
 
 print x
-print y
+print "sentimentplot yyyy", y
 
 report.sentimentgraph = tuple(y)
 
@@ -802,14 +802,14 @@ for tweet_data in main_data:
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     if d == x[l]:
         tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (l + 1)
-        cluster1.append(tweet_data) 
+        cluster1.append(tweet_data)
     if d == x[k]:
         tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (k + 1)
         cluster2.append(tweet_data)
     if d == x[j]:
         tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (j + 1)
         cluster3.append(tweet_data)
-    
+
     '''    ws = tweet_data['ws']
 
     #todo: check for more clusters?
