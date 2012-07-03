@@ -95,10 +95,10 @@ for y in x:
     for keyword in competitor_keyword:
         list = ['python', 'engine/createreport.py']
         list.append("main_enterprise='Philips'")
-        list.append("main_keyword=%s" % y[2])
-        list.append("competitor1_keyword=%s" % keyword)
+        list.append("main_keyword=%s" % str(y[2]))
+        list.append("competitor1_keyword=%s" % str(keyword))
         list.append("main_language=%s" % lang[str(y[4])])
-        list.append("main_location=%s" % y[4])
+        list.append("main_location=%s" % str(y[4]))
 #        list.append("mail_to_list=%" % email)
 #        list.append("main_screen_name_list='ThinkMedia'")
 #        if i == 1:
