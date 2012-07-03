@@ -54,6 +54,7 @@ class Report(object):
         self.optima = []
         self.avatar_negative_urls = []
         self.avatar_positive_urls = []
+        self.abs_path =  str(os.path.split(os.path.abspath(__file__))[0])
 
     def drawStringOrangeHelvetica(self, canvas, string, size, x, y, isBold=False):
         canvas.setFillColor(colors.darkorange)
@@ -118,6 +119,7 @@ class Report(object):
         for i in range(len(catNames)):
             lc.categoryAxis.labels[i].fontSize = 14
         lc.categoryAxis.labels.dy  = -50
+        lc.categoryAxis.labels.dy = -50
         lc.categoryAxis.labels.angle = 60
         lc.categoryAxis.labels.boxAnchor = 'n'
         lc.categoryAxis.joinAxisMode = 'bottom'
@@ -136,9 +138,11 @@ class Report(object):
         lc.lines[0].symbol.fillColor = colors.green
         lc.lines[0].symbol.strokeColor = colors.green
         lc.lines[0].symbol.size = 10'''
-        cordinates = []
-        positions = lc.map_optima(self.optima)
-        self.optima = positions[0]
+
+        #positions = lc.map_optima(self.optima)
+        print self.optima
+        positions = lc.calcPositions_xy(self.optima)
+        self.opts = positions[0]
         drawing.add(lc)
 
         return drawing
@@ -155,32 +159,36 @@ class Report(object):
     def splitSentence(self, sentence, isConversation=1, name=''):
         list = sentence.split()
         sentence_list = []
-        first, second, third = '', '', ''
-        is_first, is_second, is_third = 1, 0, 0
+        first, second, third, fourth = '', '', '', ''
+        is_first, is_second, is_third, is_fourth = 1, 0, 0, 0
         # isConversation = 1 for TimeLine Conversation
         # isConversation = 0 for Positive & Negative Comments
         if isConversation:
             for i in range(len(list)):
                 try:
-                    if len(first + list[i]) < 27 and is_first == 1:
+                    if len(first + list[i]) < 22 and is_first == 1:
                         first += list[i] + " "
                     else:
                         is_first = 0
                         is_second = 1
-                    if len(second + list[i]) < 27 and is_second == 1:
+                    if len(second + list[i]) < 22 and is_second == 1:
                         second += list[i] + " "
                     elif not is_first:
                         is_second = 0
                         is_third = 1
-                    if len(third + list[i]) < 27 and is_third == 1:
+                    if len(third + list[i]) < 22 and is_third == 1:
                         third += list[i] + " "
                     elif not is_first and not is_second:
                         is_third = 0
+                        is_fourth = 1
+                    if len(fourth + list[i]) < 22 and is_fourth == 1:
+                        fourth += list[i] + " "
+                    elif not is_first and not is_second and not is_third:
                         for j in range(len(list[i])):
-                            if len(third + list[i][j] + "..") < 27:
-                                third += list[i][j]
+                            if len(third + list[i][j] + "..") < 22:
+                                fourth += list[i][j]
                             else:
-                                third += list[i][j] + ".."
+                                fourth += list[i][j] + ".."
                                 break
                 except:
                     break
@@ -284,7 +292,8 @@ class Report(object):
         time_list = self.getTimeList()
 
         #bg
-        canvas.drawImage("reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
+
+        canvas.drawImage(self.abs_path+"/reports/EMPTYPhilipsRealTimeReport1.png", 0, 0,\
             2479, 3507)
         #volume spike
         if self.spike_kind == 'volume':
@@ -328,6 +337,7 @@ class Report(object):
     #    graph_tuple = (1000, 1200, 1250, 1500, 2000, 3200, 4600, 2100, 4000, 6100, 5700, 7000\
     #        , 6900, 7900, 8000, 10200, 9500, 11000)
         print "volume graph pointsss", self.volumegraphs
+
         self.twitterMentionsGraph(self.volumegraphs, canvas, time_list).drawOn(canvas, 365, 1880)
 
         #Legend Circles
@@ -337,16 +347,18 @@ class Report(object):
         #Create Circle on Twitter Mention Graph
         colorList = ['#725E43', '#C04C4E', '#FFED5E', '#4FDF58', '#E2509F', '#47C4C9', '#F95D58', '#507AD2', '#F5AF21']
         index = 0
-        for position in self.optima:
-            # colorList - colors for each circle on the graph
-            try:
-                color = colorList[index]
-            except:
-                color = '#0198E1'
-            # X & Y positions returned is added with the coordinates of the graph
-            print 'optimaaa', position
-            self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 9])
-            index += 1
+        print self.opts
+        if self.opts :
+            for position in self.opts:
+                # colorList - colors for each circle on the graph
+                try:
+                    color = colorList[index]
+                except:
+                    color = '#0198E1'
+                # X & Y positions returned is added with the coordinates of the graph
+                print 'optimaaa', position
+                self.createCircle(canvas, 365 + position[0], 1880 + position[1], 10, colorList[index % 9])
+                index += 1
 
     #    twitterMentionsGraph([graph_tuple2]).drawOn(canvas, 365, 1880)
 
@@ -375,13 +387,13 @@ class Report(object):
             filename =  pos['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
             #ubuntu
-            #urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
+#            urllib.urlretrieve(pos['avatar'][0], "tmp/" + filename)
             #mac
-#            urllib.urlretrieve(pos['avatar'][0], filename)
+            urllib.urlretrieve(pos['avatar'][0], filename)
 
-#            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
+            canvas.drawImage(filename, 300, 635 - deltay_text, 80, 80)
             #remove the file created
-#            os.remove(filename)
+            os.remove(filename)
             i += 1
 
 
@@ -443,10 +455,10 @@ class Report(object):
             #avatar
             filename = neg['avatar'][0].split('/')[-1]
             # Save image for avatar from twitter
-#            urllib.urlretrieve(neg['avatar'][0], filename)
+            urllib.urlretrieve(neg['avatar'][0], filename)
             canvas.drawImage(filename, 1360, 635 - deltay_text, 80, 80)
             #remove the file created
-#            os.remove(filename)
+            os.remove(filename)
 
 
             i += 1
@@ -911,18 +923,20 @@ class Report(object):
 
     def create(self, name):
         try:
-            c = canvas.Canvas(("report-%s-%s-%s-%s.pdf" % name, self.keyword, self.volumekeywords[1], self.volumekeywords[2]), pagesize=(2480, 3508), bottomup=1, verbosity=1)
+#            str = "report-%s.pdf" % datetime.now()
+            str = self.abs_path + "/generated_reports/report-%s-%s-%s.pdf" % name, self.volumekeywords[1], self.spike_location
+            c = canvas.Canvas(str , pagesize=(2480, 3508), bottomup=1, verbosity=1)
         except:
-            c = canvas.Canvas("report.pdf", pagesize=(2480, 3508), bottomup=1, verbosity=1)
-
+            str = self.abs_path + "/generated_reports/report-%s.pdf" % datetime.now()
+            c = canvas.Canvas(str, pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
-#        self.page2(c)
-#        c.showPage()
+        self.page2(c)
+        c.showPage()
         #self.page3()
         #c.showPage()
         c.save()
-        os.system('/usr/bin/gnome-open report.pdf')
+#        os.system('/usr/bin/gnome-open %s' % str)
 #        os.system("open -a Preview report-%s.pdf" % name)
 
 if __name__ == '__main__':

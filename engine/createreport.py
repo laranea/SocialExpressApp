@@ -60,8 +60,8 @@ MAIN_SCREEN_NAME_LIST = ['PhilipsNL', 'PhilipsCare_NL']
 
 MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
-SEARCH_PAGES = 3
-SEARCH_RPP = 10
+SEARCH_PAGES = 10
+SEARCH_RPP = 100
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -165,7 +165,7 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             #print tweet['text'].encode('utf-8'),"\n"
             tweet_data['text'] = tweet['text']#.encode('utf-8')
             tweet_data['username'] = tweet['from_user']
-            tweet_data['created_at'] = tweet['created_at']
+            tweet_data['created_at'] = parser.parse(tweet['created_at'])
             #===================================================================
             # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
             # try:
@@ -238,7 +238,7 @@ if COMPETITOR1_KEYWORD:
                 #print tweet['text'].encode('utf-8'),"\n"
                 tweet_data['text'] = tweet['text'].encode('utf-8')
                 tweet_data['username'] = tweet['from_user']
-                tweet_data['created_at'] = tweet['created_at']
+                tweet_data['created_at'] = parser.parse(tweet['created_at'])
                 #===================================================================
                 # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
                 # try:
@@ -306,11 +306,11 @@ if COMPETITOR2_KEYWORD:
                 #print tweet['text'].encode('utf-8'),"\n"
                 tweet_data['text'] = tweet['text'].encode('utf-8')
                 tweet_data['username'] = tweet['from_user']
-                tweet_data['created_at'] = tweet['created_at']
+                tweet_data['created_at'] = parser.parse(tweet['created_at'])
                 #===================================================================
                 # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
                 # try:
-                #    tweet_data['influence'] = klout.score()
+                #    tweet_data['influence'] = klout.score()n
                 #    tweet_data['influences'] =  klout.influences()
                 #    tweet_data['influence_topics'] = klout.topics()
                 # except:
@@ -357,11 +357,18 @@ if COMPETITOR2_KEYWORD:
 
     competitor2_data = sorted(competitor2_data, key=lambda k: k['created_at'])
 
+try:
+    begin_date = max(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
+except:
+    try:
+        begin_date = max(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
+    except:
+        begin_date = main_data[0]['created_at']
 
-report.volumebegintime = str(parser.parse(main_data[0]['created_at']).date()) + " " + str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
+report.volumebegintime = str(begin_date.date()) + " " + str(begin_date.hour) + ":" + str(begin_date.minute)
 print "Begin time", report.volumebegintime
 
-max_hour = 0
+'''max_hour = 0
 try:
     max_hour = max(parser.parse(main_data[-1]['created_at']).hour, parser.parse(competitor1_data[-1]['created_at']).hour, parser.parse(competitor2_data[-1]['created_at']).hour)
 except:
@@ -372,9 +379,18 @@ except:
 
 if max_hour == 23:
     max_hour = -1
+'''
 
 #report.volumeendtime = str(max_hour + 1) + ":00"
-report.volumeendtime =  str(parser.parse(main_data[-1]['created_at']).date()) + " " + str(max_hour + 1) + ":00"
+try:
+    end_date = max(main_data[-1]['created_at'], competitor1_data[-1]['created_at'], competitor2_data[-1]['created_at'])
+except:
+    try:
+        end_date = max(main_data[-1]['created_at'], competitor1_data[-1]['created_at'])
+    except:
+        end_date = main_data[-1]['created_at']
+
+report.volumeendtime = str(end_date.date()) + " " + str(end_date.hour) + ":" + str(end_date.minute)
 print "End time", report.volumeendtime
 
 timelist = report.getTimeList()
@@ -386,24 +402,45 @@ volume = -1
 
 volume_axis = {}
 for tweet_data in competitor2_data:
-    dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
-    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
+    dt = tweet_data['created_at']
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
+    if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
+        continue
     if not d in x:
         if volume != -1:
             y.append(volume)
         volume = 0
         x.append(d)
-    if volume_axis[dt]:
-        volume_axis[dt] += 1
-    else:
-        volume_axis[dt] = 1
     volume += 1
+
+    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
+        try:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+    else:
+        if tweet_data['created_at'].minute:
+            dt += datetime.timedelta(hours = 1)
+        try:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
 y.append(volume)
 
 print x
 print y
-volumegraph3 = tuple(y)
+volumegraph3 = [-1]
+if COMPETITOR2_KEYWORD:
+    for time in timelist:
+        try:
+            volumegraph3.append(float(volume_axis[time]))
+        except:
+            volumegraph3.append(0)
+
+print volumegraph3
+
+
 volume_axis = {}
 
 print "Calculating cumulative volumes... comp1"
@@ -411,9 +448,9 @@ x= []
 y = []
 volume = -1
 for tweet_data in competitor1_data:
-    dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
-    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour) + ":" + str(parser.parse(tweet_data['created_at']).minute)
+    dt = tweet_data['created_at']
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
 #    graph_date_obj  = datetime.strptime(start_day, date_format)
 #    if datetime.strptime(dt, "%H:%M %d/%m/%Y") dt.strftime()
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
@@ -425,13 +462,13 @@ for tweet_data in competitor1_data:
         x.append(d)
 
     volume += 1
-    if parser.parse(tweet_data['created_at']).minute and parser.parse(tweet_data['created_at']).minute < 30:
+    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
         try:
             volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
         except:
             volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
     else:
-        if parser.parse(tweet_data['created_at']).minute:
+        if tweet_data['created_at'].minute:
             dt += datetime.timedelta(hours = 1)
         try:
             volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
@@ -439,48 +476,76 @@ for tweet_data in competitor1_data:
             volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
 print "volume axisssss", volume_axis
 print "timelistssssssss", timelist
-volumegraph2 = []
-for time in timelist:
-    if str(time) in volume_axis.keys():
-        volumegraph2.append(float(volume_axis[str(time)])/len(volume_axis))
-    else:
-        volumegraph2.append(0)
+volumegraph2 = [-1]
+if COMPETITOR1_KEYWORD:
+    for time in timelist:
+        try:
+            volumegraph2.append(float(volume_axis[time]))
+        except:
+            volumegraph2.append(0)
+
+
+#blah = raw_input()
 
 y.append(volume)
 print x
 print y
 #volumegraph2 = tuple(y)
-volumegraph2 = tuple(volumegraph2)
+#volumegraph2 = tuple(volumegraph2)
 #volumegraph2 = tuple(map(lambda x: float(x)/len(volume_axis), volume_axis.values()))
 print "volumegraph2", volumegraph2
+volume_axis = {}
 
 print "Calculating cumulative volumes..."
 x= []
 y = []
 volume = -1
 for tweet_data in main_data:
-    dt = parser.parse(tweet_data['created_at'])
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
-    tweet_data['hour_string'] = str(parser.parse(tweet_data['created_at']).hour).zfill(2) + ":" + str(parser.parse(tweet_data['created_at']).minute).zfill(2)
+    dt = tweet_data['created_at']
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    tweet_data['hour_string'] = str(tweet_data['created_at'].hour).zfill(2) + ":" + str(tweet_data['created_at'].minute).zfill(2)
 
+    if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
+        continue
     if not d in x:
         if volume != -1:
             y.append(volume)
         volume = 0
         x.append(d)
+
+    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
+        try:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+    else:
+        if tweet_data['created_at'].minute:
+            dt += datetime.timedelta(hours = 1)
+        try:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+        except:
+            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+
     volume += 1
 
 y.append(volume)
+x_main = x
+volumegraph1 = [-1]
+for time in timelist:
+    try:
+        volumegraph1.append(float(volume_axis[time]))
+    except:
+        volumegraph1.append(0)
 
 print x
 print y
-volumegraph1 = tuple(y)
+#volumegraph1 = tuple(y)
 
 report.volumekeywords = [MAIN_KEYWORD, COMPETITOR1_KEYWORD, COMPETITOR2_KEYWORD]
 #report.volumebegintime = str(parser.parse(main_data[0]['created_at']).hour) + ":" + str(parser.parse(main_data[0]['created_at']).minute)
 
 
-report.volumegraphs = [volumegraph1, volumegraph2, volumegraph3]
+report.volumegraphs = [tuple(volumegraph1), tuple(volumegraph2), tuple(volumegraph3)]
 print "graph points ", report.volumegraphs
 
 print "Calculating the freq times..."
@@ -495,7 +560,7 @@ times = [item['created_at'] for item in main_data]
 sum_deltas = 0
 count_deltas = 1
 for (t0, t1) in pairwise(times):
-    sum_deltas += (parser.parse(t1) - parser.parse(t0)).seconds #seconds, minutes, hours
+    sum_deltas += (t1 - t0).seconds #seconds, minutes, hours
     #print t0, t1, (sum_deltas) / count_deltas
     count_deltas += 1
 
@@ -540,7 +605,7 @@ y = []
 sentiment = -100
 counter = 0
 for tweet_data in main_data:
-    dt = parser.parse(tweet_data['created_at'])
+    dt = tweet_data['created_at']
     d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
 
     if not d in x:
@@ -618,31 +683,29 @@ ax.format_ydata = '$%1.2f'
 ax.grid(True)
 ax.plot(x, y)
 '''
-a = np.diff(np.sign(np.diff(y))).nonzero()[0] + 1 # local min+max
-b = (np.diff(np.sign(np.diff(y))) > 0).nonzero()[0] + 1 # local min
-c = (np.diff(np.sign(np.diff(y))) < 0).nonzero()[0] + 1 # local max
+a = np.diff(np.sign(np.diff(volumegraph1))).nonzero()[0] + 1 # local min+max
+b = (np.diff(np.sign(np.diff(volumegraph1))) > 0).nonzero()[0] + 1 # local min
+c = (np.diff(np.sign(np.diff(volumegraph1))) < 0).nonzero()[0] + 1 # local max
 
 print a
 print "bbb", b
 print c
 
-ya = [y[i] for i in a]
-
+ya = [volumegraph1[i] for i in a]
 
 
 d = np.diff(ya)
 
 print d
 
+#xmins = [x[i] for i in b]
+ymins = [volumegraph1[i] for i in b]
+#xmaxs = [x[i] for i in c]
+ymaxs = [volumegraph1[i] for i in c]
 
-xmins = [x[i] for i in b]
-ymins = [y[i] for i in b]
-xmaxs = [x[i] for i in c]
-ymaxs = [y[i] for i in c]
-
-print "x minss", xmins
+#print "x minss", xmins
 print "y minss", ymins
-print "x maxss", xmaxs
+#print "x maxss", xmaxs
 print "y maxss", ymaxs
 
 '''xopt = [x[i] for i in a]
@@ -681,16 +744,18 @@ for (y0, y1) in pairwise(ya):
 
 #print sorted_max_deltas
 print 'ya', ya
-xopt = [x[i] for i in [l, k, j]]
-yopt = [y[i] for i in [l, k, j]]
+#xopt = [x[i] for i in [l, k, j]]
+yopt = [volumegraph1[i] for i in [l, k, j]]
 #report.optima = zip(xopt, yopt)
-report.optima = [l, k, j].sort()
+
+report.optima = [l, k, j]
+report.optima.sort()
 
 print "l", l
 print "k", k
 print "j", j
-print "xopt", xopt
-print "yopt", yopt
+#print "xopt", xopt
+#print "yopt", yopt
 print "xxx", x
 print "yyy", y
 
@@ -713,15 +778,15 @@ fig.autofmt_xdate()'''
 
 #plt.show()
 
-print "Calculating weighted scores..."
+'''print "Calculating weighted scores..."
 for xmin, xmax in map(None, xmins, xmaxs):
     for tweet_data in main_data:
-        if parser.parse(tweet_data['created_at']).hour == xmax:
+        if tweet_data['created_at'].hour == xmax:
             tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (xmaxs.index(xmax) + 1)
 
-        if parser.parse(tweet_data['created_at']).hour == xmin:
+        if tweet_data['created_at'].hour == xmin:
             tweet_data['ws'] = -30 * tweet_data['sentiment'] - 1 * tweet_data['influence'] - 1000 * (xmins.index(xmin) + 1)
-
+'''
 conversationlist = []
 
 #TODO: generalize for more clusters
@@ -733,7 +798,19 @@ cluster3 = []
 cluster4 = []
 
 for tweet_data in main_data:
-    ws = tweet_data['ws']
+    dt = tweet_data['created_at']
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    if d == x[l]:
+        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (l + 1)
+        cluster1.append(tweet_data)
+    if d == x[k]:
+        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (k + 1)
+        cluster2.append(tweet_data)
+    if d == x[j]:
+        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (j + 1)
+        cluster3.append(tweet_data)
+
+    '''    ws = tweet_data['ws']
 
     #todo: check for more clusters?
     if ws > 1999:
@@ -744,6 +821,7 @@ for tweet_data in main_data:
         cluster3.append(tweet_data)
     if ws < -1189:
         cluster4.append(tweet_data)
+    '''
 
 print "Sort clusters..."
 #todo: check is reverse or not
@@ -828,7 +906,7 @@ for tweet in main_data:
                 c += 1
 
         if DEBUG:
-            if c > 100:
+            if c > 1000:
                 break
 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
