@@ -192,7 +192,9 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
     
                     print results[0]
                 except:
-                    pass
+                    tweet_data['geo'] = None
+                    tweet_data['country'] = None
+
             else:
                 tweet_data['geo'] = None
                 tweet_data['country'] = None
