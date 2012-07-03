@@ -150,12 +150,12 @@ def sentiment(text):
 search_result = []
 twitter = Twython(app_key=general_settings.CONSUMER_KEY, app_secret=general_settings.CONSUMER_SECRET, oauth_token=general_settings.ACCESS_TOKEN, oauth_token_secret=general_settings.ACCESS_SECRET)
 for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
-        try:
-            print "Searching tweets page %i" % i
-            # TODO: country language
-            search_results = twitter.search(q=MAIN_KEYWORD, page=i, rpp=SEARCH_RPP)
-        except:
-            pass
+        #try:
+        print "Searching tweets page %i" % i
+        # TODO: country language
+        search_results = twitter.search(q=MAIN_KEYWORD, page=i, rpp=SEARCH_RPP)
+        #except:
+        #    pass
 
         print "Indexing tweets page %i" % i
         for tweet in search_results["results"]:
