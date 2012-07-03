@@ -924,10 +924,10 @@ class Report(object):
     def create(self, name):
         try:
 #            str = "report-%s.pdf" % datetime.now()
-            str = self.abs_path + "/generated_reports/report-%s-%s-%s.pdf" % name, self.volumekeywords[1], self.spike_location
+            str = self.abs_path + "report-%s-%s-%s.pdf" % name, self.volumekeywords[1], self.spike_location
             c = canvas.Canvas(str , pagesize=(2480, 3508), bottomup=1, verbosity=1)
         except:
-            str = self.abs_path + "/generated_reports/report-%s.pdf" % datetime.now()
+            str = self.abs_path + "report-%s.pdf" % datetime.now()
             c = canvas.Canvas(str, pagesize=(2480, 3508), bottomup=1, verbosity=1)
         self.page1(c)
         c.showPage()
