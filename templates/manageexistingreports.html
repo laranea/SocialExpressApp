@@ -28,7 +28,10 @@ value="No" id="report_del_no">
       {% for report in list %}
         <tr>
             <td>{{report[0]}}</td>
-            <td>{{report[2]}}</td>
+            <td>{{report[1]}}</td>
+
+            <td><input class="btn-danger edit-rpt" type="button" value="edit" id="{{report[0]}}"></td>
+
             <td><input class="btn-danger delete-report" type="button" value="Delete" id="{{report[0]}}"></td>
         </tr>
       {% end %}
@@ -40,7 +43,21 @@ value="No" id="report_del_no">
     {% end %}
 
 
+<div class="modal hide fade" id="editreportModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Edit Report</h3>
+  </div>
+  <div class="modal-body edit-report">
 
+  </div>
+ <!-- <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" class="btn btn-primary">Save changes</a>
+  </div>
+
+-->
+</div>
     <!--Body content-->
     </div>
     </div>

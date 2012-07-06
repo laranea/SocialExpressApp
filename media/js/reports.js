@@ -7,6 +7,26 @@ $(document).ready(function() {
         return r ? r[1] : undefined;
     };
 
+    $("#edit_rule").live('click', function() {
+        $('#editreportModal').modal('hide');
+      $.ajax({
+        headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
+        type: "POST",
+        url: "/addrule",
+        data: {
+            'report_id': $('#report_id').val(),
+            'keyword': $('#keyword').val(),
+            'compare': $('#compare').val(),
+            'country': $('#country').val(),
+            'emails': $('#emails').val(),
+            '_xsrf': getCookie("_xsrf")
+        },
+        success: function (data) {
+            window.location.href = "/manageexistingreports"
+        }
+      });
+
+    });
     $("#add_rule").click(function() {
       $("#rule_add_alert").fadeIn(1600);
       $("#rule_add_alert").delay(1200).fadeOut(1600);
@@ -26,6 +46,19 @@ $(document).ready(function() {
       });
 
       return false;
+    });
+
+    $('.edit-rpt').click(function() {
+        id = $(this).attr("id")
+        $('.edit-report').load('/newweeklyreport?id='+id+' #wellie');
+        $('#editreportModal').modal('show');
+
+        });
+
+    $('.edit-rule').click(function () {
+        id = $(this).attr("id")
+        $('.edit-realtime-report').load('/newrealtimereport?id='+id+' #wellie');
+        $('#editruleModal').modal('show');
     });
 
     var delete_report = function() {
@@ -95,6 +128,29 @@ $(document).ready(function() {
           }
         });
         return false;
+    });
+
+    $('#realtime-report-edit').live('click', function() {
+        $.ajax({
+        headers: {'X-CSRF-Token': getCookie("_xsrf"), 'Content-Type': 'application/x-www-form-urlencoded'},
+        type: "POST",
+        url: "/newrealtimereportcrieria",
+        data: {
+            'report_id': $('#report_id').val(),
+            'keyword': $('#keyword').val(),
+            'sentiment': $('#sentiment').val(),
+            'country': $('#country').val(),
+            'language': $('#language').val(),
+            'changes': $('#changes').val(),
+            'change-rate': $('#change-rate').val(),
+            'emails': $('#emails').val(),
+            '_xsrf': getCookie("_xsrf")
+          },
+        success: function (data) {
+            $('#editruleModal').modal('hide');
+          }
+        });
+
     });
 
     var delete_trigger = function () {

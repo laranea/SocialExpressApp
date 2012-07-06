@@ -26,6 +26,7 @@ value="No" id="trigger_del_no">
         <tr>
         <td>{{report[0]}}</td>
         <td>{{report[1]}}</td>
+        <td><input class="btn-danger edit-rule" type="button" value="edit" id="{{report[0]}}"></td>
         <td><input class="btn-danger delete-trigger" type="button"
         value="Delete" id="{{report[0]}}"></td>
     </tr>
@@ -36,6 +37,22 @@ value="No" id="trigger_del_no">
         <strong class="no_report"><p>No Reports Yet</p><strong>
     {% end %}
     <!--Body content-->
+<div class="modal hide fade" id="editruleModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Edit Rule</h3>
+  </div>
+  <div class="modal-body edit-realtime-report">
+
+  </div>
+ <!-- <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Close</a>
+    <a href="#" class="btn btn-primary">Save changes</a>
+  </div>
+
+-->
+</div>
+
     </div>
     </div>
 {% end %}
