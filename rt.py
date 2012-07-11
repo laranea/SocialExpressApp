@@ -44,8 +44,8 @@ class StreamWatcherListener(tweepy.StreamListener):
         #try:
         #    if '@' in tweet.text or not tweet.text.endswith('?'):
         #       return True 
-        print repr(tweet.text)
-        print '\n %s  %s  via %s\n' % (status.author.screen_name, status.created_at, status.source)
+        #print repr(tweet.text)
+        #print '\n %s  %s  via %s\n' % (status.author.screen_name, status.created_at, status.source)
         self.fr.push(json.dumps( {'id':tweet.id,
                                  'text':tweet.text,
                                  'username':tweet.author.screen_name,
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     words = sys.argv[1].split(",")
     key = "_".join(words)
     
-    fr = FilterRedis(key)
+    fr = FilterRedis(str(datetime.datetime.now()))
 
 
     username = "laranea"
