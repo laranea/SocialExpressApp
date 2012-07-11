@@ -39,7 +39,10 @@ class FilterRedis(object):
         return [json.loads(x) for x in data if int(json.loads(x)['received_at']) > since]
 
 class StreamWatcherListener(tweepy.StreamListener):
-    fr = FilterRedis(str(datetime.now()))
+    
+    def __init__(self):
+        fr = FilterRedis(str(datetime.now()))
+        super.__init__()
 
     def on_status(self, status):
         tweet = status
