@@ -29,7 +29,7 @@ for y in enumerate(x):
     words.extend(competitor_keywords)
         
     list = ['python', 'rt.py']
-    list.append(words.join(", "))
+    list.append(", ".join(words))
     print list
     process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
     time.sleep(300)

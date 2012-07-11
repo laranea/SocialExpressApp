@@ -73,7 +73,7 @@ class StreamWatcherListener(tweepy.StreamListener):
 if __name__ == '__main__':
     
     words = sys.argv[1].split(",")
-    key = words.join("_")
+    key = "_".join(words)
     
     fr = FilterRedis(key)
 
