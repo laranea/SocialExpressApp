@@ -3,6 +3,8 @@ import time
 import redis
 import tweetstream
 import tweepy
+import getopt
+import sys
 
 from datetime import datetime
 
@@ -13,14 +15,13 @@ except:
 
 
 class FilterRedis(object):
-
-    key = "coffee_tweets"
     r = redis.Redis(host='localhost', port=6379)
     num_tweets = 20
     trim_threshold = 100
 
-    def __init__(self):
+    def __init__(self, key):
         self.trim_count = 0
+        self.key = key
 
 
     def push(self, data):
@@ -43,8 +44,8 @@ class StreamWatcherListener(tweepy.StreamListener):
         tweet = status
         #try:
         #    if '@' in tweet.text or not tweet.text.endswith('?'):
-        #       return True
-	print repr(tweet.text)
+        #       return True 
+        print repr(tweet.text)
         print '\n %s  %s  via %s\n' % (status.author.screen_name, status.created_at, status.source)
         self.fr.push(json.dumps( {'id':tweet.id,
                                  'text':tweet.text,
@@ -53,7 +54,7 @@ class StreamWatcherListener(tweepy.StreamListener):
                                  'name':tweet.author.name,
                                  'profile_image_url':tweet.author.profile_image_url,
                                  'received_at':time.time(),
-				 'geo':tweet.geo
+				                 'geo':tweet.geo
                                  } 
                                )
                     )
@@ -71,9 +72,12 @@ class StreamWatcherListener(tweepy.StreamListener):
 
 
 if __name__ == '__main__':
-    fr = FilterRedis()
+    
+    words = sys.argv[1].split(",")
+    key = words.join("_")
+    
+    fr = FilterRedis(key)
 
-    words = ["coffee", "senseo"]
 
     username = "laranea"
     password = "elleke77"
