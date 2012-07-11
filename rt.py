@@ -5,6 +5,7 @@ import tweetstream
 import tweepy
 import getopt
 import sys
+import datetime
 
 from datetime import datetime
 
@@ -38,7 +39,8 @@ class FilterRedis(object):
         return [json.loads(x) for x in data if int(json.loads(x)['received_at']) > since]
 
 class StreamWatcherListener(tweepy.StreamListener):
-    
+    fr = FilterRedis(str(datetime.now()))
+
     def on_status(self, status):
         tweet = status
         #try:
@@ -74,9 +76,6 @@ if __name__ == '__main__':
     
     words = sys.argv[1].split(",")
     key = "_".join(words)
-    
-    fr = FilterRedis(str(datetime.datetime.now()))
-
 
     username = "laranea"
     password = "elleke77"

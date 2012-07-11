@@ -8,6 +8,7 @@ import rt
 import os
 import re
 import subprocess
+import time
 
 main_enterprise = "ABN Amro"
 
