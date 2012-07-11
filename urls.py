@@ -21,4 +21,5 @@ url_patterns = [
     (r"/newrealtimereportcrieria", RealTimeReportCrieria),
     (r"/deletetrigger", DeleteTrigger),
     (r"/downloadrealtimereport", DownloadRealTimeReport),
+    (r"/editreport", EditWeeklyReport),
 ]

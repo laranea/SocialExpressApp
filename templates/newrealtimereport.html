@@ -15,34 +15,42 @@
 
     <label class="control-label" for="input01"><h3>Main keyword</h3><p>Enter a main keyword you want to monitor</p></label>
     <div class="controls">
-    <input type="text" class="input-xlarge" id="keyword">
+    <input type="text" class="input-xlarge" id="keyword" {%if report %} value="{{report[0][1]}}" {% end %} >
     </div>
     <label class="control-label" for="input01"><h3>IF condition</h3><p>Example: If the sentiment increases with > 30% compared to the moving average</p></label>
     <div class="controls">
       if the <select class="input-xlarge" id="sentiment">
-      <option value="sentiment">sentiment</option>
-     <option value="volume">volume</option>
+      <option value="sentiment" {% if report %} {% if report[0][2] == "sentiment" %} selected="selected" {% end %} {% end %}>sentiment</option>
+     <option value="volume" {% if report %} {% if report[0][2] == "volume" %} selected="selected" {% end %} {% end %}>volume</option>
      </select>
      of all the conversations from
        <select class="input-xlarge" id="country">
-     <option value="Belgium">Belgium</option>
+       <option value="">Select Country</option>
+     {% for country in countries %}
+            <option value="{{country[0]}}"
+            {% if report %} {% if report[0][3] == country[0] %} selected="selected" {% end %} {% end %} >{{country[1]}}</option>
+       {% end %}
      </select>
      in the language
        <select class="input-xlarge" id="language">
-     <option value="Belgium">French</option>
+       <option value="">Select Language</option>
+     {% for language in languages %}
+            <option value="{{language[0]}}" {% if report %} {% if report[0][4] == language[0] %} selected="selected" {% end %} {% end %} >{{language[1]}}</option>
+       {% end %}
      </select>
      <select class="input-xlarge" id="changes">
-      <option value="changes">changes</option>
-     <option value="increases">increases</option>
-      <option value="decreases">decreases</option>
+      <option value="changes" {% if report %} {% if report[0][5] == "changes" %} selected="selected" {% end %} {% end %} >changes</option>
+     <option value="increases" {% if report %} {% if report[0][5] == "increases" %} selected="selected" {% end %} {% end %}>increases</option>
+      <option value="decreases" {% if report %} {% if report[0][5] == "decreases" %} selected="selected" {% end %} {% end %}>decreases</option>
      </select>
     with at least
        <select class="input-xlarge" id="change-rate">
-      <option value="10">5%</option>
-           <option value="increases">10%</option>
-     <option value="increases">20%</option>
-      <option value="decreases">30%</option>
-        <option value="decreases">50%</option>
+       <option> Change Rate </option>
+      <option value="5" {% if report %} {% if report[0][6] == "5" %} selected="selected" {% end %} {% end %} >5%</option>
+           <option value="10" {% if report %} {% if report[0][6] == "10" %} selected="selected" {% end %} {% end %}>10%</option>
+     <option value="20" {% if report %} {% if report[0][6] == "20" %} selected="selected" {% end %} {% end %}>20%</option>
+      <option value="30" {% if report %} {% if report[0][6] == "30" %} selected="selected" {% end %} {% end %}>30%</option>
+        <option value="50" {% if report %} {% if report[0][6] == "50" %} selected="selected" {% end %} {% end %} >50%</option>
 
      </select>
 
@@ -55,14 +63,19 @@
 
 
        <div class="controls">
-    <input type="text" class="input-xlarge" id="emails">
+    <input type="text" class="input-xlarge" id="emails" {% if report %} value="{{report[0][7]}}" {% end %}>
     </div>
 
 
 </div>
-
+{% if report %}
+        <input type="hidden" id="report_id" name="report_id" value="{{ report[0][0] }}" />
+<input class="btn-success btn-large" type="submit"
+value="Edit trigger" id="realtime-report-edit">
+{% else %}
 <input class="btn-success btn-large" type="submit"
 value="Add trigger" id="realtime-report">
+{% end %}
     </fieldset>
  </form>
     <!--Body content-->

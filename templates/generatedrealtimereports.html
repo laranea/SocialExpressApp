@@ -14,6 +14,9 @@
     <tr>
     <th>Number</th>
     <th>Main keyword</th>
+    <!-- <th>Competitor</th> -->
+    <th>Country</th>
+    <th>Language</th>
     <th>Date</th>
     <th>Action</th>
     </tr>
@@ -22,7 +25,10 @@
     {% for report in list %}
         <tr>
             <td>{{report[0]}}</td>
-            <td>{{report[4]}}</td>
+            <td>{{report[5]}}</td>
+            <!-- <td>{{report[5]}}</td> -->
+            <td>{{report[13]}}</td>
+            <td>{{report[14]}}</td>
             <td>{{report[3].strftime("%d/%m/%Y")}}</td>
             <td><input class="btn-primary dwnld-realtime-report" type="button"
                 value="Download" id="1"></td>
