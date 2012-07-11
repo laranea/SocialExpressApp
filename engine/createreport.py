@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Created on Jun 6, 2012
 
@@ -29,6 +30,7 @@ import sys
 
 import json
 import numpy as np
+import pytz
 '''
 import matplotlib
 import matplotlib.pyplot as plt
@@ -42,15 +44,20 @@ from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 from nltk import word_tokenize, sent_tokenize, corpus
 
 import getopt
+import unicodedata
+
+def strip_accents(s):
+    return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+
 
 DEBUG = True
 REALTIME = False
 
 
-MAIN_KEYWORD = 'koffie'
+MAIN_KEYWORD = u"Saeco"
 #MAIN_KEYWORD = 'senseo'
-COMPETITOR1_KEYWORD = 'koffieapparaat'
-COMPETITOR2_KEYWORD = ''
+COMPETITOR1_KEYWORD = u"Delonghi"
+COMPETITOR2_KEYWORD = u"Jura"
 MAIN_ENTERPRISE =  'PhilipsNL'
 MAIN_LOCATION = 'Amsterdam'
 
@@ -62,6 +69,9 @@ MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 
 SEARCH_PAGES = 10
 SEARCH_RPP = 100
+
+begin_date = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=7) 
+end_date = datetime.datetime.now(pytz.UTC) 
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "drv", ["help", "main_keyword=", "competitor1_keyword=", "competitor2_keyword=", "main_enterprise=", "main_location=", "main_language=", "main-country=", "main_screen_name_list=", "mail_to_list=" ])
@@ -105,7 +115,7 @@ for arg in args:
 import report
 
 report = report.Report()
-main_data = []
+m_data = []
 competitor1_data = []
 competitor2_data = []
 
@@ -163,9 +173,15 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
             tweet_data = {}
             print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
             #print tweet['text'].encode('utf-8'),"\n"
-            tweet_data['text'] = tweet['text'].encode('utf-8')
+            tweet_data['text'] = unicode(tweet['text'])
             tweet_data['username'] = tweet['from_user'].encode('utf-8')
             tweet_data['created_at'] = parser.parse(tweet['created_at'])
+            
+            #if tweet_data['created_at'] > begin_date:
+            #    begin_date = tweet_data['created_at']
+                
+            #if tweet_data['created_at'] < end_date:
+            #    end_date = tweet_data['created_at']
             #===================================================================
             # klout = KloutInfluence(tweet['from_user'].encode('utf-8'))
             # try:
@@ -215,12 +231,12 @@ for i in (map(lambda x : x+1, range(SEARCH_PAGES))):
 
             #filter out retweets
             if (MAIN_COUNTRY == tweet_data['country']) or (tweet_data['lang'] == MAIN_LANGUAGE) and (tweet_data['username'] not in MAIN_SCREEN_NAME_LIST) and (tweet_data['text'] not in tweet_list):
-                main_data.append(tweet_data)
+                m_data.append(tweet_data)
 
             if tweet_data['text'] not in tweet_list:
                 tweet_list.append(tweet_data['text'])
 
-main_data = sorted(main_data, key=lambda k: k['created_at'])
+main_data = sorted(m_data, key=lambda k: k['created_at'])
 report.spike_keyword = MAIN_KEYWORD
 report.spike_location = MAIN_COUNTRY
 
@@ -241,7 +257,7 @@ if COMPETITOR1_KEYWORD:
                 tweet_data = {}
                 print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
                 #print tweet['text'].encode('utf-8'),"\n"
-                tweet_data['text'] = tweet['text'].encode('utf-8')
+                tweet_data['text'] = unicode(tweet['text'])
                 tweet_data['username'] = tweet['from_user']
                 tweet_data['created_at'] = parser.parse(tweet['created_at'])
                 #===================================================================
@@ -309,7 +325,7 @@ if COMPETITOR2_KEYWORD:
                 tweet_data = {}
                 print "Tweet from @%s Date: %s" % (tweet['from_user'].encode('utf-8'),tweet['created_at'])
                 #print tweet['text'].encode('utf-8'),"\n"
-                tweet_data['text'] = tweet['text'].encode('utf-8')
+                tweet_data['text'] = unicode(tweet['text'])
                 tweet_data['username'] = tweet['from_user']
                 tweet_data['created_at'] = parser.parse(tweet['created_at'])
                 #===================================================================
@@ -362,13 +378,14 @@ if COMPETITOR2_KEYWORD:
 
     competitor2_data = sorted(competitor2_data, key=lambda k: k['created_at'])
 
-try:
-    begin_date = max(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
+'''try:
+    begin_date = min(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
 except:
     try:
-        begin_date = max(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
+        begin_date = min(main_data[0]['created_at'], competitor1_data[0]['created_at'], competitor2_data[0]['created_at'])
     except:
         begin_date = main_data[0]['created_at']
+'''
 
 report.volumebegintime = str(begin_date.date()) + " " + str(begin_date.hour) + ":" + str(begin_date.minute)
 print "Begin time", report.volumebegintime
@@ -387,13 +404,14 @@ if max_hour == 23:
 '''
 
 #report.volumeendtime = str(max_hour + 1) + ":00"
-try:
+'''try:
     end_date = max(main_data[-1]['created_at'], competitor1_data[-1]['created_at'], competitor2_data[-1]['created_at'])
 except:
     try:
         end_date = max(main_data[-1]['created_at'], competitor1_data[-1]['created_at'])
     except:
         end_date = main_data[-1]['created_at']
+'''
 
 report.volumeendtime = str(end_date.date()) + " " + str(end_date.hour) + ":" + str(end_date.minute)
 print "End time", report.volumeendtime
@@ -408,7 +426,7 @@ volume = -1
 volume_axis = {}
 for tweet_data in competitor2_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
         continue
@@ -418,19 +436,18 @@ for tweet_data in competitor2_data:
         volume = 0
         x.append(d)
     volume += 1
-
-    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
+    
+    if dt.hour >= 0 and dt.hour < 12:
         try:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
     else:
-        if tweet_data['created_at'].minute:
-            dt += datetime.timedelta(hours = 1)
         try:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
+
 y.append(volume)
 
 print x
@@ -454,7 +471,7 @@ y = []
 volume = -1
 for tweet_data in competitor1_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
 #    graph_date_obj  = datetime.strptime(start_day, date_format)
 #    if datetime.strptime(dt, "%H:%M %d/%m/%Y") dt.strftime()
@@ -467,18 +484,18 @@ for tweet_data in competitor1_data:
         x.append(d)
 
     volume += 1
-    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
+        
+    if dt.hour >= 0 and dt.hour < 12:
         try:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
     else:
-        if tweet_data['created_at'].minute:
-            dt += datetime.timedelta(hours = 1)
         try:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
+
 print "volume axisssss", volume_axis
 print "timelistssssssss", timelist
 volumegraph2 = []
@@ -504,10 +521,12 @@ volume_axis = {}
 print "Calculating cumulative volumes..."
 x= []
 y = []
+x_main = []
 volume = -1
 for tweet_data in main_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
+    x_main.append(dt)
+    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour).zfill(2) + ":" + str(tweet_data['created_at'].minute).zfill(2)
 
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
@@ -517,24 +536,21 @@ for tweet_data in main_data:
             y.append(volume)
         volume = 0
         x.append(d)
-
-    if tweet_data['created_at'].minute and tweet_data['created_at'].minute < 30:
+        
+    if dt.hour >= 0 and dt.hour < 12:
         try:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:30 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
     else:
-        if tweet_data['created_at'].minute:
-            dt += datetime.timedelta(hours = 1)
         try:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
         except:
-            volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
 
     volume += 1
 
 y.append(volume)
-x_main = x
 volumegraph1 = []
 for time in timelist:
     try:
@@ -616,7 +632,7 @@ sentiment = -100
 counter = 0
 for tweet_data in main_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, (dt.hour / 12) * 12, 0)
 
     if not d in x:
         if sentiment > -100:
@@ -663,8 +679,10 @@ print max_sentiment_s0, max_sentiment_s1
 
 if max_volume_percentage > max_sentiment_percentage:
     report.spike_percentage = max_volume_sign * max_volume_percentage
+    report.spike_kind = 'volume'
 else:
     report.spike_percentage = max_sentiment_sign * max_sentiment_percentage
+    report.spike_kind = 'sentiment'
 
 report.mentions_percentage = max_volume_percentage
 report.sentiment_percentage = max_sentiment_percentage
@@ -809,16 +827,18 @@ cluster4 = []
 
 for tweet_data in main_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
-    if d == x[l]:
-        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (l + 1)
-        cluster1.append(tweet_data)
-    if d == x[k]:
-        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (k + 1)
-        cluster2.append(tweet_data)
-    if d == x[j]:
-        tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (j + 1)
-        cluster3.append(tweet_data)
+    try:
+        if dt.date() == x_main[l].date():
+            tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (l + 1)
+            cluster1.append(tweet_data)
+        if dt.date() == x_main[k].date():
+            tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (k + 1)
+            cluster2.append(tweet_data)
+        if dt.date() == x_main[j].date():
+            tweet_data['ws'] = 30 * tweet_data['sentiment'] + 1 * tweet_data['influence'] + 1000 * (j + 1)
+            cluster3.append(tweet_data)
+    except:
+        pass
 
     '''    ws = tweet_data['ws']
 
@@ -889,11 +909,21 @@ c = 0
 #word cloud
 #TODO stop words and stem
 #TODO calculate KLOUT, partnership with KLOUT ???
+stopwordsdict = {
+  'nl': 'dutch',
+  'en': 'english',
+  'fr': 'french',
+  'de': 'german',
+  'es': 'spanish',
+}
+
+
 for tweet in main_data:
+        #TODO: order set of words!
         #for word in word_tokenize(tweet['text']):
         for word in tweet['text'].split():
             word = word.lower()
-            if len(word) > 5 and word not in corpus.stopwords.words('dutch') and word[0] != '@' and re.match("^[A-Za-z0-9_-]*(\#)*[A-Za-z0-9_-]*$", word):
+            if len(word) > 5 and word not in corpus.stopwords.words(stopwordsdict[MAIN_LANGUAGE]) and word[0] != '@' and re.match("^[A-Za-z0-9_-]*(\#)*[A-Za-z0-9_-]*$", word):
                 if word_cloud.has_key(word):
                     word_cloud[word] += tweet['sentiment']
                 else:

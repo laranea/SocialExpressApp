@@ -118,7 +118,7 @@ class Report(object):
         lc.categoryAxis.categoryNames = catNames
         for i in range(len(catNames)):
             lc.categoryAxis.labels[i].fontSize = 14
-        lc.categoryAxis.labels.dy  = -50
+        #lc.categoryAxis.labels.dy  = -50
         lc.categoryAxis.labels.dy = -50
         lc.categoryAxis.labels.angle = 60
         lc.categoryAxis.labels.boxAnchor = 'n'
@@ -185,7 +185,7 @@ class Report(object):
                         fourth += list[i] + " "
                     elif not is_first and not is_second and not is_third:
                         for j in range(len(list[i])):
-                            if len(third + list[i][j] + "..") < 22:
+                            if len(fourth + list[i][j] + "..") < 22:
                                 fourth += list[i][j]
                             else:
                                 fourth += list[i][j] + ".."
@@ -258,30 +258,25 @@ class Report(object):
 
         delta = end_day - start_day
         num_days = delta.days
-        hours = divmod(delta.days * 86400 + delta.seconds, 3600)
+        hours = divmod(delta.days * 86400 + delta.seconds, 600)
         graph_date = start_day.strftime("%d/%m/%Y")
+        start = "00:00"
         start_date = time = map(int, start.split(':'))
         end_date = map(int, end.split(':'))
         time_list = [start + " " + graph_date]
-
-        if hours[1]:
-            loop_count = range(num_days*48 + hours[0]* 2 + 1)
-        else:
-            loop_count = range(num_days*48 + hours[0]* 2)
+        
+        
+        loop_count = range(num_days + 1)
+      
         for i in loop_count:
-            if time[1]:
-                if time[0] + 1 == 24:
-                    graph_date_obj += timedelta(days=1)
-                    graph_date = graph_date_obj.strftime("%d/%m/%Y")
-                    time_list.append("00:00 " + graph_date)
-                    time[0] = 00
-                else:
-                    time_list.append(str(time[0] + 1) + ":00 " + graph_date)
-                    time[0] += 1
-                time[1] = 0
-            else:
-                time_list.append(str(time[0]) + ":30 "+ graph_date)
-                time[1] = 30
+            graph_date = graph_date_obj.strftime("%d/%m/%Y")
+            time_list.append("12:00 " + graph_date)
+
+            graph_date_obj += timedelta(days=1)
+            graph_date = graph_date_obj.strftime("%d/%m/%Y")
+            time_list.append("00:00 " + graph_date)
+
+ 
         return time_list
 
     def page1(self, canvas):
@@ -579,7 +574,7 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, str(int(round(self.followers_percentage))) + "%", 65, 499, 2220, False, '#e68383')
 
         #Arrows
-        if self.mentions_percentage >= 0:
+        if mentions >= 0:
             canvas.drawImage("reports/green-up.png", 320, 2652, 100, 120)
         else:
             canvas.drawImage("reports/red-down.png", 320, 2652, 100, 120)
@@ -757,29 +752,28 @@ class Report(object):
         self.drawStringGrayHelvetica(canvas, 'ICT', 13.96, 2090, 584, False)
         '''
         #Influencer Info above Top Row
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[6][0]], 18.61, 468, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[7][0]], 18.61, 775, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[8][0]], 18.61, 1087, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[9][0]], 18.61, 1407, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[10][0]], 18.61, 1727, 324, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[11][0]], 18.61, 2043, 324, False, '#000000')
-
+        try:
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[6][0]], 18.61, 468, 324, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[7][0]], 18.61, 775, 324, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[8][0]], 18.61, 1087, 324, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[9][0]], 18.61, 1407, 324, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[10][0]], 18.61, 1727, 324, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, self.key_infl[self.word_klout[11][0]], 18.61, 2043, 324, False, '#000000')
+        except:
+            pass
         #avatars
-        canvas.drawImage("reports/TabulaMagica-1.png", 420, 304, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 727, 304, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1041, 304, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1359, 304, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1679, 304, 30, 30)
-        canvas.drawImage("reports/TabulaMagica-1.png", 1995, 304, 30, 30)
+
 
         #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[6][1], 2)), 13.96, 490, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[7][1], 2)), 13.96, 797, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[8][1], 2)), 13.96, 1109, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[9][1], 2)), 13.96, 1429, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[10][1], 2)), 13.96, 1749, 304, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[11][1], 2)), 13.96, 2065, 304, False, '#000000')
-
+        try:
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[6][1], 2)), 13.96, 490, 304, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[7][1], 2)), 13.96, 797, 304, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[8][1], 2)), 13.96, 1109, 304, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[9][1], 2)), 13.96, 1429, 304, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[10][1], 2)), 13.96, 1749, 304, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[11][1], 2)), 13.96, 2065, 304, False, '#000000')
+        except:
+            pass
         '''
         #Expertise Field Top Row
         self.drawStringGrayHelvetica(canvas, 'Programming', 13.96, 515, 304, False)
