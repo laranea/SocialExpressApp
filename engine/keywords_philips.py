@@ -400,9 +400,9 @@ for tweet in main_data:
 #===============================================================================
                 c += 1
 
-        if DEBUG:
-            if c > 100:
-                break
+        #if DEBUG:
+        #    if c > 100:
+        #        break
 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
 print report.word_cloud
