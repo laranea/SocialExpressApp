@@ -117,7 +117,7 @@ for y in enumerate(x):
     for keyword in competitor_keyword:
         list = ['python', 'engine/createreport.py']
         list.append("main_enterprise='ABN Amro'")
-        list.append("main_keyword=%s" % [w.strip(' ') for w in  re.split(' OR | \+ ', y[1][2])])
+        list.append("main_keyword=%s" % [w.strip(' ') for w in  re.split('OR|\+', y[1][2])])
         list.append("competitor1_keyword=%s" % keyword)
         try:
             list.append("main_language=%s" % lang[str(y[1][4])])
