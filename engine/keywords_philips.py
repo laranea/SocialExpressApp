@@ -405,7 +405,8 @@ for tweet in main_data:
         #        break
 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
-print report.word_cloud
+for word, freq in report.word_cloud:
+    print tweet + ":" + freq
 #report.key_infl = key_infl
 #report.word_sent = word_sent
 #report.word_klout = sorted(word_klout.items(), key=lambda k:k[1], reverse = True)
@@ -425,7 +426,8 @@ for tweet in competitor1_data:
                     word_cloud[word] = 1
                     
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
-print report.word_cloud
+for word, freq in report.word_cloud:
+    print tweet + ":" + freq
 
 
 #report.create(MAIN_ENTERPRISE)
