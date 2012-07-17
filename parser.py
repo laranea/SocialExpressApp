@@ -114,14 +114,14 @@ for y in enumerate(x):
     if not y[1][1] or y[0] == 1:
         continue
     
-    list = ['python', 'engine/createreport.py']
+    list = ['python', 'createreport.py']
     list.append("main_enterprise='ABN Amro'")
-    list.append("main_keyword=%s" % y[1][2].replace(" OR ", "+OR+").replace(" + ", "+AND+"))
+    list.append("main_keyword=%s" % y[1][2].replace(" OR ", "+OR+").replace(" + ", "+AND+") + "+AND+ABN")
 
     competitor_keyword = [w.strip(' ') for w in y[1][3].split(",")]
     
     for keyword in competitor_keyword:
-        list.append("competitor1_keyword=%s" % keyword)
+        list.append("competitor1_keyword=%s" % y[1][2].replace(" OR ", "+OR+").replace(" + ", "+AND+") + "+AND+" + keyword)
         
     try:
         list.append("main_language=%s" % lang[str(y[1][4])])
