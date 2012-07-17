@@ -594,11 +594,15 @@ class Report(object):
 
         #Hottest Topics
         self.drawStringGrayHelvetica(canvas, 'Topics mention together with the word ' + self.spike_keyword, 23.26, 379, 1780, False, '#000000')
+            
         #Green
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[0][0], 72, 400, 1590, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[1][0], 72, 645, 1490, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[2][0], 72, 470, 1410, False, '#7cc576')
-        self.drawStringGrayHelvetica(canvas, self.word_cloud[3][0], 72, 400, 1300, False, '#7cc576')
+        try:
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[0][0], 72, 400, 1590, False, '#7cc576')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[1][0], 72, 645, 1490, False, '#7cc576')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[2][0], 72, 470, 1410, False, '#7cc576')
+            self.drawStringGrayHelvetica(canvas, self.word_cloud[3][0], 72, 400, 1300, False, '#7cc576')
+        except:
+            pass
         #Black
         try:
             self.drawStringGrayHelvetica(canvas, self.word_cloud[4][0], 72, 1200, 1590, False)
@@ -679,18 +683,21 @@ class Report(object):
         canvas.drawImage("reports/TabulaMagica-1.png", 1995, 710, 30, 30)
 
         #Expertise Top Row (Left align --  22 from top row name, Top Align -- 2 from row ht)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[0][1], 2)), 13.96, 490, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 515, 710, False) # 25 from expertise - left align
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[1][1], 2)), 13.96, 797, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 822, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[2][1], 2)), 13.96, 1109, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 1134, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[3][1], 2)), 13.96, 1429, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 1454, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[4][1], 2)), 13.96, 1749, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 1774, 710, False)
-        self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[5][1], 2)), 13.96, 2065, 710, False, '#000000')
-        self.drawStringGrayHelvetica(canvas, '', 13.96, 2090, 710, False)
+        try:
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[0][1], 2)), 13.96, 490, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 515, 710, False) # 25 from expertise - left align
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[1][1], 2)), 13.96, 797, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 822, 710, False)
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[2][1], 2)), 13.96, 1109, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 1134, 710, False)
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[3][1], 2)), 13.96, 1429, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 1454, 710, False)
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[4][1], 2)), 13.96, 1749, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 1774, 710, False)
+            self.drawStringGrayHelvetica(canvas, str(round(self.word_klout[5][1], 2)), 13.96, 2065, 710, False, '#000000')
+            self.drawStringGrayHelvetica(canvas, '', 13.96, 2090, 710, False)
+        except:
+            pass
 
         '''
         #Influencer Info above Middle Row
