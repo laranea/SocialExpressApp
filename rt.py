@@ -42,7 +42,6 @@ class StreamWatcherListener(tweepy.StreamListener):
     
     def __init__(self):
         fr = FilterRedis(str(datetime.now()))
-        super.__init__(self)
 
     def on_status(self, status):
         tweet = status

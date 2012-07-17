@@ -81,30 +81,32 @@ class XLSXReader:
 
 i = 0
 lang = {"France": "fr", "Netherlands": "nl", "Belgium": "nl", "Germany": "de", "Italy": "it", "Russia": "ru", "The Netherlands": "nl"}
-x = XLSXReader(os.path.split(os.path.abspath(__file__))[0]+"/Copy_of_SocialExpress_pilot_keywords.xlsx")
-for y in x:
-    if y[2] == "Main term" or not y[2]:
-        i += 1
-        continue
-#    print "main_keyword -- ", y[2]
-#    print "competitor_keyword-- ", [w.strip(' ') for w in  y[3].split(",")]
-    competitor_keyword = [w.strip(' ') for w in  y[3].split(",")]
-#    print "main_enterprise-- ", "Philips"
-#    print "main_location-- ", y[4]
-#    print "main_language-- ", lang[str(y[4])]
-    for keyword in competitor_keyword:
-        list = ['python', 'engine/createreport.py']
-        list.append("main_enterprise='Philips'")
-        list.append("main_keyword=%s" % str(y[2]))
-        list.append("competitor1_keyword=%s" % str(keyword))
-        list.append("main_language=%s" % lang[str(y[4])])
-        list.append("main_location=%s" % str(y[4]))
-#        list.append("mail_to_list=%" % email)
-#        list.append("main_screen_name_list='ThinkMedia'")
-#        if i == 1:
-        process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
-        time.sleep(300)
-    i += 1
+#===============================================================================
+# x = XLSXReader(os.path.split(os.path.abspath(__file__))[0]+"/Copy_of_SocialExpress_pilot_keywords.xlsx")
+# for y in x:
+#    if y[2] == "Main term" or not y[2]:
+#        i += 1
+#        continue
+# #    print "main_keyword -- ", y[2]
+# #    print "competitor_keyword-- ", [w.strip(' ') for w in  y[3].split(",")]
+#    competitor_keyword = [w.strip(' ') for w in  y[3].split(",")]
+# #    print "main_enterprise-- ", "Philips"
+# #    print "main_location-- ", y[4]
+# #    print "main_language-- ", lang[str(y[4])]
+#    for keyword in competitor_keyword:
+#        list = ['python', 'engine/createreport.py']
+#        list.append("main_enterprise='Philips'")
+#        list.append("main_keyword=%s" % str(y[2]))
+#        list.append("competitor1_keyword=%s" % str(keyword))
+#        list.append("main_language=%s" % lang[str(y[4])])
+#        list.append("main_location=%s" % str(y[4]))
+# #        list.append("mail_to_list=%" % email)
+# #        list.append("main_screen_name_list='ThinkMedia'")
+# #        if i == 1:
+#        process = subprocess.Popen(list, shell=False, stdin=subprocess.PIPE)
+#        time.sleep(300)
+#    i += 1
+#===============================================================================
 
 x = XLSXReader("SocialExpress_pilot_keywords_ABN_AMRO.xlsx")
 i = 0
