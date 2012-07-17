@@ -266,15 +266,17 @@ class Report(object):
         time_list = [start + " " + graph_date]
         
         
-        loop_count = range(num_days + 1)
+        loop_count = range(24 * num_days + 1)
       
         for i in loop_count:
             graph_date = graph_date_obj.strftime("%d/%m/%Y")
             time_list.append("12:00 " + graph_date)
+            
+            graph_date_obj += timedelta(hours=1)
 
-            graph_date_obj += timedelta(days=1)
-            graph_date = graph_date_obj.strftime("%d/%m/%Y")
-            time_list.append("00:00 " + graph_date)
+            #graph_date_obj += timedelta(days=1)
+            #graph_date = graph_date_obj.strftime("%d/%m/%Y")
+            #time_list.append("00:00 " + graph_date)
 
  
         return time_list

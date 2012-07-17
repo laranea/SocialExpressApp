@@ -426,7 +426,7 @@ volume = -1
 volume_axis = {}
 for tweet_data in competitor2_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
         continue
@@ -437,16 +437,16 @@ for tweet_data in competitor2_data:
         x.append(d)
     volume += 1
     
-    if dt.hour >= 0 and dt.hour < 12:
-        try:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
-    else:
-        try:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
+    #if dt.hour >= 0 and dt.hour < 12:
+    try:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+    except:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+    #else:
+    #    try:
+    #        volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
+    #    except:
+    #        volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
 
 y.append(volume)
 
@@ -471,7 +471,7 @@ y = []
 volume = -1
 for tweet_data in competitor1_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour) + ":" + str(tweet_data['created_at'].minute)
 #    graph_date_obj  = datetime.strptime(start_day, date_format)
 #    if datetime.strptime(dt, "%H:%M %d/%m/%Y") dt.strftime()
@@ -485,16 +485,16 @@ for tweet_data in competitor1_data:
 
     volume += 1
         
-    if dt.hour >= 0 and dt.hour < 12:
-        try:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
-    else:
-        try:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
+    #if dt.hour >= 0 and dt.hour < 12:
+    try:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+    except:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+    #else:
+    #    try:
+    #        volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
+    #    except:
+    #        volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
 
 print "volume axisssss", volume_axis
 print "timelistssssssss", timelist
@@ -526,7 +526,7 @@ volume = -1
 for tweet_data in main_data:
     dt = tweet_data['created_at']
     x_main.append(dt)
-    d = datetime.datetime(dt.year, dt.month, dt.day, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour)
     tweet_data['hour_string'] = str(tweet_data['created_at'].hour).zfill(2) + ":" + str(tweet_data['created_at'].minute).zfill(2)
 
     if timelist[0] > dt.strftime("%H:%M %d/%m/%Y"):
@@ -537,16 +537,16 @@ for tweet_data in main_data:
         volume = 0
         x.append(d)
         
-    if dt.hour >= 0 and dt.hour < 12:
-        try:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("00:00 %d/%m/%Y")] = 1
-    else:
-        try:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
-        except:
-            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
+    #if dt.hour >= 0 and dt.hour < 12:
+    try:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] += 1
+    except:
+        volume_axis[dt.strftime("%H:00 %d/%m/%Y")] = 1
+#    else:
+#        try:
+#            volume_axis[dt.strftime("12:00 %d/%m/%Y")] += 1
+#        except:
+#            volume_axis[dt.strftime("12:00 %d/%m/%Y")] = 1
 
     volume += 1
 
@@ -629,10 +629,10 @@ print "Creating sentiment plot..."
 x= []
 y = []
 sentiment = -100
-counter = 0
+counter = 1
 for tweet_data in main_data:
     dt = tweet_data['created_at']
-    d = datetime.datetime(dt.year, dt.month, dt.day, (dt.hour / 12) * 12, 0)
+    d = datetime.datetime(dt.year, dt.month, dt.day, dt.hour, 0)
 
     if not d in x:
         if sentiment > -100:
@@ -946,7 +946,7 @@ for tweet in main_data:
                 c += 1
 
         if DEBUG:
-            if c > 1000:
+            if c > 5000:
                 break
 
 report.word_cloud = sorted(word_cloud.items(), key=lambda k:k[1], reverse=True)
