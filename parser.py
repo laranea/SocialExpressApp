@@ -116,7 +116,7 @@ for y in enumerate(x):
     
     list = ['python', 'engine/createreport.py']
     list.append("main_enterprise='ABN Amro'")
-    list.append("main_keyword=%s" % y[1][2].replace(" OR ", ",").replace(" + ", ","))
+    list.append("main_keyword=%s" % y[1][2].replace(" OR ", "+OR+").replace(" + ", "+AND+"))
 
     competitor_keyword = [w.strip(' ') for w in y[1][3].split(",")]
     
