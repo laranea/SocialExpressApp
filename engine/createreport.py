@@ -70,7 +70,8 @@ MAIL_TO_LIST = ['kristof.leroux@gmail.com']
 SEARCH_PAGES = 10
 SEARCH_RPP = 1000
 
-begin_date = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=7) 
+#todo: dynamic time slices, also in report.py (timelist)...
+begin_date = datetime.datetime.now(pytz.UTC) - datetime.timedelta(days=1) 
 end_date = datetime.datetime.now(pytz.UTC) 
 
 try:
