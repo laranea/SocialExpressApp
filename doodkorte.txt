@@ -1,0 +1,12 @@
+clustering QA
+clustering van oorzaak
+uitsluiting steden en veelvoorkomende woorden
+context-sensitief
+
+modules -> dev
+=> arjan dost: extra opl.
+kwaliteit!!!
+
+laetitia => clustering
+
+doodkorte
